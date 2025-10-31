@@ -5,11 +5,10 @@
     <classes>
       <class name="tests.CreateEstimateTest">
         <methods>
-          <include name="afterMethod"/>
           <include name="createEstimateTest"/>
-          <include name="setup"/>
-          <include name="beformethod"/>
+          <include name="setUp"/>
           <include name="tearDown"/>
+          <include name="beforeMethod"/>
         </methods>
       </class> <!-- tests.CreateEstimateTest -->
     </classes>

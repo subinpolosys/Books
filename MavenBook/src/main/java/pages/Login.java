@@ -4,32 +4,27 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import utils.ConfigReader;
 
 public class Login {
-
 
     private WebDriver driver;
     private WebDriverWait wait;
     private boolean recaptchaSolved = false;
 
-    String loginUrl = ConfigReader.get("url");
-    String browser = ConfigReader.get("browser");
-    String username = ConfigReader.get("username");
-    
-    String password = ConfigReader.get("password");
+    private String loginUrl = ConfigReader.get("url");
+    private String username = ConfigReader.get("username");
+    private String password = ConfigReader.get("password");
 
     private By usernameField = By.id("username");
     private By passwordField = By.id("password");
     private By loginButton = By.xpath("//button[contains(text(),'Login')]");
     private By continueButton = By.xpath("//button[contains(text(),'Continue')]");
     private By dashboardMenu = By.xpath("//div[@title='Dashboard']/a[contains(text(),'Dashboard')]");
-
+    private By verifyRecaptchafield=By.xpath("//div[contains(text(),'Please verify reCAPTCHA')]");
     public Login(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(25));
@@ -38,47 +33,38 @@ public class Login {
     public void login() throws InterruptedException {
         int retries = 0;
         int maxRetries = 3;
-       
 
         while (!recaptchaSolved && retries < maxRetries) {
             retries++;
             driver.get(loginUrl);
             Thread.sleep(500);
-            
             List<WebElement> captchas = driver.findElements(By.xpath("//iframe[@title='reCAPTCHA']"));
             if (!captchas.isEmpty()) {
                 recaptchaSolved = handleCaptcha();
             }
-            else 
-	        {
-	            System.out.println("CAPTCHA not found. Reloading page (attempt " + retries + "/" + maxRetries + ")...");
-	           // Thread.sleep(2000); // Wait a bit before retrying
-	        }
         }
 
-        if (!recaptchaSolved) 
-        {
+        if (!recaptchaSolved) {
             throw new RuntimeException("CAPTCHA could not be solved after " + maxRetries + " attempts.");
         }
+
         driver.switchTo().defaultContent();
         wait.until(ExpectedConditions.visibilityOfElementLocated(usernameField));
         driver.findElement(usernameField).sendKeys(username);
         driver.findElement(passwordField).sendKeys(password);
-        wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(loginButton));
-		long loginStart = System.currentTimeMillis();
-        driver.findElement(loginButton).click();
+        wait.until(ExpectedConditions.elementToBeClickable(loginButton)).click();
+
         try 
 		{
 			WebDriverWait localWait = new WebDriverWait(driver, Duration.ofSeconds(15));
-			WebElement iframe = localWait.until(ExpectedConditions.presenceOfElementLocated(
-		    By.xpath(" //div[contains(text(),'Please verify reCAPTCHA')]")));
-			 //driver.switchTo().defaultContent();
+			localWait.until(ExpectedConditions.presenceOfElementLocated(verifyRecaptchafield));
+			Thread.sleep(200);
 			driver.findElement(loginButton).click();
 		        //dr.switchTo().frame(iframe);
 		}catch(Exception e) 
 		{	
 		}
-
+        
         try {
             wait.until(ExpectedConditions.visibilityOfElementLocated(continueButton)).click();
         } catch (Exception ignored) {}
@@ -89,11 +75,10 @@ public class Login {
 
     private boolean handleCaptcha() {
         try {
-            WebDriverWait localWait = new WebDriverWait(driver, Duration.ofSeconds(10));
-            WebElement iframe = localWait.until(ExpectedConditions.presenceOfElementLocated(
+            WebElement iframe = wait.until(ExpectedConditions.presenceOfElementLocated(
                     By.xpath("//iframe[@title='reCAPTCHA']")));
             driver.switchTo().frame(iframe);
-            WebElement checkbox = localWait.until(ExpectedConditions.elementToBeClickable(
+            WebElement checkbox = wait.until(ExpectedConditions.elementToBeClickable(
                     By.xpath("//div[@class='recaptcha-checkbox-border']")));
             checkbox.click();
             driver.switchTo().defaultContent();
@@ -105,25 +90,19 @@ public class Login {
     }
 
     public void logout() {
-        System.out.println("Logout start time: " + currentDateTime());
         try {
             By profileBtn = By.xpath("//button[@id='headlessui-popover-button-:re:']/div");
             By signOut = By.xpath("//p[contains(text(),'Sign Out')]");
-            if (driver.findElements(profileBtn).size() > 0) {
+            if (!driver.findElements(profileBtn).isEmpty()) {
                 driver.findElement(profileBtn).click();
                 driver.findElement(signOut).click();
             }
         } catch (Exception e) {
             System.out.println("Exception during logout: " + e.getMessage());
         }
-        System.out.println("Logout end time: " + currentDateTime());
     }
 
     private String currentDateTime() {
         return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
-	
-	
-	
-	
 }

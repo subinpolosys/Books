@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-
-<suite name="AutomationSuite" parallel="false">
-
-    <test name="EstimateTests">
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+<suite name="Automation Suite" verbose="1" parallel="false">
+    <test name="Estimate Tests">
         <classes>
             <class name="tests.CreateEstimateTest"/>
         </classes>
     </test>
-
 </suite>

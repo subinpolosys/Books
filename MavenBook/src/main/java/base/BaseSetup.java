@@ -1,32 +1,27 @@
 package base;
-import utils.ConfigReader;
 
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.annotations.*;
-
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import drivers.DriverFactory;
-
-import java.time.Duration;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class BaseSetup {
 
-	protected WebDriver driver;
-    protected WebDriverWait wait;
+    protected WebDriver driver;
+    private static final Logger logger = LogManager.getLogger(BaseSetup.class);
 
-    @Parameters("browser")
     @BeforeMethod(alwaysRun = true)
-    public void setup(@Optional("chrome") String browser) {
+    public void setUp() {
+        String browser = System.getProperty("browser", "chrome");
         driver = DriverFactory.initializeDriver(browser);
-        wait = new WebDriverWait(driver, Duration.ofSeconds(25));
-        driver.get(ConfigReader.get("url"));
+        logger.info(browser + " driver initialized successfully.");
     }
 
     @AfterMethod(alwaysRun = true)
     public void tearDown() {
         DriverFactory.quitDriver();
+        logger.info("Driver quit successfully.");
     }
-	
-	
-	
 }

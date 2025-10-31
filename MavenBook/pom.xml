@@ -13,15 +13,17 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>17</maven.compiler.source>   <!-- or 11 if you prefer -->
+        <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <selenium.version>4.25.0</selenium.version>
         <testng.version>7.10.2</testng.version>
-        <log4j.version>1.2.17</log4j.version>
+        <log4j2.version>2.24.1</log4j2.version>
+        <poi.version>5.3.0</poi.version>
+        <commonsio.version>2.15.1</commonsio.version>
     </properties>
 
     <dependencies>
-        <!-- ✅ Selenium WebDriver -->
+        <!-- ✅ Selenium -->
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
@@ -36,68 +38,85 @@
             <scope>test</scope>
         </dependency>
 
-<dependency>
-    <groupId>org.testng</groupId>
-    <artifactId>testng</artifactId>
-    <version>7.10.2</version>
-    <!-- remove <scope>test</scope> -->
-</dependency>
+  <dependency>
+    <groupId>org.apache.poi</groupId>
+    <artifactId>poi-ooxml</artifactId>
+    <version>5.3.0</version>
+    <exclusions>
+        <exclusion>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </exclusion>
+    </exclusions>
+ </dependency>
 
-        <!-- ✅ WebDriverManager (handles browser drivers automatically) -->
+ <dependency>
+    <groupId>org.apache.poi</groupId>
+    <artifactId>poi-ooxml</artifactId>
+    <version>5.3.0</version>
+ </dependency>
+
+<!-- Ensure latest Commons IO version -->
+    <dependency>
+    <groupId>commons-io</groupId>
+    <artifactId>commons-io</artifactId>
+    <version>2.16.1</version>
+     </dependency>
+
+        <!-- ✅ WebDriverManager -->
         <dependency>
             <groupId>io.github.bonigarcia</groupId>
             <artifactId>webdrivermanager</artifactId>
             <version>5.9.2</version>
         </dependency>
 
-        <!-- ✅ Log4j for logging -->
+        <!-- ✅ Logging -->
         <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>${log4j.version}</version>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${log4j2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j2.version}</version>
         </dependency>
 
-        <!-- ✅ Extent Reports (beautiful HTML reports) -->
+        <!-- ✅ Extent Reports -->
         <dependency>
             <groupId>com.aventstack</groupId>
             <artifactId>extentreports</artifactId>
             <version>5.1.1</version>
         </dependency>
 
-        <!-- ✅ Apache POI (Excel handling for test data) -->
+        <!-- ✅ Excel / Apache POI -->
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
-            <version>5.3.0</version>
+            <version>${poi.version}</version>
         </dependency>
 
-        <!-- ✅ JSON library (optional, for parsing JSON test data) -->
+        <!-- ✅ Commons IO -->
+       
+
+        <!-- ✅ JSON -->
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20240303</version>
         </dependency>
 
-        <!-- ✅ Commons IO (for file utils, screenshots, etc.) -->
+        <!-- ✅ SLF4J Simple -->
         <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.15.1</version>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>2.0.12</version>
         </dependency>
-        <!-- subin -->
-       <dependency>
-    <groupId>org.slf4j</groupId>
-    <artifactId>slf4j-simple</artifactId>
-    <version>2.0.12</version>
-   </dependency>
- 
-
-
     </dependencies>
 
     <build>
         <plugins>
-            <!-- ✅ Maven compiler plugin -->
+            <!-- ✅ Compiler -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -108,7 +127,7 @@
                 </configuration>
             </plugin>
 
-            <!-- ✅ Maven Surefire plugin (runs TestNG tests) -->
+            <!-- ✅ Surefire for TestNG -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
