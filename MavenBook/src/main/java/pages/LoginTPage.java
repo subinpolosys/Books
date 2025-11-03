@@ -18,11 +18,8 @@ public class LoginTPage {
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(15));
     }
 
- // ──────────────── Navigation Elements ────────────────
+ // ──────────────── User email-id ────────────────
     private final By usernameField = By.xpath("//a[@class='text-sm']");
-    
-    
-    
     
     public boolean verifyuser(String usn) {
     	System.out.println(usn);

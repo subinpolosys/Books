@@ -1,5 +1,6 @@
 package base;
 
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -24,4 +25,24 @@ public class BaseSetup {
         DriverFactory.quitDriver();
         logger.info("Driver quit successfully.");
     }
+    
+    public void injectNetworkTracker(WebDriver driver) {
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript(
+            "if (!window.pendingRequests) {" +
+            "  window.pendingRequests = 0;" +
+            "  (function(open) {" +
+            "    XMLHttpRequest.prototype.open = function() { window.pendingRequests++; this.addEventListener('loadend', function() { window.pendingRequests--; }); open.apply(this, arguments); };" +
+            "  })(XMLHttpRequest.prototype.open);" +
+            "  (function(fetch) {" +
+            "    window.fetch = function() { window.pendingRequests++; return fetch.apply(this, arguments).finally(() => window.pendingRequests--); };" +
+            "  })(window.fetch);" +
+            "}"
+        );
+       // System.out.println("✅ Injected network tracker for AJAX/fetch monitoring.");
+    }
+    
+    
+    
+    
 }
