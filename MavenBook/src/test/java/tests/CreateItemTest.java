@@ -63,8 +63,6 @@ public class CreateItemTest extends BaseSetup {
 	        throw new SkipException("Selling OR Purchase Price cannot be empty — skipping test case.");
 	    }
 	  
-	  
-	  
 	  CreateItemPage createItemPage=new CreateItemPage(driver);
 	  createItemPage.navigateToNewItem();
 	 

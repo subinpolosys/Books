@@ -5,6 +5,8 @@ import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import drivers.DriverFactory;
+import utils.ConfigReader;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,7 +17,7 @@ public class BaseSetup {
 
     @BeforeMethod(alwaysRun = true)
     public void setUp() {
-        String browser = System.getProperty("browser", "chrome");
+        String browser = System.getProperty("browser", ConfigReader.get("browser"));
         driver = DriverFactory.initializeDriver(browser);
         logger.info(browser + " driver initialized successfully.");
     }

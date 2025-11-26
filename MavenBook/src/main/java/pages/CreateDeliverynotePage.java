@@ -1,0 +1,172 @@
+package pages;
+
+import java.time.Duration;
+import java.time.LocalDate;
+import java.util.List;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
+
+import utils.Utilities;
+
+public class CreateDeliverynotePage {
+
+	 private final WebDriver driver;
+	    private final WebDriverWait wait;
+
+	    public CreateDeliverynotePage(WebDriver driver) {
+	        this.driver = driver;
+	        this.wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+	    }
+
+	    // ──────────────── Navigation Elements ────────────────
+	    private final By dashboardField=By.xpath("//a[text()='Dashboard']"); 
+	    private final By salesMenuField = By.xpath("//div[@title='sales']/a[contains(text(),'Sales')]");
+	    private final By deliveryNoteMenuField = By.xpath("//div[@title='delivery note']/span[contains(text(),'Delivery Note')]");
+	    private final By newDeliverynoteButtonField = By.xpath("//button/p[contains(text(),'new')]");
+
+	    // ──────────────── Header / Customer Fields ────────────────
+	    private final By customerDropdownField = By.xpath("//input[@placeholder='Select Customer Name']");
+	    private final By firstCustomerOptionField =  By.xpath("//div[@class='flex flex-col gap-4 px-10 py-5']/div/div/div/div/div/div/div/ul/li[1]/div/div/h1");
+	    private final By deliveryNoteNumberfield=By.id("delivery_challan_no");
+	    private final By referenceNumberField = By.id("reference");
+	    
+	    private final By dNDateField=By.id("date");
+	   // private final By expirydateField=By.id("expected_delivery_date");
+	    
+	   // private final By subjectField = By.id("subject");
+	    private final By searchDNoteTypeField=By.xpath("//label[contains(text(),'Challan Type')]/following-sibling::input[@type='text']");
+	    
+	    private final By selectDNoteTypeField = By.xpath("//ul/li[1]/span");
+	    // ──────────────── Item Fields ────────────────
+	    private final By itemDetailsField = By.xpath("//table[@class=' w-full ']/thead/tr[1]/td[1]");
+	    private final By itemListField = By.xpath("//input[@placeholder='Type or click to add items']");
+	    private final String itemSelectField = "//ul[1]/li[%d]"; // dynamic
+
+	    // ──────────────── Notes and Terms ────────────────
+	    private final By customerNoteField = By.id("notes");
+	    private final By termsField = By.id("terms_and_conditions");
+
+	    // ──────────────── Action Buttons ────────────────
+	    private final By saveAsDraftButtonField = By.xpath("//button[contains(text(),'Save as Draft')]");
+	    private final By deliveryNoteNoinListField = By.xpath("(//tr/td[3])[1]/div/div");
+
+	    // ──────────────── Actions ────────────────
+
+	    /** Navigate to Create Estimate Page */
+	    public void navigateToNewDeliverynote() {
+	    	wait.until(ExpectedConditions.elementToBeClickable(dashboardField)).click();
+	        wait.until(ExpectedConditions.elementToBeClickable(salesMenuField)).click();
+	        wait.until(ExpectedConditions.elementToBeClickable(deliveryNoteMenuField)).click();
+	        wait.until(ExpectedConditions.elementToBeClickable(newDeliverynoteButtonField)).click();
+	    }
+	    public String delivernoteNumber() {
+	    	String DCNO=wait.until(ExpectedConditions.presenceOfElementLocated(deliveryNoteNumberfield)).getText();
+	    	return DCNO;
+	    }
+	    /** Fill in header details (customer, ref no, subject) 
+	     * @throws InterruptedException */
+	    public void fillEstimateHeader(String customerName, String referenceNo,String dNDate,String challanType) throws InterruptedException {
+	    	//System.out.println(customerName+" : "+referenceNo+" : "+dNDate+" : "+challanType);
+	    	if (customerName != null && !customerName  .trim().isEmpty()) {
+	    		try {
+	    		wait.until(ExpectedConditions.elementToBeClickable(customerDropdownField)).click();
+		        driver.findElement(customerDropdownField).sendKeys(customerName);
+		        
+		        List<WebElement> options = driver.findElements(firstCustomerOptionField); // adjust locator as needed
+		        boolean found = false;
+	            for (WebElement option : options) {
+	                if (option.getText().equalsIgnoreCase(customerName)) {
+	                    option.click();
+	                    found = true;
+	                    break;
+	                }
+	            }
+	            if (!found) {
+	                Assert.fail("Customer name '" + customerName + "' not found in the dropdown list.");
+	            }	        
+		       // wait.until(ExpectedConditions.elementToBeClickable(firstCustomerOptionField)).click();
+	    		}catch(Exception e) {
+	    			 Assert.fail("Error selecting customer: " + e.getMessage());
+	    		}
+	    	}
+	        if (referenceNo != null && !referenceNo .trim().isEmpty()) {
+	        driver.findElement(referenceNumberField).sendKeys(referenceNo);
+	        }
+	        Thread.sleep(200);
+	        if (dNDate != null && !dNDate.trim().isEmpty()) {
+	        	 WebElement ddate = driver.findElement(dNDateField);
+	        	wait.until(ExpectedConditions.attributeToBeNotEmpty(ddate, "value"));
+	       
+	        ddate.clear();
+	        ddate.sendKeys(dNDate);     // Format: yyyy-MM-dd
+	        ddate.sendKeys(Keys.TAB);         // triggers blur/change event
+	        }
+	        else {
+	    		 LocalDate today = LocalDate.now();
+	    		 String todayStr = today.toString();  // format yyyy-MM-dd
+	    		 //System.out.println(todayStr);
+	    		 wait.until(ExpectedConditions.textToBePresentInElementValue(dNDateField, todayStr));
+	    	 }
+	        Thread.sleep(2000);
+	        
+	        Thread.sleep(200);
+	        if (challanType != null && !challanType .trim().isEmpty()) {
+	    		Utilities.selectIfListed(driver, searchDNoteTypeField, selectDNoteTypeField,challanType);
+	    	}   
+	    }
+
+	    /** Add multiple items dynamically 
+	     * @throws InterruptedException */
+	    public void addItems(String[] itemNames, String[] itemQtys) throws InterruptedException {
+	    	
+			JavascriptExecutor js = (JavascriptExecutor) driver;
+			WebElement itemdetail  = driver.findElement(itemDetailsField);
+		    js.executeScript("arguments[0].scrollIntoView();",itemdetail);  
+			driver.findElement(itemDetailsField).click();  //#####  
+			Thread.sleep(500);	
+	        for (int i = 0; i < itemNames.length; i++) {
+	            wait.until(ExpectedConditions.elementToBeClickable(itemListField)).click();
+	            driver.findElement(itemListField).sendKeys(itemNames[i]);
+	            Thread.sleep(500);
+	            // Select item dynamically
+	            By selectItem = By.xpath(String.format(itemSelectField, 1));
+	            wait.until(ExpectedConditions.elementToBeClickable(selectItem)).click();
+	            Thread.sleep(500);
+	            // Fill item quantity
+	            WebElement qtyField = driver.findElement(By.xpath("//tbody/tr[" + (i + 1) + "]/td[4]//input"));
+	            qtyField.clear();
+	            qtyField.sendKeys(itemQtys[i]);
+	            Thread.sleep(500);
+	        }
+	    }
+	    /** Add optional notes and terms */
+	    public void addNotesAndTerms(String customerNote, String terms) {
+//	    	String dateValue = driver.findElement(dNDateField).getAttribute("value"); //
+//	    	System.out.println("Date value: " + dateValue);                          //                    
+	        if (customerNote != null && !customerNote.isEmpty()) {
+	            driver.findElement(customerNoteField).sendKeys(customerNote);
+	        }
+	        if (terms != null && !terms.isEmpty()) {
+	            driver.findElement(termsField).sendKeys(terms);
+	        }
+	    }
+	    /** Save the estimate as draft */
+	    public void saveAsDraft() {
+	    	
+	        wait.until(ExpectedConditions.elementToBeClickable(saveAsDraftButtonField)).click();
+	        
+	    }
+	    /** Verify estimate saved by checking list */
+	    public boolean verifyDeliverynoteCreated(String expectedDeliveryNoteNo) {
+	        wait.until(ExpectedConditions.visibilityOfElementLocated(deliveryNoteNoinListField));
+	        String actualDeliverynoteNo = driver.findElement(deliveryNoteNoinListField).getText();
+	        return actualDeliverynoteNo.contains(expectedDeliveryNoteNo);
+	    }
+	}

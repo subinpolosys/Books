@@ -4,6 +4,7 @@
     <test name="Estimate Tests">
         <classes>
             <class name="tests.CreateEstimateTest"/>
+            <class name="tests.CreateSalesOrderTest"/>
         </classes>
     </test>
 </suite>

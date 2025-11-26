@@ -6,6 +6,7 @@ import java.util.concurrent.TimeoutException;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -13,17 +14,16 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import utils.Utilities;
 
-public class CreateItemPage {
-	
+public class CreateItemPage {	
 	 private final WebDriver driver;
 	    private final WebDriverWait wait;
-
 	    public CreateItemPage(WebDriver driver) {
 	        this.driver = driver;
 	        this.wait = new WebDriverWait(driver, Duration.ofSeconds(15));
 	    }
 	
 	 // ──────────────── Navigation Elements ────────────────
+	    private final By dashboardField=By.xpath("//a[text()='Dashboard']");
 	    private final By itemMasterMenuField = By.xpath("//a[contains(text(),'Item Master')]");
 	    private final By itemsMenufield = By.xpath("//span[contains(text(),'Items')]");
 	    private final By newItemButtonField = By.xpath("//p[contains(text(),'new')]");
@@ -33,21 +33,17 @@ public class CreateItemPage {
 	    private final By itemNameField = By.id("name");
 	    private final By eanCodeField = By.id("sku");
 	    private final By itemCodeField = By.id("item_code");
-	    private final By arabicNameField = By.id("name_in_secondary_lang");
-	    
+	    private final By arabicNameField = By.id("name_in_secondary_lang"); 
 	    private final By hsnCodeField = By.id("hsn_code");
 	    private final By genBarCodeField = By.xpath("//button[@name='button' and contains(text(),'Generate')]");
 	    
 //	    private final By brandDropdownField = By.id("//button[@id='headlessui-combobox-button-:r2d:']/div[2]/div");
 //	    private final By brandListField = By.id("//label[contains(text(),'Brand')]");
 	    private final By searchBrandField = By.xpath("//label[contains(text(),'Brand')]/following-sibling::input[@type='text']");
-	    private final By selectBrandField = By.xpath(" //ul/li[1]/span");
-	  
+	    private final By selectBrandField = By.xpath(" //ul/li[1]/span"); 
 	    private final By searchCategoryField = By.xpath("//label[text()='Category']/following-sibling::input[@type='text']");
-	    private final By selectCategoryField = By.xpath("//ul/li[1]/span");
-	    
-	    private final By remarkField = By.id("remark");
-	    
+	    private final By selectCategoryField = By.xpath("//ul/li[1]/span");	    
+	    private final By remarkField = By.id("remark");  
 	    private final By searchBaseUnitField = By.xpath("//label[contains(text(),'Base Unit')]/following-sibling::input[@type='text']");
 	    private final By selectBaseunitField = By.xpath("//ul/li[1]/span");
 	    
@@ -63,27 +59,22 @@ public class CreateItemPage {
 	    private final By openingStocQtykField = By.id("opening_stock_qty");
 	    private final By openingStockRateField = By.id("opening_stock_rate");
 	    private final By reorderPointField = By.id("reorder_point");
-	  
-	    private final By saveButtonField = By.name("default_submit");
-	     
+	    private final By saveButtonField = By.name("default_submit");     
 	    private final By createdItemNameField = By.xpath("//h1");
-	 private final By nameAlreadyExistalertField=By.xpath("//div[@role='alert']/div[2]");
-	    
-	    
+	    private final By nameAlreadyExistalertField=By.xpath("//div[@role='alert']/div[2]");
 	    public void navigateToNewItem() throws InterruptedException {
+	    	 wait.until(ExpectedConditions.elementToBeClickable(dashboardField)).click();
 	        wait.until(ExpectedConditions.elementToBeClickable(itemMasterMenuField)).click();
 	        wait.until(ExpectedConditions.elementToBeClickable(itemsMenufield)).click();
 	        wait.until(ExpectedConditions.elementToBeClickable(newItemButtonField)).click();
 	        Thread.sleep(200);
 	    }
-	
 	    public void createNewItem( String name,String eanCode,String hsnCode,String brand,String category,String remark,String baseUnit,String sellingPrice,String purchasePrice,
 	    		String sellingDescription,String purchaseDescription,String openingStock,String openingStockRate,String reorderPoint) throws InterruptedException {
 	    	//System.out.println(name+","+eanCode+","+hsnCode+","+brand+","+category+","+remark+","+baseUnit+","+sellingPrice+","+ purchasePrice+","+sellingDescription+","+purchaseDescription+","+openingStock+","+openingStockRate+","+reorderPoint);
 	    	 Utilities.injectNetworkTracker(driver);
 	    	if (name != null && !name.trim().isEmpty()) { 
-	    		wait.until(ExpectedConditions.visibilityOfElementLocated(itemNameField)).sendKeys(name);
-	    	
+	    		wait.until(ExpectedConditions.visibilityOfElementLocated(itemNameField)).sendKeys(name, Keys.TAB);
 	    	}else {
 	    		System.out.println("Item Name cannot be Empty !!!");
 	    	}
@@ -101,7 +92,6 @@ public class CreateItemPage {
 	    	if (category != null && !category .trim().isEmpty()) {
 	    		Utilities.selectIfListed(driver, searchCategoryField, selectCategoryField,category);
 		    	}
-	    	
 	    	if (remark != null && !remark .trim().isEmpty())
 	    		wait.until(ExpectedConditions.visibilityOfElementLocated(remarkField)).sendKeys(remark);
 	    	
@@ -111,8 +101,6 @@ public class CreateItemPage {
 	    	else {
 	    		System.out.println("Base Unit cannot be Empty !!!");
 	    	}
-	    	
-	    	
 	    	if (sellingPrice != null && !sellingPrice .trim().isEmpty()) {
 	    	wait.until(ExpectedConditions.visibilityOfElementLocated(sellingPriceField)).sendKeys(sellingPrice);
 	    	}else {
@@ -123,20 +111,15 @@ public class CreateItemPage {
 	    	}else {
 	    		System.out.println("Purchase Price cannot be Empty !!!");
 	    	}
-	    	
 	    	if (sellingDescription != null && !sellingDescription .trim().isEmpty()) {
 	    		wait.until(ExpectedConditions.visibilityOfElementLocated(selesDescriptionField)).sendKeys(sellingDescription);
 	    	}
-	    	
 	    	if (purchaseDescription != null && !purchaseDescription .trim().isEmpty()) {
 	    		wait.until(ExpectedConditions.visibilityOfElementLocated(purchaseDescriptionField)).sendKeys(purchaseDescription);
 	    	}
-	    	
 	    	JavascriptExecutor js = (JavascriptExecutor) driver;
 			WebElement stocks  = driver.findElement(openingStocQtykField);
 		    js.executeScript("arguments[0].scrollIntoView();",stocks);  
-	    	
-	    	
 	    	if (openingStock != null && !openingStock  .trim().isEmpty()) {
 	    		wait.until(ExpectedConditions.visibilityOfElementLocated(openingStocQtykField)).sendKeys(openingStock );
 	    	}
@@ -146,19 +129,14 @@ public class CreateItemPage {
 	    	if (reorderPoint!= null && !reorderPoint.trim().isEmpty()) {
 	    		wait.until(ExpectedConditions.visibilityOfElementLocated(reorderPointField)).sendKeys(reorderPoint);
 	    	}
-
 	    }
-	    public void clickSaveButton() {
+	    public void clickSaveButton() { 
 	        try {
 	        	Utilities.waitForPageToLoad(driver);
-	        	
 	            WebElement saveButton = wait.until(ExpectedConditions.visibilityOfElementLocated(saveButtonField));
 	            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", saveButton);
-
-	           
-	                    saveButton.click();
-	        }catch(Exception e) {
-	        	
+	            saveButton.click();
+	        }catch(Exception e) {	
 	        }
 	        try {
 	        	wait.until(ExpectedConditions.visibilityOfElementLocated(nameAlreadyExistalertField));
@@ -170,10 +148,8 @@ public class CreateItemPage {
 	        catch(Exception e) {
 	        	//System.out.println("yes");
 	        }
-	        
-	        
-	    }
-	    public boolean verifyItemCreated(String expectedItemName) {
+	   }
+	   public boolean verifyItemCreated(String expectedItemName) {
 	    	try {
 	        wait.until(ExpectedConditions.visibilityOfElementLocated(createdItemNameField));
 	        String actualItemName = driver.findElement(createdItemNameField).getText();
@@ -182,12 +158,5 @@ public class CreateItemPage {
 	    	}catch(Exception e) {
 	    		return false;
 	    	}
-	    	
-	    }
-	    
-	    
-	    
-	    
-	
-
+	    }	
 }
