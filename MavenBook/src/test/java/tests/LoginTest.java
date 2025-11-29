@@ -1,11 +1,8 @@
 package tests;
-
-import static org.testng.Assert.assertTrue;
-
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
+import org.testng.asserts.SoftAssert;
 import base.BaseSetup;
 import pages.Login;
 import pages.LoginTPage;
@@ -19,21 +16,19 @@ public class LoginTest extends BaseSetup {
       loginPage = new Login(driver);
       loginPage.login();
   }
-
  @AfterMethod
   public void afterMethod() {
       loginPage.logout();
  }
  @Test
- public void loginTest() throws InterruptedException {
-	  
+ public void loginTest() throws InterruptedException {  
 	  LoginTPage loginP = new LoginTPage(driver);
 	 // loginP.verifyuser("");
-	  
-	  assertTrue(loginP.verifyuser(eid),
+	  SoftAssert soft=new SoftAssert();
+	  soft.assertTrue(loginP.verifyuser(eid),
               "Estimate not found or failed to login : " + eid);
- }
- 
+	  soft.assertAll();
+ } 
 }
 
 

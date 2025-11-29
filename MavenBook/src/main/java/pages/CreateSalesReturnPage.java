@@ -1,6 +1,8 @@
 package pages;
 
 import java.time.Duration;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.openqa.selenium.By;
@@ -14,12 +16,12 @@ import org.testng.Assert;
 
 import utils.Utilities;
 
-public class CreateSalesInvoicePage {
+public class CreateSalesReturnPage {
 	private final WebDriver driver;
     private final WebDriverWait wait;
 
-    public CreateSalesInvoicePage(WebDriver driver) {
-        this.driver = driver;
+    public CreateSalesReturnPage(WebDriver driver) {
+		this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(15));
     }
 
@@ -27,27 +29,34 @@ public class CreateSalesInvoicePage {
   
     private final By dashboardField=By.xpath("//a[text()='Dashboard']"); 
     private final By salesMenuField = By.xpath("//div[@title='sales']/a[contains(text(),'Sales')]");
-    private final By salesInvoiceMenuField = By.xpath("//div[@title='invoices']/span[contains(text(),'Invoices')]");
-    private final By newSalesInvoiceButtonField = By.xpath("//button/p[contains(text(),'new')]");
+    private final By salesReturnMenuField = By.xpath("//div[@title='sales return']/span[contains(text(),'Sales Return')]");
+    private final By newSalesReturnButtonField = By.xpath("//button/p[contains(text(),'new')]");
 
     // ──────────────── Header / Customer Fields ────────────────
     private final By customerDropdownField = By.xpath("//input[@placeholder='Select Customer Name']");
     private final By firstCustomerOptionField =  By.xpath("//div[@class='flex flex-col gap-4 px-10 py-5']/div/div/div/div/div/div/div/ul/li[1]/div/div/h1");
-    private final By salesInvoiceNumberfield=By.id("sales_invoice_no");
-    private final By orderNumberField = By.id("order_number");
+    private final By salesReturnNumberField=By.id("sales_return_no");
+    //private final By orderNumberField = By.id("order_number");
     
-    private final By invoiceDateField=By.id("date");
-    private final By subjectField = By.id("subject");
+    private final By salesReturnDateField=By.id("date");
+    //private final By subjectField = By.id("subject");
+    
+    private final By searchInvoiceField=By.xpath("//label[contains(text(),'Invoices')]/following-sibling::input[@type='text']");	    
+    private final By selectInvoiceField = By.xpath("//ul/li[1]/span");
+    private final By searchSalesPersonLabelField=By.xpath("//label[contains(text(),'Sales Person')]");
     private final By searchSalesPersonField=By.xpath("//label[contains(text(),'Sales Person')]/following-sibling::input[@type='text']");	    
     private final By selectSalesPersonField = By.xpath("//ul/li[1]/span");
     
-    private final By supplyDateField=By.id("supply_date");
+    //private final By supplyDateField=By.id("supply_date");
     
-    private final By searchPaymentTermsField=By.xpath("//label[contains(text(),'Payment Terms')]/following-sibling::input[@type='text']");	    
-    private final By selectPaymentTermsField = By.xpath("//ul/li[1]/span");
+    //private final By searchPaymentTermsField=By.xpath("//label[contains(text(),'Payment Terms')]/following-sibling::input[@type='text']");	    
+    //private final By selectPaymentTermsField = By.xpath("//ul/li[1]/span");
     private final By searchTransactionTypeField=By.xpath("//label[contains(text(),'Transaction Type')]/following-sibling::input[@type='text']");	    
     private final By selectTransactionTypeField = By.xpath("//ul/li[1]/span");
-    
+    private final By referenceField=By.id("reference");
+    private final By referenceLabelField=By.xpath("//label[@title='Reference']");
+    private final By reasonField=By.id("reason");
+    private final By taxField=By.xpath("//a[text()='Tax']");
     
     // ──────────────── Item Fields ────────────────
     private final By itemDetailsField = By.xpath("//table[@class=' w-full ']/thead/tr[1]/td[1]");
@@ -60,31 +69,36 @@ public class CreateSalesInvoicePage {
 
     // ──────────────── Action Buttons ────────────────
     private final By saveAsDraftButtonField = By.xpath("//button[contains(text(),'Save as Draft')]");
-    private final By invoiceNoinListField = By.xpath("(//tr/td[3])[1]/div/div");
+    private final By salesReturnNoinListField = By.xpath("(//tr/td[3])[1]/div/div");
 
     // ──────────────── Actions ────────────────
 
-    /** Navigate to Create Estimate Page */
-    public void navigateToNewSalesInvoice() {
+    /** Navigate to Create Estimate Page 
+     * @throws InterruptedException */
+    public void navigateToNewSalesReturn(){
     	wait.until(ExpectedConditions.elementToBeClickable(dashboardField)).click();
         wait.until(ExpectedConditions.elementToBeClickable(salesMenuField)).click();
-        wait.until(ExpectedConditions.elementToBeClickable(salesInvoiceMenuField)).click();
-        wait.until(ExpectedConditions.elementToBeClickable(newSalesInvoiceButtonField)).click();
+        wait.until(ExpectedConditions.elementToBeClickable(salesReturnMenuField)).click();
+        wait.until(ExpectedConditions.elementToBeClickable(newSalesReturnButtonField)).click();
+       
     }
 
-    public String salesInvoiceNumber() {
-    	String SONO=wait.until(ExpectedConditions.visibilityOfElementLocated(salesInvoiceNumberfield)).getAttribute("value");
-    	System.out.println("creat Invoice ID :"+SONO);
-    	return SONO;
+    public String salesReturnNumber() {
+    	String SRno=wait.until(ExpectedConditions.visibilityOfElementLocated(salesReturnNumberField)).getAttribute("value");
+    	System.out.println(SRno);
+    	return SRno;
+    	
     }
     /** Fill in header details (customer, ref no, subject) 
      * @throws InterruptedException */
-    public void fillSalesInvoiceHeader(String customerName, String orderNo, String subject,String salesPerson,String invDate,String paymentTerms,String supDate,String transactionType) throws InterruptedException {
-    	//System.out.println(customerName+" : "+orderNo+" : "+subject+" : "+salesPerson+" : "+invDate+" : "+supDate+" : "+paymentTerms+" : "+transactionType);
+    public void fillSalesReturnHeader(String customerName, String invoNo, String reason,String salesPerson,String salesReturnDate,String referenceNo,String transactionType) throws InterruptedException {
+    	//System.out.println(customerName+" : "+invoNo+" : "+salesPerson+" : "+salesReturnDate+" : "+reason+" : "+referenceNo+" : "+transactionType);
+    	//System.out.println("Return Date:"+salesReturnDate);
     	if (customerName != null && !customerName  .trim().isEmpty()) {
     		try {
     		wait.until(ExpectedConditions.elementToBeClickable(customerDropdownField)).click();
-	        driver.findElement(customerDropdownField).sendKeys(customerName);       
+	        driver.findElement(customerDropdownField).sendKeys(customerName);
+	        
 	        List<WebElement> options = driver.findElements(firstCustomerOptionField); // adjust locator as needed
 	        boolean found = false;
             for (WebElement option : options) {
@@ -102,39 +116,55 @@ public class CreateSalesInvoicePage {
     			 Assert.fail("Error selecting customer: " + e.getMessage());
     		}
     	}
-
-        driver.findElement(orderNumberField).sendKeys(orderNo);
-        
-        if (invDate != null && !invDate.trim().isEmpty()) {
-        	//System.out.println("inv Date:");
-    		wait.until(ExpectedConditions.visibilityOfElementLocated(invoiceDateField)).sendKeys(invDate);
+        if (salesReturnDate != null && !salesReturnDate.trim().isEmpty()) {
+        	WebElement srdate = driver.findElement(salesReturnDateField);
+	        	wait.until(ExpectedConditions.attributeToBeNotEmpty(srdate, "value"));
+	        	//String dateValue = driver.findElement(salesReturnDateField).getAttribute("value"); //
+		    	//System.out.println("Date value: " + dateValue);  
+	        	
+		    	srdate.clear();
+		    	srdate.sendKeys(salesReturnDate);
+		    	//srdate.sendKeys(Keys.TAB);
+        	//wait.until(ExpectedConditions.visibilityOfElementLocated(salesReturnDateField)).sendKeys(salesReturnDate);
+        	//srdate.sendKeys(Keys.TAB);
+    		
+        	//String dateValue1 = driver.findElement(salesReturnDateField).getAttribute("value"); //
+	    	//System.out.println("Date value: " + dateValue1);
+	    	//===============
+        	
+    	}
+        else {
+        	Thread.sleep(200);
+        	//WebElement srdate = driver.findElement(salesReturnDateField);
+        	//wait.until(ExpectedConditions.attributeToBeNotEmpty(srdate, todayStr));
+        }
+        Thread.sleep(2000);
+        if (invoNo!= null && !invoNo.trim().isEmpty()) {
+    		Utilities.selectIfListed(driver, searchInvoiceField, selectInvoiceField,invoNo);
     	}
         
-        if (paymentTerms!= null && !paymentTerms.trim().isEmpty()) {
-    		Utilities.selectIfListed(driver, searchPaymentTermsField, selectPaymentTermsField,paymentTerms);
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        WebElement tax  = driver.findElement(taxField);
+	    js.executeScript("arguments[0].scrollIntoView();",tax); 
+        if (salesPerson  != null && !salesPerson  .trim().isEmpty()) {
+        	//wait.until(ExpectedConditions.attributeToBeNotEmpty(salesP, "value"));
+    		Utilities.selectIfListed(driver, searchSalesPersonField, selectSalesPersonField,salesPerson);
+    		driver.findElement(searchSalesPersonField).sendKeys(Keys.ESCAPE);
     	}
-         
-        if (supDate != null && !supDate.trim().isEmpty()) {
-        	//System.out.println("sup Date:");
-        	wait.until(ExpectedConditions.visibilityOfElementLocated(supplyDateField)).sendKeys(supDate);
-    	}
+        
+        Thread.sleep(100);
         if (transactionType!= null && !transactionType.trim().isEmpty()) {
     		Utilities.selectIfListed(driver, searchTransactionTypeField, selectTransactionTypeField,transactionType);
+    		driver.findElement(referenceLabelField).click();
     	}
-        
-        JavascriptExecutor sp = (JavascriptExecutor) driver;
-        WebElement salesP  = driver.findElement(searchSalesPersonField);
-	    sp.executeScript("arguments[0].scrollIntoView();",salesP); 
-        
-        if (salesPerson  != null && !salesPerson  .trim().isEmpty()) {
-    		Utilities.selectIfListed(driver, searchSalesPersonField, selectSalesPersonField,salesPerson);
-    	}
-        
-        salesP.sendKeys(Keys.ESCAPE);
-        if (subject != null && !subject .trim().isEmpty()) {
-        driver.findElement(subjectField).click();
-        driver.findElement(subjectField).sendKeys(subject);
+        Thread.sleep(100);
+        if(referenceNo!=null&&!referenceNo.trim().isEmpty()) {
+        	driver.findElement(referenceField).sendKeys(referenceNo);
         }
+        if(reason!=null&&!reason.trim().isEmpty()) {
+        	driver.findElement(reasonField).sendKeys(reason);
+        }   
+         
          Thread.sleep(200);
     }
 
@@ -164,9 +194,11 @@ public class CreateSalesInvoicePage {
     /** Add optional notes and terms */
     public void addNotesAndTerms(String customerNote, String terms) {
         if (customerNote != null && !customerNote.isEmpty()) {
+        	driver.findElement(customerNoteField).clear();
             driver.findElement(customerNoteField).sendKeys(customerNote);
         }
         if (terms != null && !terms.isEmpty()) {
+        	driver.findElement(termsField).clear();
             driver.findElement(termsField).sendKeys(terms);
         }
     }
@@ -175,11 +207,11 @@ public class CreateSalesInvoicePage {
         wait.until(ExpectedConditions.elementToBeClickable(saveAsDraftButtonField)).click();
     }
     /** Verify estimate saved by checking list */
-    public boolean verifySalesInvoiceCreated(String expectedInvoiceNo) {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(invoiceNoinListField));
-        String actualInvoiceNo = driver.findElement(invoiceNoinListField).getText();
-        //System.out.println("actual SI NO: "+actualInvoiceNo);
-        return actualInvoiceNo.equalsIgnoreCase(expectedInvoiceNo);
+    public boolean verifySalesReturnCreated(String expectedSalesReturnNo) {
+    	//System.out.println("expected SR number : "+expectedSalesReturnNo);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(salesReturnNoinListField));
+        String actualSalesReturnNo = driver.findElement(salesReturnNoinListField).getText();
+        //System.out.println("Actual SR number :"+actualSalesReturnNo);
+        return actualSalesReturnNo.equalsIgnoreCase(expectedSalesReturnNo);
     }
 }
-

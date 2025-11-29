@@ -9,6 +9,8 @@ import org.testng.SkipException;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
+
 import base.BaseSetup;
 import pages.CreateVendorPage;
 import pages.Login;
@@ -97,22 +99,14 @@ public class CreateVendorTest extends BaseSetup{
 			   contactWorkPhone != null && !contactWorkPhone.trim().isEmpty()) || (contactMobile != null && !contactMobile.trim().isEmpty()))){
 	   createVendorPage.vendorContactAddress(contactSalutation, contactFirstName, contactLastName, contactEmail, contactWorkPhone, contactMobile);
 	   } 
-
 	  createVendorPage.clickSaveButton();
-	  assertTrue(createVendorPage.verifyVendorCreated(companyDisplayName),
+	  SoftAssert soft=new SoftAssert();
+	  soft.assertTrue(createVendorPage.verifyVendorCreated(companyDisplayName),
 	              "Vendor not found or failed to create : " + companyDisplayName);
-	   
-	  }
-	  
-  }
-	       
+	  soft.assertAll();
+	  }	  
+  }       
 	  private String getValue(Map<String, Object> data, String key) {
 	            return data.getOrDefault(key, "").toString().trim();
-	        } 
-	   
-	  
-	  
-	  
-	  
-  
+	        }   
 }

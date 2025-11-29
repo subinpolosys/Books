@@ -10,6 +10,7 @@ import org.testng.SkipException;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 
 import base.BaseSetup;
 import pages.CreateSalesOrderPage;
@@ -61,8 +62,10 @@ public class CreateSalesOrderTest extends BaseSetup {
                     "This is a system-generated document. Ensure accuracy before acceptance."
             );
             salesOrderPage.saveAsDraft();
-            assertTrue(salesOrderPage.verifySalesOrderCreated(SONo),
+            SoftAssert soft=new SoftAssert();
+            soft.assertTrue(salesOrderPage.verifySalesOrderCreated(SONo),
                     "Estimate not found or failed to create : " + SONo);
+            soft.assertAll();
         }
     }
 }

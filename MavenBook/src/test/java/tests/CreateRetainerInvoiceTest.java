@@ -7,6 +7,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 
 import base.BaseSetup;
 import pages.CreateRetainerInvoicePage;
@@ -51,16 +52,15 @@ public class CreateRetainerInvoiceTest extends BaseSetup {
 		  if (amount == null || amount.trim().isEmpty()) {
 		        throw new SkipException("Amount cannot be empty — skipping test case.");
 		    }
-		  
 		  CreateRetainerInvoicePage createRetainerInvoicePage=new CreateRetainerInvoicePage(driver);
-		  
-		  createRetainerInvoicePage.navigateToNewRetainerInvoice();
-		  
+		  createRetainerInvoicePage.navigateToNewRetainerInvoice(); 
 		  createRetainerInvoicePage.fillRetainerInvoice(customerName, retainerData, referenceNo, description, amount, customerNote, termsAndcondition);
 		  String RIno=createRetainerInvoicePage.retainerInvoiceNumber();
 		  createRetainerInvoicePage.saveAsDraft();
-		  assertTrue(createRetainerInvoicePage.verifyRetainerInvoiceCreated(RIno),
+		  SoftAssert soft=new SoftAssert();
+          soft.assertTrue(createRetainerInvoicePage.verifyRetainerInvoiceCreated(RIno),
                   "Retainer Invoice not found or failed to create : " + RIno);
+          soft.assertAll();
 	  }
 	  
 	  

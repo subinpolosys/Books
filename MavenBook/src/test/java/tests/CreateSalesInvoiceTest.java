@@ -1,7 +1,5 @@
 package tests;
 
-import static org.testng.Assert.assertTrue;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +8,7 @@ import org.testng.SkipException;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 
 import base.BaseSetup;
 import pages.CreateSalesInvoicePage;
@@ -34,8 +33,8 @@ public class CreateSalesInvoiceTest extends BaseSetup{
                 ExcelReader.getMasterDetailData(filePath, "SalesInvoiceHeader", "SalesInvoiceItems");
         CreateSalesInvoicePage salesInvoicePage = new CreateSalesInvoicePage(driver);
         //debug
-        System.out.println("Total records read: " + allSalesInvoice.size());
-        allSalesInvoice.forEach(System.out::println);
+//        System.out.println("Total records read: " + allSalesInvoice.size());
+//        allSalesInvoice.forEach(System.out::println);
         //
         for (Map<String, Object> salesInvoice : allSalesInvoice) {
             String customerName = salesInvoice.get("customerName").toString();
@@ -59,15 +58,17 @@ public class CreateSalesInvoiceTest extends BaseSetup{
             }
             salesInvoicePage.navigateToNewSalesInvoice();
             salesInvoicePage.fillSalesInvoiceHeader(customerName, referenceNo, subject,salesPerson,invoiceDate,paymentTerms,supplyDate,transactionType);
-            String SONo=salesInvoicePage.salesInvoiceNumber();
+            String SINo=salesInvoicePage.salesInvoiceNumber();
             salesInvoicePage.addItems(itemNames, itemQtys);
             salesInvoicePage.addNotesAndTerms(
-                    "Dear " + customerName + ", " + SONo + " has been created by Automation",
+                    "Dear " + customerName + ", " + SINo + " has been created by Automation",
                     "This is a system-generated document. Ensure accuracy before acceptance."
             );
             salesInvoicePage.saveAsDraft();
-            assertTrue(salesInvoicePage.verifySalesInvoiceCreated(SONo),
-                    "Estimate not found or failed to create : " + SONo);
+            SoftAssert soft = new SoftAssert();
+            soft.assertTrue(salesInvoicePage.verifySalesInvoiceCreated(SINo),
+                    "Sales Invoice not found or failed to create : " + SINo);
+            soft.assertAll();
         }
     }
 }

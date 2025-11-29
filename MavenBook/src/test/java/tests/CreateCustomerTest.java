@@ -10,6 +10,7 @@ import org.testng.SkipException;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 
 import base.BaseSetup;
 import pages.CreateCustomerPage;
@@ -83,7 +84,6 @@ public class CreateCustomerTest extends BaseSetup{
 
 	        // === Skip invalid data ===
 	        if ((companyDisplayName == null || companyDisplayName.trim().isEmpty()) ||(taxTreatment == null || taxTreatment.trim().isEmpty())) {
-
 	        	    throw new SkipException("Skipping: Missing Customer Display Name or Tax Treatment");
 	        }
 	   createCustomerPage.navigateToNewCustomer();
@@ -98,19 +98,16 @@ public class CreateCustomerTest extends BaseSetup{
 			   contactWorkPhone != null && !contactWorkPhone.trim().isEmpty()) || (contactMobile != null && !contactMobile.trim().isEmpty()))){
 	   createCustomerPage.customerContactAddress(contactSalutation, contactFirstName, contactLastName, contactEmail, contactWorkPhone, contactMobile);
 	   } 
-
 	  createCustomerPage.clickSaveButton();
-	  assertTrue(createCustomerPage.verifyCustomerCreated(companyDisplayName),
+	  SoftAssert soft=new SoftAssert();
+	  soft.assertTrue(createCustomerPage.verifyCustomerCreated(companyDisplayName),
 	              "Customer not found or failed to create : " + companyDisplayName);
-	   
-	  }
-	  
-  }
-	       
+	  soft.assertAll();   
+	  } 
+  }       
 	  private String getValue(Map<String, Object> data, String key) {
 	            return data.getOrDefault(key, "").toString().trim();
-	        } 
-	  
+	        }   
 }
 	        
 	        

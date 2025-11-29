@@ -7,6 +7,8 @@ import utils.ExcelReader;
 
 import org.testng.SkipException;
 import org.testng.annotations.*;
+import org.testng.asserts.SoftAssert;
+
 import static org.testng.Assert.assertTrue;
 import java.io.IOException;
 import java.util.List;
@@ -72,9 +74,10 @@ public class CreateEstimateTest extends BaseSetup {
     	            );
 
     	            estimatePage.saveAsDraft();
-
-    	            assertTrue(estimatePage.verifyEstimateCreated(estNo),
+    	            SoftAssert soft=new SoftAssert();
+    	            soft.assertTrue(estimatePage.verifyEstimateCreated(estNo),
     	                    "Estimate not found : " + estNo);
+    	            soft.assertAll();
     	        }
     	    }
     	}
