@@ -64,7 +64,7 @@ public class CreateSalesOrderTest extends BaseSetup {
             salesOrderPage.saveAsDraft();
             SoftAssert soft=new SoftAssert();
             soft.assertTrue(salesOrderPage.verifySalesOrderCreated(SONo),
-                    "Estimate not found or failed to create : " + SONo);
+                    "Sales Oreder not found or failed to create : " + SONo);
             soft.assertAll();
         }
     }

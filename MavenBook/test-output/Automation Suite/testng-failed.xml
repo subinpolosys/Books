@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <suite name="Failed suite [Automation Suite]" guice-stage="DEVELOPMENT">
-  <test thread-count="5" name="Estimate Tests(failed)">
+  <test thread-count="5" name="Tests(failed)">
     <classes>
-      <class name="tests.CreateSalesOrderTest">
+      <class name="tests.CreateDeliverynoteTest">
         <methods>
-          <include name="createEstimateTest"/>
           <include name="setUp"/>
-          <include name="tearDown"/>
-          <include name="beforeMethod"/>
           <include name="afterMethod"/>
+          <include name="tearDown"/>
+          <include name="createDeliverynoteTest"/>
+          <include name="beforeMethod"/>
         </methods>
-      </class> <!-- tests.CreateSalesOrderTest -->
+      </class> <!-- tests.CreateDeliverynoteTest -->
     </classes>
-  </test> <!-- Estimate Tests(failed) -->
+  </test> <!-- Tests(failed) -->
 </suite> <!-- Failed suite [Automation Suite] -->

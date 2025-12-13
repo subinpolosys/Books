@@ -21,7 +21,6 @@ public class CreateSalesOrderPage {
 	        this.driver = driver;
 	        this.wait = new WebDriverWait(driver, Duration.ofSeconds(15));
 	    }
-
 	    // ──────────────── Navigation Elements ────────────────
 	    private final By dashboardField=By.xpath("//a[text()='Dashboard']"); 
 	    private final By salesMenuField = By.xpath("//div[@title='sales']/a[contains(text(),'Sales')]");
@@ -67,7 +66,7 @@ public class CreateSalesOrderPage {
 	        wait.until(ExpectedConditions.elementToBeClickable(newSalesOrderButtonField)).click();
 	    }
 	    public String salesOrderNumber() {
-	    	String SONO=wait.until(ExpectedConditions.presenceOfElementLocated(salesOrderNumberfield)).getText();
+	    	String SONO=wait.until(ExpectedConditions.visibilityOfElementLocated(salesOrderNumberfield)).getAttribute("value");
 	    	return SONO;
 	    }
 	    /** Fill in header details (customer, ref no, subject) 
@@ -96,8 +95,11 @@ public class CreateSalesOrderPage {
 	    			 Assert.fail("Error selecting customer: " + e.getMessage());
 	    		}
 	    	}
+	    	if(referenceNo != null && !referenceNo.trim().isEmpty()) {
+	    		String ctime=Utilities.dateTime(); 
+	        	referenceNo=referenceNo+":"+ctime.split(" ")[1];
 	        driver.findElement(referenceNumberField).sendKeys(referenceNo);
-	        
+	    	}
 	        if (soDate != null && !soDate.trim().isEmpty()) {
 	        	//System.out.println("inv Date:");
 	    		wait.until(ExpectedConditions.visibilityOfElementLocated(soDateField)).sendKeys(soDate);
@@ -160,6 +162,6 @@ public class CreateSalesOrderPage {
 	    public boolean verifySalesOrderCreated(String expectedSalesOrderNo) {
 	        wait.until(ExpectedConditions.visibilityOfElementLocated(salesOrderNoinListField));
 	        String actualSalesOrderNo = driver.findElement(salesOrderNoinListField).getText();
-	        return actualSalesOrderNo.contains(expectedSalesOrderNo);
+	        return actualSalesOrderNo.equalsIgnoreCase(expectedSalesOrderNo);
 	    }
 	}

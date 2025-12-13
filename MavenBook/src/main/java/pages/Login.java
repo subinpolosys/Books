@@ -31,8 +31,11 @@ public class Login {
     }
 
     public void login() throws InterruptedException {
-    //==================No Captcha==================//
-    	
+    //==================New Captcha==================//
+    int flag=0;
+    int i=0;
+    do{
+    	 i++;
     driver.get(loginUrl);
     Thread.sleep(500);
     wait.until(ExpectedConditions.visibilityOfElementLocated(usernameField));
@@ -43,7 +46,7 @@ public class Login {
     wait.until(ExpectedConditions.elementToBeClickable(loginButton)).click();	
     	
 //        int retries = 0;
-//        int maxRetries = 3;
+//       int maxRetries = 3;
 //
 //        while (!recaptchaSolved && retries < maxRetries) {
 //            retries++;
@@ -58,7 +61,6 @@ public class Login {
 //        if (!recaptchaSolved) {
 //            throw new RuntimeException("CAPTCHA could not be solved after " + maxRetries + " attempts.");
 //        }
-//
 //        driver.switchTo().defaultContent();
 //        wait.until(ExpectedConditions.visibilityOfElementLocated(usernameField));
 //        driver.findElement(usernameField).sendKeys(username);
@@ -78,10 +80,18 @@ public class Login {
 //        
         try {
             wait.until(ExpectedConditions.visibilityOfElementLocated(continueButton)).click();
-        } catch (Exception ignored) {}
-
-        wait.until(ExpectedConditions.visibilityOfElementLocated(dashboardMenu));
-        driver.findElement(dashboardMenu).click();
+            flag=1;
+            wait.until(ExpectedConditions.visibilityOfElementLocated(dashboardMenu));
+            driver.findElement(dashboardMenu).click();
+        } catch (Exception ignored) {
+        	flag=0;
+        	}
+        //System.out.println("I: "+i);
+    	}
+    	while(flag==0 && i<4);
+        if(i>3) {
+        	System.out.println("CAPTCHA could not be solved after " + i + " attempts.");
+        }
     }
 
 //    private boolean handleCaptcha() {

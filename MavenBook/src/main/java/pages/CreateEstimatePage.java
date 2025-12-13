@@ -61,7 +61,7 @@ public class CreateEstimatePage {
     }
 
     public String estimatenumber() {
-    	String ESTNO=wait.until(ExpectedConditions.presenceOfElementLocated(estimateNumberfield)).getText();
+    	String ESTNO=wait.until(ExpectedConditions.visibilityOfElementLocated(estimateNumberfield)).getAttribute("value");
     	return ESTNO;
     }
    
@@ -89,6 +89,8 @@ public class CreateEstimatePage {
     		}
     	}
         if (referenceNo != null && !referenceNo .trim().isEmpty()) {
+        	String ctime=Utilities.dateTime(); 
+        	referenceNo=referenceNo+":"+ctime.split(" ")[1];
         driver.findElement(referenceNumberField).sendKeys(referenceNo);
         }
         Thread.sleep(200);
@@ -153,13 +155,18 @@ public class CreateEstimatePage {
     /** Save the estimate as draft */
     public void saveAsDraft() {
         wait.until(ExpectedConditions.elementToBeClickable(saveAsDraftButtonField)).click();
-        System.out.println("Estimate date field value: " + driver.findElement(estimateDateField).getAttribute("value"));
+        //System.out.println("Estimate date field value: " + driver.findElement(estimateDateField).getAttribute("value"));
     }
     /** Verify estimate saved by checking list */
     public boolean verifyEstimateCreated(String expectedstimateNo) {
+    	try {
         wait.until(ExpectedConditions.visibilityOfElementLocated(estimateNoinListField));
         String actualEstimateNo = driver.findElement(estimateNoinListField).getText();
-        return actualEstimateNo.contains(expectedstimateNo);
+        return actualEstimateNo.equalsIgnoreCase(expectedstimateNo);
+    	}
+    	catch(TimeoutException e) {
+    		return false;
+    	}
     }
 }
 

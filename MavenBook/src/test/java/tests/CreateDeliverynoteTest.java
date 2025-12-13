@@ -1,11 +1,7 @@
 package tests;
-
-import static org.testng.Assert.assertTrue;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-
 import org.testng.SkipException;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -39,9 +35,7 @@ public class CreateDeliverynoteTest extends BaseSetup {
 	            String referenceNo = dnote .get("referenceNo").toString();
 	            
 	            String dnDate=dnote .get("invoiceDate").toString();
-	            String dnType=dnote.get("transactionType").toString();
-	            
-	            
+	            String dnType=dnote.get("transactionType").toString();	            
 	            if (customerName.isEmpty()) {
 	                throw new SkipException("❌ Skipping test: Customer Name is empty in Excel data");
 	            }

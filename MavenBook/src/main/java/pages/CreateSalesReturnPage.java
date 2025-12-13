@@ -85,7 +85,7 @@ public class CreateSalesReturnPage {
 
     public String salesReturnNumber() {
     	String SRno=wait.until(ExpectedConditions.visibilityOfElementLocated(salesReturnNumberField)).getAttribute("value");
-    	System.out.println(SRno);
+    	//System.out.println(SRno);
     	return SRno;
     	
     }
@@ -159,6 +159,8 @@ public class CreateSalesReturnPage {
     	}
         Thread.sleep(100);
         if(referenceNo!=null&&!referenceNo.trim().isEmpty()) {
+        	String ctime=Utilities.dateTime(); 
+        	referenceNo=referenceNo+":"+ctime.split(" ")[1];
         	driver.findElement(referenceField).sendKeys(referenceNo);
         }
         if(reason!=null&&!reason.trim().isEmpty()) {
