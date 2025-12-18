@@ -35,26 +35,33 @@ public class CreateSalesOrderTest extends BaseSetup {
                 ExcelReader.getMasterDetailData(filePath, "SalesOrderHeader", "SalesOrderItems");
         CreateSalesOrderPage salesOrderPage = new CreateSalesOrderPage(driver);
         for (Map<String, Object> salesOrder : allSalesOrder) {
-            String customerName = salesOrder.get("customerName").toString();
-            String referenceNo = salesOrder.get("referenceNo").toString();
-            String subject = salesOrder.get("subject").toString();
-            String salesPerson = salesOrder.get("salesPerson").toString();
-            String soDate = salesOrder.get("invoiceDate").toString();
-            String paymentTerms = salesOrder.get("paymentTerms").toString();
-            String deliveryDate = salesOrder.get("supplyDate").toString();
+        	String customerName  = ExcelReader.getValue(salesOrder, "Customer Name");
+        	String referenceNo   = ExcelReader.getValue(salesOrder, "Reference Number");
+        	String soDate        = ExcelReader.getValue(salesOrder, "Sales Order Date");
+        	String expDelivDate  =ExcelReader.getValue(salesOrder, "Expected Delivery Date");
+        	String paymentTerms  = ExcelReader.getValue(salesOrder, "Payment Terms");
+        	String salesPerson   = ExcelReader.getValue(salesOrder, "Sales Person");
+        	
                        
             if (customerName.isEmpty()) {
                 throw new SkipException("❌ Skipping test: Customer Name is empty in Excel data");
             }
             @SuppressWarnings("unchecked")
             List<Map<String, String>> items = (List<Map<String, String>>) salesOrder.get("items");
-            String[] itemNames = items.stream().map(i -> i.get("itemName")).toArray(String[]::new);
-            String[] itemQtys = items.stream().map(i -> i.get("itemQty")).toArray(String[]::new);
-            if (items == null || items.isEmpty()) {
+             if (items == null || items.isEmpty()) {
                 throw new SkipException("❌ Skipping test: No items(name or Qty) found for Customer: " + customerName);
             }
+          // ===== ITEM DATA (example headers) =====
+             String[] itemNames = items.stream()
+                     .map(i -> i.getOrDefault("Item Name", "").trim())
+                     .toArray(String[]::new);
+
+             String[] itemQtys = items.stream()
+                     .map(i -> i.getOrDefault("Item Quantity", "").trim())
+                     .toArray(String[]::new);
+             
             salesOrderPage.navigateToNewSalesOrder();
-            salesOrderPage.fillSalesOrderHeader(customerName, referenceNo, subject,salesPerson,soDate,paymentTerms,deliveryDate);
+            salesOrderPage.fillSalesOrderHeader(customerName, referenceNo,soDate,expDelivDate,paymentTerms,salesPerson);
             String SONo=salesOrderPage.salesOrderNumber();
             salesOrderPage.addItems(itemNames, itemQtys);
             salesOrderPage.addNotesAndTerms(

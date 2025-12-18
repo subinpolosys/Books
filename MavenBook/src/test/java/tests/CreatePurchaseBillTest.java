@@ -14,7 +14,6 @@ import base.BaseSetup;
 import pages.CreatePurchaseBillPage;
 import pages.Login;
 import utils.ExcelReader;
-
 public class CreatePurchaseBillTest extends BaseSetup{
 	private Login loginPage;
     @BeforeMethod
@@ -33,30 +32,48 @@ public class CreatePurchaseBillTest extends BaseSetup{
                 ExcelReader.getMasterDetailData(filePath, "PurchaseBillHeader", "PurchaseBillItems");
         CreatePurchaseBillPage purchaseBillPage = new CreatePurchaseBillPage(driver);
         //debug
-//        System.out.println("Total records read: " + allSalesInvoice.size());
-//        allSalesInvoice.forEach(System.out::println);
+//        System.out.println("Total records read: " + allPurchaseBill.size());
+//        allPurchaseBill.forEach(System.out::println);
         //
         for (Map<String, Object> purchaseBill : allPurchaseBill) {
-            String vendorName = purchaseBill.get("customerName").toString();
-            String referenceNo = purchaseBill.get("referenceNo").toString();
-            String subject = purchaseBill.get("subject").toString();
-            String salesPerson = purchaseBill.get("salesPerson").toString();
-            String billDate = purchaseBill.get("invoiceDate").toString();
-            String paymentTerms = purchaseBill.get("paymentTerms").toString();
-            String supplyDate = purchaseBill.get("supplyDate").toString();
-            String transactionType = purchaseBill.get("transactionType").toString();
-            if (vendorName.isEmpty()) {
-                throw new SkipException("❌ Skipping test: Vendor Name is empty in Excel data");
+
+            // ===== MASTER DATA (EXACT Excel headers) =====
+            String vendorName      = ExcelReader.getValue(purchaseBill, "Vendor Name");
+            String entryDate     = ExcelReader.getValue(purchaseBill, "Entry Date");
+            String invoiceDate         = ExcelReader.getValue(purchaseBill, "Invoice Date");
+            String expectedDeliveryDate     = ExcelReader.getValue(purchaseBill, "Expected Delivery Date");  
+            String referenceNumber    = ExcelReader.getValue(purchaseBill, "Reference Number");
+            String paymentTerms      = ExcelReader.getValue(purchaseBill, "Payment Terms");
+           
+            // ===== Mandatory validation =====
+            if (vendorName.isEmpty()||referenceNumber.isEmpty()) {
+                throw new SkipException(
+                        "❌ Skipping test: Customer Name OR Reference Number is empty in Excel"
+                );
             }
+
+            // ===== ITEMS =====
             @SuppressWarnings("unchecked")
-            List<Map<String, String>> items = (List<Map<String, String>>) purchaseBill.get("items");
-            String[] itemNames = items.stream().map(i -> i.get("itemName")).toArray(String[]::new);
-            String[] itemQtys = items.stream().map(i -> i.get("itemQty")).toArray(String[]::new);
+            List<Map<String, String>> items =
+                    (List<Map<String, String>>) purchaseBill.get("items");
+
             if (items == null || items.isEmpty()) {
-                throw new SkipException("❌ Skipping test: No items(name or Qty) found for Customer: " + vendorName);
+                throw new SkipException(
+                        "❌ Skipping test: No items found for Customer: " + vendorName
+                );
             }
+
+            // ===== ITEM DATA (example headers) =====
+            String[] itemNames = items.stream()
+                    .map(i -> i.getOrDefault("Item Name", "").trim())
+                    .toArray(String[]::new);
+
+            String[] itemQtys = items.stream()
+                    .map(i -> i.getOrDefault("Item Quantity", "").trim())
+                    .toArray(String[]::new);
+        
             purchaseBillPage.navigateToNewPurchaseBill();
-            purchaseBillPage.fillPurchaseBillHeader(vendorName, referenceNo, subject,salesPerson,billDate,paymentTerms,supplyDate,transactionType);
+            purchaseBillPage.fillPurchaseBillHeader(vendorName,entryDate,invoiceDate,expectedDeliveryDate ,referenceNumber,paymentTerms);
             String billNo=purchaseBillPage.purchaseBillNumber();
             purchaseBillPage.addItems(itemNames, itemQtys);
             purchaseBillPage.addNotesAndTerms(

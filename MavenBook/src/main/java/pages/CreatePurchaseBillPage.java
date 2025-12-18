@@ -79,10 +79,10 @@ public class CreatePurchaseBillPage {
     }
     /** Fill in header details (customer, ref no, subject) 
      * @throws InterruptedException */
-    public void fillPurchaseBillHeader(String vendorName, String refNo, String subject,String salesPerson,String billDate,String paymentTerms,String deliveryDate,String transactionType) throws InterruptedException {
+    public void fillPurchaseBillHeader(String vendorName, String entryDate, String billDate,String expectedDeliveryDate,String referenceNumber,String paymentTerms) throws InterruptedException {
     	//System.out.println(vendorName+" : "+refNo+" : "+subject+" : "+salesPerson+" : "+billDate+" :  "+paymentTerms+" : "+transactionType);
     	String ctime=Utilities.dateTime(); 
-    	refNo=refNo+":"+ctime.split(" ")[1];
+    	referenceNumber=referenceNumber+":"+ctime.split(" ")[1];
     	//System.out.println(refNo);
     	if (vendorName != null && !vendorName  .trim().isEmpty()) {
     		try {
@@ -113,39 +113,41 @@ public class CreatePurchaseBillPage {
     		wait.until(ExpectedConditions.visibilityOfElementLocated(billDateField)).sendKeys(billDate);
     	}
        
-        if(refNo!= null && !refNo.trim().isEmpty()) {
-        driver.findElement(referenceNumberField).sendKeys(refNo);
+        if(referenceNumber!= null && !referenceNumber.trim().isEmpty()) {
+        driver.findElement(referenceNumberField).sendKeys(referenceNumber);
         }
         
         if (paymentTerms!= null && !paymentTerms.trim().isEmpty()) {
     		Utilities.selectIfListed(driver, searchPaymentTermsField, selectPaymentTermsField,paymentTerms);
     	}
          
-        if (deliveryDate != null && !deliveryDate.trim().isEmpty()) {
+        if (expectedDeliveryDate != null && !expectedDeliveryDate.trim().isEmpty()) {
         	Thread.sleep(3000);
         	Utilities.waitForPageLoad(driver);
-        	wait.until(ExpectedConditions.visibilityOfElementLocated(deliveryDateField)).sendKeys(deliveryDate);
+        	wait.until(ExpectedConditions.visibilityOfElementLocated(deliveryDateField)).sendKeys(expectedDeliveryDate);
     	}
          Thread.sleep(200);
     }
     /** Add multiple items dynamically 
      * @throws InterruptedException */
     public void addItems(String[] itemNames, String[] itemQtys) throws InterruptedException {    	
+    	
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		WebElement itemdetail  = driver.findElement(itemDetailsField);
 	    js.executeScript("arguments[0].scrollIntoView();",itemdetail);  
 		driver.findElement(itemDetailsField).click();  //#####  
 		Thread.sleep(500);	
         for (int i = 0; i < itemNames.length; i++) {
+        	System.out.println("Item Name: "+itemNames[i]+" --- Item Qty : "+itemQtys[i]);
             wait.until(ExpectedConditions.elementToBeClickable(itemListField)).click();
             driver.findElement(itemListField).sendKeys(itemNames[i]);
-            Thread.sleep(500);
+            Thread.sleep(1000);
             // Select item dynamically
             By selectItem = By.xpath(String.format(itemSelectField, 1));
             wait.until(ExpectedConditions.elementToBeClickable(selectItem)).click();
             Thread.sleep(500);
             // Fill item quantity
-            WebElement qtyField = driver.findElement(By.xpath("//tbody/tr[" + (i + 1) + "]/td[4]//input"));
+            WebElement qtyField = driver.findElement(By.xpath("//tbody/tr[" + (i + 1) + "]/td[5]//input"));
             qtyField.clear();
             qtyField.sendKeys(itemQtys[i]);
             Thread.sleep(500);

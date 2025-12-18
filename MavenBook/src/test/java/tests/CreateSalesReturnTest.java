@@ -37,25 +37,31 @@ public class CreateSalesReturnTest extends BaseSetup {
         //allSalesReturn.forEach(System.out::println);
         //
         for (Map<String, Object> salesReturn : allSalesReturn) {
-            String customerName = salesReturn.get("customerName").toString();
-            String invoiceNo = salesReturn.get("referenceNo").toString();
-            String reason = salesReturn.get("subject").toString();
-            String salesPerson = salesReturn.get("salesPerson").toString();
-            String salesReturnDate = salesReturn.get("invoiceDate").toString();
-            //String paymentTerms = salesInvoice.get("paymentTerms").toString();
-            String referenceNumber = salesReturn.get("supplyDate").toString();
-            String transactionType = salesReturn.get("transactionType").toString();
-          
+        	String customerName       = ExcelReader.getValue(salesReturn, "Customer Name");
+        	String invoiceNo          = ExcelReader.getValue(salesReturn, "Invoice Number");
+        	String reason             = ExcelReader.getValue(salesReturn, "Reason");
+        	String salesPerson        = ExcelReader.getValue(salesReturn, "Sales Person");
+        	String salesReturnDate    = ExcelReader.getValue(salesReturn, "Return Date");
+        	String referenceNumber    = ExcelReader.getValue(salesReturn, "Reference Number");
+        	String transactionType    = ExcelReader.getValue(salesReturn, "Transaction Type");
+
             if (customerName.isEmpty()||invoiceNo.isEmpty()) {
                 throw new SkipException("❌ Skipping test: Customer Name is empty in Excel data");
             }
             @SuppressWarnings("unchecked")
             List<Map<String, String>> items = (List<Map<String, String>>) salesReturn.get("items");
-            String[] itemNames = items.stream().map(i -> i.get("itemName")).toArray(String[]::new);
-            String[] itemQtys = items.stream().map(i -> i.get("itemQty")).toArray(String[]::new);
+            
             if (items == null || items.isEmpty()) {
                 throw new SkipException("❌ Skipping test: No items(name or Qty) found for Customer: " + customerName);
             }
+         // ===== ITEM DATA (example headers) =====
+            String[] itemNames = items.stream()
+                    .map(i -> i.getOrDefault("Item Name", "").trim())
+                    .toArray(String[]::new);
+
+            String[] itemQtys = items.stream()
+                    .map(i -> i.getOrDefault("Item Quantity", "").trim())
+                    .toArray(String[]::new);
             salesReturnPage.navigateToNewSalesReturn();
             
             salesReturnPage.fillSalesReturnHeader(customerName, invoiceNo, reason,salesPerson,salesReturnDate,referenceNumber,transactionType);

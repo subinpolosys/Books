@@ -31,24 +31,21 @@ public class CreateEstimateTest extends BaseSetup {
 
     	    @Test
     	    public void createEstimateTest() throws Exception {
-
     	        String filePath = System.getProperty("user.dir") + "/src/test/resources/EstimateData.xlsx";
-
     	        List<Map<String, Object>> allEstimates =
     	                ExcelReader.getMasterDetailData(filePath, "EstimateHeader", "EstimateItems");
-
-    	        System.out.println("Total records read: " + allEstimates.size());
+    	        //System.out.println("Total records read: " + allEstimates.size());
 
     	        CreateEstimatePage estimatePage = new CreateEstimatePage(driver);
 
     	        for (Map<String, Object> estimate : allEstimates) {
 
-    	            String customerName = estimate.get("customerName").toString();
-    	            String referenceNo  = estimate.get("referenceNo").toString();
-    	            String subject      = estimate.get("subject").toString();
-    	            String salesPerson  = estimate.get("salesPerson").toString();
-    	            String estimateDate = estimate.get("invoiceDate").toString();
-    	            String expiryDate   = estimate.get("supplyDate").toString();
+    	        	String customerName  = ExcelReader.getValue(estimate, "Customer Name");
+    	        	String referenceNo   = ExcelReader.getValue(estimate, "Reference Number");
+    	        	String subject       = ExcelReader.getValue(estimate, "Subject");
+    	        	String salesPerson   = ExcelReader.getValue(estimate, "Sales Person");
+    	        	String estimateDate  = ExcelReader.getValue(estimate, "Estimate Date");
+    	        	String expiryDate    = ExcelReader.getValue(estimate, "Expiry Date");
 
     	            @SuppressWarnings("unchecked")
     	            List<Map<String, String>> items =
@@ -56,23 +53,24 @@ public class CreateEstimateTest extends BaseSetup {
 
     	            if (items == null || items.isEmpty())
     	                throw new SkipException("No items for customer: " + customerName);
+    	            // ===== ITEM DATA (example headers) =====
+    	             String[] itemNames = items.stream()
+    	                     .map(i -> i.getOrDefault("Item Name", "").trim())
+    	                     .toArray(String[]::new);
 
-    	            String[] itemNames = items.stream().map(i -> i.get("itemName")).toArray(String[]::new);
-    	            String[] itemQtys  = items.stream().map(i -> i.get("itemQty")).toArray(String[]::new);
-
+    	             String[] itemQtys = items.stream()
+    	                     .map(i -> i.getOrDefault("Item Quantity", "").trim())
+    	                     .toArray(String[]::new);
     	            // --- UI actions ---
     	            estimatePage.navigateToNewEstimate();
     	            estimatePage.fillEstimateHeader(customerName, referenceNo, subject,
     	                    salesPerson, estimateDate, expiryDate);
-
     	            String estNo = estimatePage.estimatenumber();
-
     	            estimatePage.addItems(itemNames, itemQtys);
     	            estimatePage.addNotesAndTerms(
     	                    "Dear " + customerName + ", " + estNo + " created by Automation",
     	                    "This is a system-generated document."
     	            );
-
     	            estimatePage.saveAsDraft();
     	            SoftAssert soft=new SoftAssert();
     	            soft.assertTrue(estimatePage.verifyEstimateCreated(estNo),

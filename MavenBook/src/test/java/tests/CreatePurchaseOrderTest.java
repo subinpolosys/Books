@@ -30,23 +30,28 @@ public class CreatePurchaseOrderTest extends BaseSetup{
                 ExcelReader.getMasterDetailData(filePath, "PurchaseOrderHeader", "PurchaseOrderItems");
         CreatePurchaseOrderPage purchaseOrderPage = new CreatePurchaseOrderPage(driver);
         for (Map<String, Object> purchaseOrder : allPurchaseOrder) {
-            String vendorName = purchaseOrder.get("customerName").toString();
-            String referenceNo = purchaseOrder.get("referenceNo").toString();
-            //String subject = purchaseOrder.get("subject").toString();
-            //String salesPerson = purchaseOrder.get("salesPerson").toString();
-            String poDate = purchaseOrder.get("invoiceDate").toString();
-            String paymentTerms = purchaseOrder.get("paymentTerms").toString();
-            String deliveryDate = purchaseOrder.get("supplyDate").toString();          
+        	String vendorName      = ExcelReader.getValue(purchaseOrder, "Vendor Name");
+        	String referenceNo     = ExcelReader.getValue(purchaseOrder, "Reference Number");
+        	String poDate          = ExcelReader.getValue(purchaseOrder, "Purchase Order Date");
+        	String paymentTerms    = ExcelReader.getValue(purchaseOrder, "Payment Terms");
+        	String deliveryDate    = ExcelReader.getValue(purchaseOrder, "Exp delivery Date");
+          
             if (vendorName.isEmpty()) {
                 throw new SkipException("❌ Skipping test: Customer Name is empty in Excel data");
             }
             @SuppressWarnings("unchecked")
             List<Map<String, String>> items = (List<Map<String, String>>) purchaseOrder.get("items");
-            String[] itemNames = items.stream().map(i -> i.get("itemName")).toArray(String[]::new);
-            String[] itemQtys = items.stream().map(i -> i.get("itemQty")).toArray(String[]::new);
+            
             if (items == null || items.isEmpty()) {
                 throw new SkipException("❌ Skipping test: No items(name or Qty) found for Customer: " + vendorName);
             }
+            String[] itemNames = items.stream()
+                    .map(i -> i.getOrDefault("Item Name", "").trim())
+                    .toArray(String[]::new);
+
+            String[] itemQtys = items.stream()
+                    .map(i -> i.getOrDefault("Item Quantity", "").trim())
+                    .toArray(String[]::new);
             purchaseOrderPage.navigateToNewPurchaseOrder();
             purchaseOrderPage.fillPurchaseOrderHeader(vendorName, referenceNo, poDate,paymentTerms,deliveryDate);
             String PONo=purchaseOrderPage.purchaseOrderNumber();
@@ -63,3 +68,4 @@ public class CreatePurchaseOrderTest extends BaseSetup{
         }
     }
 }
+

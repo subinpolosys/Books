@@ -37,27 +37,35 @@ public class CreateSalesInvoiceTest extends BaseSetup{
 //        allSalesInvoice.forEach(System.out::println);
         //
         for (Map<String, Object> salesInvoice : allSalesInvoice) {
-            String customerName = salesInvoice.get("customerName").toString();
-            String referenceNo = salesInvoice.get("referenceNo").toString();
-            String subject = salesInvoice.get("subject").toString();
-            String salesPerson = salesInvoice.get("salesPerson").toString();
-            String invoiceDate = salesInvoice.get("invoiceDate").toString();
-            String paymentTerms = salesInvoice.get("paymentTerms").toString();
-            String supplyDate = salesInvoice.get("supplyDate").toString();
-            String transactionType = salesInvoice.get("transactionType").toString();
+        	String customerName     = ExcelReader.getValue(salesInvoice, "Customer Name");
+        	String orderNo          = ExcelReader.getValue(salesInvoice, "Order Number");
+        	String invoiceDate      = ExcelReader.getValue(salesInvoice, "Invoice Date");
+        	String paymentTerms     = ExcelReader.getValue(salesInvoice, "Payment Terms");
+        	String supplyDate       = ExcelReader.getValue(salesInvoice, "Supply Date");
+        	String transactionType  = ExcelReader.getValue(salesInvoice, "Transaction Type");
+        	String salesPerson      = ExcelReader.getValue(salesInvoice, "Sales Person");
+        	String subject          = ExcelReader.getValue(salesInvoice, "Subject");
           
             if (customerName.isEmpty()) {
                 throw new SkipException("❌ Skipping test: Customer Name is empty in Excel data");
             }
             @SuppressWarnings("unchecked")
             List<Map<String, String>> items = (List<Map<String, String>>) salesInvoice.get("items");
-            String[] itemNames = items.stream().map(i -> i.get("itemName")).toArray(String[]::new);
-            String[] itemQtys = items.stream().map(i -> i.get("itemQty")).toArray(String[]::new);
+            
             if (items == null || items.isEmpty()) {
                 throw new SkipException("❌ Skipping test: No items(name or Qty) found for Customer: " + customerName);
             }
+            // ===== ITEM DATA (example headers) =====
+            String[] itemNames = items.stream()
+                    .map(i -> i.getOrDefault("Item Name", "").trim())
+                    .toArray(String[]::new);
+
+            String[] itemQtys = items.stream()
+                    .map(i -> i.getOrDefault("Item Quantity", "").trim())
+                    .toArray(String[]::new);
+            
             salesInvoicePage.navigateToNewSalesInvoice();
-            salesInvoicePage.fillSalesInvoiceHeader(customerName, referenceNo, subject,salesPerson,invoiceDate,paymentTerms,supplyDate,transactionType);
+            salesInvoicePage.fillSalesInvoiceHeader(customerName, orderNo, subject,salesPerson,invoiceDate,paymentTerms,supplyDate,transactionType);
             String SINo=salesInvoicePage.salesInvoiceNumber();
             salesInvoicePage.addItems(itemNames, itemQtys);
             salesInvoicePage.addNotesAndTerms(

@@ -107,6 +107,10 @@ public class CreateSalesInvoicePage {
 
         driver.findElement(orderNumberField).sendKeys(orderNo);
         
+        JavascriptExecutor sp1 = (JavascriptExecutor) driver;
+        WebElement invD  = driver.findElement(invoiceDateField);
+	    sp1.executeScript("arguments[0].scrollIntoView();",invD); 
+        
         if (invDate != null && !invDate.trim().isEmpty()) {
         	//System.out.println("inv Date:");
         	Thread.sleep(3000);
@@ -117,6 +121,7 @@ public class CreateSalesInvoicePage {
         if (paymentTerms!= null && !paymentTerms.trim().isEmpty()) {
     		Utilities.selectIfListed(driver, searchPaymentTermsField, selectPaymentTermsField,paymentTerms);
     	}
+        
          
         if (supDate != null && !supDate.trim().isEmpty()) {
         	//System.out.println("sup Date:");

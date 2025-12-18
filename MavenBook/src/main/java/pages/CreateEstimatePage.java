@@ -66,7 +66,7 @@ public class CreateEstimatePage {
     }
    
     public void fillEstimateHeader(String customerName, String referenceNo, String subject,String salesPerson,String estDate,String expiryDate) throws InterruptedException {
-    	//System.out.println(customerName+" : "+referenceNo+" : "+subject+" : "+salesPerson+" : "+estDate+" : "+expiryDate);
+    	System.out.println(customerName+" : "+referenceNo+" : "+subject+" : "+salesPerson+" : "+estDate+" : "+expiryDate);
     	if (customerName != null && !customerName  .trim().isEmpty()) {
     		try {
     		wait.until(ExpectedConditions.elementToBeClickable(customerDropdownField)).click();
@@ -100,14 +100,16 @@ public class CreateEstimatePage {
         est.sendKeys(estDate);     // Format: yyyy-MM-dd
         est.sendKeys(Keys.TAB);         // triggers blur/change event
         }
-        Thread.sleep(200);
+        Thread.sleep(2000);
         if (expiryDate != null && !expiryDate.trim().isEmpty()) {
-        WebElement exp = driver.findElement(expirydateField);
-        exp.clear();
-        exp.sendKeys(expiryDate);
-        exp.sendKeys(Keys.TAB);
+        	System.out.println("Expiry DAte : "+expiryDate);
+        	driver.findElement(expirydateField).sendKeys(expiryDate);
+//        WebElement exp = driver.findElement(expirydateField);
+//        exp.clear();
+//        exp.sendKeys(expiryDate);
+//        exp.sendKeys(Keys.TAB);
         }
-        Thread.sleep(200);
+        Thread.sleep(2000);
         if (salesPerson != null && !salesPerson .trim().isEmpty()) {
     		Utilities.selectIfListed(driver, searchSalesPersonField, selectSalesPersonField,salesPerson);
     	}   

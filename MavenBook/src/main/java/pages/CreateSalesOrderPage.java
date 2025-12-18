@@ -71,8 +71,8 @@ public class CreateSalesOrderPage {
 	    }
 	    /** Fill in header details (customer, ref no, subject) 
 	     * @throws InterruptedException */
-	    public void fillSalesOrderHeader(String customerName, String referenceNo, String subject,String salesPerson,String soDate,String paymentTerms,String deliveryDate) throws InterruptedException {
-	    	System.out.println(customerName+" : "+referenceNo+" : "+subject+" : "+salesPerson);
+	    public void fillSalesOrderHeader(String customerName, String referenceNo,String soDate,String expDeliDate,String paymentTerms, String salesPerson) throws InterruptedException {
+	    	System.out.println(customerName+" : "+referenceNo+" : "+soDate+" :"+expDeliDate+": "+salesPerson+":"+paymentTerms);
 	    	if (customerName != null && !customerName  .trim().isEmpty()) {
 	    		try {
 	    		wait.until(ExpectedConditions.elementToBeClickable(customerDropdownField)).click();
@@ -107,9 +107,9 @@ public class CreateSalesOrderPage {
 	        if (paymentTerms!= null && !paymentTerms.trim().isEmpty()) {
 	    		Utilities.selectIfListed(driver, searchPaymentTermsField, selectPaymentTermsField,paymentTerms);
 	    	}	         
-	        if (deliveryDate != null && !deliveryDate.trim().isEmpty()) {
+	        if (expDeliDate != null && !expDeliDate.trim().isEmpty()) {
 	        	//System.out.println("sup Date:");
-	        	wait.until(ExpectedConditions.visibilityOfElementLocated(deliverDateField)).sendKeys(deliveryDate);
+	        	wait.until(ExpectedConditions.visibilityOfElementLocated(deliverDateField)).sendKeys(expDeliDate);
 	    	}
 	        JavascriptExecutor sp = (JavascriptExecutor) driver;
 	        WebElement salesP  = driver.findElement(searchSalesPersonField);

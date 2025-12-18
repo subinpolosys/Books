@@ -31,21 +31,27 @@ public class CreateDeliverynoteTest extends BaseSetup {
 	                ExcelReader.getMasterDetailData(filePath, "DeliverynoteHeader", "deliverynoteItems");
 	        CreateDeliverynotePage deliverynotePage = new CreateDeliverynotePage(driver);
 	        for (Map<String, Object> dnote : allDeliverynote) {
-	            String customerName = dnote .get("customerName").toString();
-	            String referenceNo = dnote .get("referenceNo").toString();
-	            
-	            String dnDate=dnote .get("invoiceDate").toString();
-	            String dnType=dnote.get("transactionType").toString();	            
+	        	String customerName = ExcelReader.getValue(dnote, "Customer Name");
+	        	String referenceNo  = ExcelReader.getValue(dnote, "Reference");
+	        	String dnDate       = ExcelReader.getValue(dnote, "Date");
+	        	String dnType       = ExcelReader.getValue(dnote, "Challan Type");
+            
 	            if (customerName.isEmpty()) {
 	                throw new SkipException("❌ Skipping test: Customer Name is empty in Excel data");
 	            }
 	            @SuppressWarnings("unchecked")
 	            List<Map<String, String>> items = (List<Map<String, String>>) dnote.get("items");
-	            String[] itemNames = items.stream().map(i -> i.get("itemName")).toArray(String[]::new);
-	            String[] itemQtys = items.stream().map(i -> i.get("itemQty")).toArray(String[]::new);
 	            if (items == null || items.isEmpty()) {
 	                throw new SkipException("❌ Skipping test: No items(name or Qty) found for Customer: " + customerName);
 	            }
+	         // ===== ITEM DATA (example headers) =====
+	             String[] itemNames = items.stream()
+	                     .map(i -> i.getOrDefault("Item Name", "").trim())
+	                     .toArray(String[]::new);
+
+	             String[] itemQtys = items.stream()
+	                     .map(i -> i.getOrDefault("Item Quantity", "").trim())
+	                     .toArray(String[]::new);
 	            deliverynotePage.navigateToNewDeliverynote();
 	            deliverynotePage.fillEstimateHeader(customerName, referenceNo,dnDate,dnType);
 	            String DNNo=deliverynotePage.delivernoteNumber();

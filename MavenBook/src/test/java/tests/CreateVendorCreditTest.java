@@ -12,7 +12,6 @@ import base.BaseSetup;
 import pages.CreateVendorCreditPage;
 import pages.Login;
 import utils.ExcelReader;
-
 public class CreateVendorCreditTest extends BaseSetup {
 	private Login loginPage;
     @BeforeMethod
@@ -35,23 +34,28 @@ public class CreateVendorCreditTest extends BaseSetup {
         //allVendorCredit.forEach(System.out::println);
        
         for (Map<String, Object> vendorCredit : allVendorCredit) {
-            String vendorName = vendorCredit.get("customerName").toString();
-            String billNo = vendorCredit.get("referenceNo").toString();          
-            String vendorCreditDate = vendorCredit.get("invoiceDate").toString();           
-            String orderNumber = vendorCredit.get("supplyDate").toString();            
+        	String vendorName        = ExcelReader.getValue(vendorCredit, "Vendor Name");
+        	String billNo            = ExcelReader.getValue(vendorCredit, "Bill Number");
+        	String vendorCreditDate  = ExcelReader.getValue(vendorCredit, "VC Date");
+        	String orderNumber       = ExcelReader.getValue(vendorCredit, "Order Number");           
           
             if (vendorName.isEmpty()||billNo.isEmpty()) {
                 throw new SkipException("❌ Skipping test: Vendor Name is empty in Excel data");
             }
             @SuppressWarnings("unchecked")
             List<Map<String, String>> items = (List<Map<String, String>>) vendorCredit.get("items");
-            String[] itemNames = items.stream().map(i -> i.get("itemName")).toArray(String[]::new);
-            String[] itemQtys = items.stream().map(i -> i.get("itemQty")).toArray(String[]::new);
             if (items == null || items.isEmpty()) {
                 throw new SkipException("❌ Skipping test: No items(name or Qty) found for Vendor: " + vendorName);
             }
-            vendorCreditPage.navigateToNewVendorCredit();
-            
+         // ===== ITEM DATA (example headers) =====
+            String[] itemNames = items.stream()
+                    .map(i -> i.getOrDefault("Item Name", "").trim())
+                    .toArray(String[]::new);
+
+            String[] itemQtys = items.stream()
+                    .map(i -> i.getOrDefault("Item Quantity", "").trim())
+                    .toArray(String[]::new);
+            vendorCreditPage.navigateToNewVendorCredit();            
             vendorCreditPage.fillVendorCreditHeader(vendorName, billNo, vendorCreditDate,orderNumber);
             String VCNo=vendorCreditPage.vendorCreditNumber();
             //System.out.println(SRNo);

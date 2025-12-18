@@ -3,15 +3,24 @@
 <suite name="Failed suite [Automation Suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Tests(failed)">
     <classes>
-      <class name="tests.CreateDeliverynoteTest">
+      <class name="tests.CreatePurchaseBillTest">
         <methods>
           <include name="setUp"/>
-          <include name="afterMethod"/>
           <include name="tearDown"/>
-          <include name="createDeliverynoteTest"/>
           <include name="beforeMethod"/>
+          <include name="afterMethod"/>
+          <include name="createPurchasebillTest"/>
         </methods>
-      </class> <!-- tests.CreateDeliverynoteTest -->
+      </class> <!-- tests.CreatePurchaseBillTest -->
+      <class name="tests.CreateSalesInvoiceTest">
+        <methods>
+          <include name="setUp"/>
+          <include name="beforeMethod"/>
+          <include name="tearDown"/>
+          <include name="afterMethod"/>
+          <include name="createSalesInvoiceTest"/>
+        </methods>
+      </class> <!-- tests.CreateSalesInvoiceTest -->
     </classes>
   </test> <!-- Tests(failed) -->
 </suite> <!-- Failed suite [Automation Suite] -->
