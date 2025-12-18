@@ -206,33 +206,24 @@ if (row == null) continue;
 String customerName = getCellValue(row, 0);
 String itemName     = getCellValue(row, 1);
 String itemQty      = getCellValue(row, 2);
-
 if (customerName.isEmpty() || itemName.isEmpty()) continue;
-
 // This item row also needs AUTO-ID logic
 String autoId = "AUTO-" + getHeaderRowIndex(header, customerName);
-
 String compositeKey = customerName + "|" + autoId;
 
 if (!headerMap.containsKey(compositeKey)) continue;
-
 Map<String, String> item = new LinkedHashMap<>();
 item.put("itemName", itemName);
 item.put("itemQty", itemQty);
 
 List<Map<String, String>> itemList =
 (List<Map<String, String>>) headerMap.get(compositeKey).get("items");
-
 itemList.add(item);
 }
-
 workbook.close();
 fis.close();
-
 return new ArrayList<>(headerMap.values());
 }
-
-
 // helper to find row index for matching header customer
 private static int getHeaderRowIndex(Sheet headerSheet, String customerName) {
 for (int i = 1; i <= headerSheet.getLastRowNum(); i++) {
@@ -244,12 +235,10 @@ return i;
 }
 return 1; // fallback
 }
-
 // safely read cell values
 private static String getCellValue(Row row, int col) {
 Cell cell = row.getCell(col, Row.MissingCellPolicy.RETURN_BLANK_AS_NULL);
 if (cell == null) return "";
-
 switch (cell.getCellType()) {
 case STRING: return cell.getStringCellValue().trim();
 case NUMERIC:
