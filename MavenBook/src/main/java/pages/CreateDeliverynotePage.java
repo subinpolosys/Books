@@ -1,20 +1,17 @@
 package pages;
 
 import java.time.Duration;
-import java.time.LocalDate;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
 
-import utils.Utilities;
 
 public class CreateDeliverynotePage {
 
@@ -77,54 +74,42 @@ public class CreateDeliverynotePage {
 	    	//System.out.println(customerName+" : "+referenceNo+" : "+dNDate+" : "+challanType);
 	    	if (customerName != null && !customerName  .trim().isEmpty()) {
 	    		try {
-	    		wait.until(ExpectedConditions.elementToBeClickable(customerDropdownField)).click();
-		        driver.findElement(customerDropdownField).sendKeys(customerName);
-		        
-		        List<WebElement> options = driver.findElements(firstCustomerOptionField); // adjust locator as needed
-		        boolean found = false;
-	            for (WebElement option : options) {
-	                if (option.getText().equalsIgnoreCase(customerName)) {
-	                    option.click();
-	                    found = true;
-	                    break;
-	                }
-	            }
-	            if (!found) {
-	                Assert.fail("Customer name '" + customerName + "' not found in the dropdown list.");
-	            }	        
-		       // wait.until(ExpectedConditions.elementToBeClickable(firstCustomerOptionField)).click();
+		    		wait.until(ExpectedConditions.elementToBeClickable(customerDropdownField)).click();
+			        driver.findElement(customerDropdownField).sendKeys(customerName);   
+			        List<WebElement> options = driver.findElements(firstCustomerOptionField); // adjust locator as needed
+			        boolean found = false;
+		            for (WebElement option : options) {
+		                if (option.getText().equalsIgnoreCase(customerName)) {
+		                    option.click();
+		                    found = true;
+		                    break;
+		                }
+		            }
+		            if (!found) {
+		            	 throw new NoSuchElementException("Customer name '" + customerName + "' not found in the dropdown list.");
+		            }	        
+		       
 	    		}catch(Exception e) {
-	    			 Assert.fail("Error selecting customer: " + e.getMessage());
+	    			 throw new RuntimeException("Error selecting customer: " + e.getMessage(), e);
 	    		}
 	    	}
 	        if (referenceNo != null && !referenceNo .trim().isEmpty()) {
-	        	String ctime=Utilities.dateTime(); 
+	        	String ctime=utils.Utilities.dateTime(); 
 	        	referenceNo=referenceNo+":"+ctime.split(" ")[1];
 	        driver.findElement(referenceNumberField).sendKeys(referenceNo);
 	        }
 	        Thread.sleep(200);
 	        if (dNDate != null && !dNDate.trim().isEmpty()) {
 	        	Thread.sleep(3000);
-	        	Utilities.waitForPageLoad(driver);
+	        	utils.Utilities.waitForPageToLoad(driver);
 	        	wait.until(ExpectedConditions.visibilityOfElementLocated(dNDateField)).sendKeys(dNDate);
-	        	// WebElement ddate = driver.findElement(dNDateField);
-	        	//wait.until(ExpectedConditions.attributeToBeNotEmpty(ddate, "value"));
-	       
-	        //ddate.clear();
-	        //ddate.sendKeys(dNDate);     // Format: yyyy-MM-dd
-	        //ddate.sendKeys(Keys.TAB);         // triggers blur/change event
-	        }
+	  	        }
 	        else {
-//	    		 LocalDate today = LocalDate.now();
-//	    		 String todayStr = today.toString();  // format yyyy-MM-dd
-//	    		 //System.out.println(todayStr);
-//	    		 wait.until(ExpectedConditions.textToBePresentInElementValue(dNDateField, todayStr));
+//	    		 
 	    	 }
-	        Thread.sleep(2000);
-	        
-	        
+	        Thread.sleep(2000);	        
 	        if (challanType != null && !challanType .trim().isEmpty()) {
-	    		Utilities.selectIfListed(driver, searchDNoteTypeField, selectDNoteTypeField,challanType);
+	    		utils.Utilities.selectIfListed(driver, searchDNoteTypeField, selectDNoteTypeField, challanType);
 	    	}   
 	    }
 

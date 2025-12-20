@@ -13,11 +13,12 @@ import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
 import base.BaseSetup;
+import base.BaseTest;
 import pages.CreateCustomerPage;
 import pages.Login;
 import utils.CustomerExcelReader;
 
-public class CreateCustomerTest extends BaseSetup{
+public class CreateCustomerTest extends BaseTest{
 	private Login loginPage;
     @BeforeMethod
     public void beforeMethod() throws InterruptedException {

@@ -8,11 +8,12 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 import base.BaseSetup;
+import base.BaseTest;
 import pages.CreatePurchaseOrderPage;
 import pages.Login;
 import utils.ExcelReader;
 
-public class CreatePurchaseOrderTest extends BaseSetup{
+public class CreatePurchaseOrderTest extends BaseTest{
 	private Login loginPage;
     @BeforeMethod
     public void beforeMethod() throws InterruptedException {

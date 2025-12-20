@@ -7,10 +7,11 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 import base.BaseSetup;
+import base.BaseTest;
 import pages.CreateRetainerInvoicePage;
 import pages.Login;
 import utils.ItemExcelReader;
-public class CreateRetainerInvoiceTest extends BaseSetup {
+public class CreateRetainerInvoiceTest extends BaseTest {
 	 private Login loginPage;
 	    @BeforeMethod
 	    public void beforeMethod() throws InterruptedException {

@@ -11,6 +11,7 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
@@ -255,6 +256,21 @@ public class Utilities {
 	    JavascriptExecutor js = (JavascriptExecutor) driver;
 	    return (String) js.executeScript("return arguments[0].validationMessage;", element);
 	}
+	
+	 public static void openUrlSafely(WebDriver driver, String url) {
+	        try {
+	            driver.get(url);
+	        } catch (WebDriverException e) {
+	            if (e.getMessage() != null &&
+	                e.getMessage().contains("ERR_CONNECTION_REFUSED")) {
+
+	                throw new ApplicationDownException(
+	                    "Skipping test: Application is down (" + url + ")"
+	                );
+	            }
+	            throw e;
+	        }
+	    }
 	
 	
 

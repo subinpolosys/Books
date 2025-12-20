@@ -3,11 +3,15 @@ package pages;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import org.openqa.selenium.*;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+
 import utils.ConfigReader;
+import utils.Utilities;
 
 public class Login {
 
@@ -36,14 +40,23 @@ public class Login {
     int i=0;
     do{
     	 i++;
-    driver.get(loginUrl);
-    Thread.sleep(500);
-    wait.until(ExpectedConditions.visibilityOfElementLocated(usernameField));
-    driver.findElement(usernameField).sendKeys(username);
-    Thread.sleep(500);
-    driver.findElement(passwordField).sendKeys(password);
-    Thread.sleep(500);
-    wait.until(ExpectedConditions.elementToBeClickable(loginButton)).click();	
+    	// ✅ SAFE navigation WITHOUT TestNG
+         Utilities.openUrlSafely(driver, loginUrl);
+    	 
+//    	try { 
+//	    driver.get(loginUrl);
+//    	} catch (WebDriverException e) {
+//    	    if (e.getMessage().contains("ERR_CONNECTION_REFUSED")) {
+//    	        throw new SkipException("Skipping test: Application is down");
+//    	    }
+//    	}
+	    Thread.sleep(500);
+	    wait.until(ExpectedConditions.visibilityOfElementLocated(usernameField));
+	    driver.findElement(usernameField).sendKeys(username);
+	    Thread.sleep(500);
+	    driver.findElement(passwordField).sendKeys(password);
+	    Thread.sleep(500);
+	    wait.until(ExpectedConditions.elementToBeClickable(loginButton)).click();	
     	
 //        int retries = 0;
 //       int maxRetries = 3;

@@ -9,10 +9,11 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 import base.BaseSetup;
+import base.BaseTest;
 import pages.CreateVendorCreditPage;
 import pages.Login;
 import utils.ExcelReader;
-public class CreateVendorCreditTest extends BaseSetup {
+public class CreateVendorCreditTest extends BaseTest {
 	private Login loginPage;
     @BeforeMethod
     public void beforeMethod() throws InterruptedException {

@@ -3,13 +3,13 @@ package pages;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
+
 
 import utils.Utilities;
 
 import java.time.Duration;
-import java.time.LocalDate;
 import java.util.List;
+import java.util.NoSuchElementException;
 public class CreateEstimatePage {
 
     private final WebDriver driver;
@@ -81,12 +81,11 @@ public class CreateEstimatePage {
                 }
             }
             if (!found) {
-                Assert.fail("Customer name '" + customerName + "' not found in the dropdown list.");
-            }	        
-	       // wait.until(ExpectedConditions.elementToBeClickable(firstCustomerOptionField)).click();
-    		}catch(Exception e) {
-    			 Assert.fail("Error selecting customer: " + e.getMessage());
-    		}
+           	 throw new NoSuchElementException("Customer name '" + customerName + "' not found in the dropdown list.");
+           }	        
+   		}catch(Exception e) {
+   			 throw new RuntimeException("Error selecting customer: " + e.getMessage(), e);
+   		}
     	}
         if (referenceNo != null && !referenceNo .trim().isEmpty()) {
         	String ctime=Utilities.dateTime(); 

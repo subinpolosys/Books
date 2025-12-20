@@ -1,9 +1,6 @@
 package pages;
 
 import java.time.Duration;
-import java.util.List;
-import java.util.concurrent.TimeoutException;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;

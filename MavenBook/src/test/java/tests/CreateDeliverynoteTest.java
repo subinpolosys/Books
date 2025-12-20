@@ -9,11 +9,12 @@ import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
 import base.BaseSetup;
+import base.BaseTest;
 import pages.CreateDeliverynotePage;
 import pages.Login;
 import utils.ExcelReader;
 
-public class CreateDeliverynoteTest extends BaseSetup {
+public class CreateDeliverynoteTest extends BaseTest {
 	  private Login loginPage;
 	    @BeforeMethod
 	    public void beforeMethod() throws InterruptedException {

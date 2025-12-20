@@ -1,6 +1,6 @@
 package tests;
 
-import base.BaseSetup;
+import base.BaseTest;
 import pages.CreateEstimatePage;
 import pages.Login;
 import utils.ExcelReader;
@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-public class CreateEstimateTest extends BaseSetup {
+public class CreateEstimateTest extends BaseTest {
  
     	    private Login loginPage;
 

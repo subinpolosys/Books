@@ -5,13 +5,14 @@
         <classes>
           <!--  <class name="tests.CreateEstimateTest"/>
             <class name="tests.CreateSalesOrderTest"/>
-            
+        
             <class name="tests.CreateSalesInvoiceTest"/>
             <class name="tests.CreateSalesReturnTest"/>
-            <class name="tests.CreateRetainerInvoiceTest"/>-->
+            <class name="tests.CreateRetainerInvoiceTest"/>
+            
             <class name="tests.CreateDeliverynoteTest"/>
             <class name="tests.CreatePurchaseOrderTest"/>
-            <class name="tests.CreatePurchaseBillTest"/>
+            <class name="tests.CreatePurchaseBillTest"/>-->
              <class name="tests.CreateVendorCreditTest"/>
         </classes>
     </test>

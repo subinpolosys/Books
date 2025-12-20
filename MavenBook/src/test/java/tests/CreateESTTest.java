@@ -1,6 +1,6 @@
 package tests;
 
-import base.BaseSetup;
+import base.BaseTest;
 import pages.Login;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -14,7 +14,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class CreateESTTest extends BaseSetup {
+public class CreateESTTest extends BaseTest {
 	 private Login loginPage;
 	 
 	String customerName="ABC super";

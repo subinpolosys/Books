@@ -4,11 +4,12 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 import base.BaseSetup;
+import base.BaseTest;
 import pages.Login;
 import pages.LoginTPage;
 import utils.ConfigReader;
 
-public class LoginTest extends BaseSetup {
+public class LoginTest extends BaseTest {
 	private Login loginPage;
 	 private String eid = ConfigReader.get("username");
   @BeforeMethod

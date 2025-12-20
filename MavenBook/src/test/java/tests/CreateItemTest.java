@@ -10,11 +10,12 @@ import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
 import base.BaseSetup;
+import base.BaseTest;
 import pages.CreateItemPage;
 import pages.Login;
 import utils.ItemExcelReader;
 
-public class CreateItemTest extends BaseSetup {
+public class CreateItemTest extends BaseTest {
 	 private Login loginPage;
 
     @BeforeMethod

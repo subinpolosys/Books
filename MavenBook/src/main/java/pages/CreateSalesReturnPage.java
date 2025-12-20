@@ -1,9 +1,8 @@
 package pages;
 
 import java.time.Duration;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -12,8 +11,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
-
 import utils.Utilities;
 
 public class CreateSalesReturnPage {
@@ -109,12 +106,13 @@ public class CreateSalesReturnPage {
                 }
             }
             if (!found) {
-                Assert.fail("Customer name '" + customerName + "' not found in the dropdown list.");
-            }	        
-	       // wait.until(ExpectedConditions.elementToBeClickable(firstCustomerOptionField)).click();
-    		}catch(Exception e) {
-    			 Assert.fail("Error selecting customer: " + e.getMessage());
-    		}
+           	 throw new NoSuchElementException(
+                        "Customer name '" + customerName + "' not found in the dropdown list."
+                    );
+           }	        
+   		}catch(Exception e) {
+   			 throw new RuntimeException("Error selecting customer: " + e.getMessage(), e);
+   		}
     	}
         if (salesReturnDate != null && !salesReturnDate.trim().isEmpty()) {
         	WebElement srdate = driver.findElement(salesReturnDateField);

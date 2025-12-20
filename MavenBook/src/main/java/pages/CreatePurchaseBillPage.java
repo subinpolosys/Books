@@ -2,17 +2,15 @@ package pages;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
-
 import utils.Utilities;
 
 public class CreatePurchaseBillPage {
@@ -98,12 +96,14 @@ public class CreatePurchaseBillPage {
                 }
             }
             if (!found) {
-                Assert.fail("Vendor name '" + vendorName + "' not found in the dropdown list.");
-            }	        
+           	 throw new NoSuchElementException(
+                        "Customer name '" + vendorName + "' not found in the dropdown list."
+                    );
+           }	        
 	       // wait.until(ExpectedConditions.elementToBeClickable(firstCustomerOptionField)).click();
-    		}catch(Exception e) {
-    			 Assert.fail("Error selecting vendor: " + e.getMessage());
-    		}
+   		}catch(Exception e) {
+   			 throw new RuntimeException("Error selecting Vendor: " + e.getMessage(), e);
+   		}
     	}
        // driver.findElement(orderNumberField).sendKeys(orderNo);    
     	 
