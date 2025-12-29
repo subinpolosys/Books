@@ -3,13 +3,15 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="tests.CreateEstimateTest">
+      <class name="tests.CreateRetainerInvoiceTest">
         <methods>
+          <include name="setUp"/>
+          <include name="tearDown"/>
           <include name="afterMethod"/>
-          <include name="createEstimateTest"/>
+          <include name="createRetainerInvoiceTest"/>
           <include name="beforeMethod"/>
         </methods>
-      </class> <!-- tests.CreateEstimateTest -->
+      </class> <!-- tests.CreateRetainerInvoiceTest -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

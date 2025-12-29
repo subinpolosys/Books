@@ -76,9 +76,9 @@ public class CreateCustomerTest extends BaseTest{
 	        String fax = getValue(customerData, "Fax");
 
 	        // === SHEET 3: Contact Person ===
-	        String contactSalutation = getValue(customerData, "Salutation");
-	        String contactFirstName = getValue(customerData, "First Name");
-	        String contactLastName = getValue(customerData, "Last Name");
+	        String contactSalutation = getValue(customerData, "Contact Salutation");
+	        String contactFirstName = getValue(customerData, "Contact FName");
+	        String contactLastName = getValue(customerData, "Contact LName");
 	        String contactEmail = getValue(customerData, "Email Address");
 	        String contactWorkPhone = getValue(customerData, "Contact Work Phone");
 	        String contactMobile = getValue(customerData, "Mobile No");
@@ -112,8 +112,3 @@ public class CreateCustomerTest extends BaseTest{
 }
 	        
 	        
-	       
-  	  	  
-	  
-  
-

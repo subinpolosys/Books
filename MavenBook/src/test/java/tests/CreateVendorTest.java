@@ -76,9 +76,9 @@ public class CreateVendorTest extends BaseTest{
 	        String fax = getValue(vendorData, "Fax");
 
 	        // === SHEET 3: Contact Person ===
-	        String contactSalutation = getValue(vendorData, "Salutation");
-	        String contactFirstName = getValue(vendorData, "First Name");
-	        String contactLastName = getValue(vendorData, "Last Name");
+	        String contactSalutation = getValue(vendorData, "Contact Salutation");
+	        String contactFirstName = getValue(vendorData, "Contact FName");
+	        String contactLastName = getValue(vendorData, "Contact LName");
 	        String contactEmail = getValue(vendorData, "Email Address");
 	        String contactWorkPhone = getValue(vendorData, "Contact Work Phone");
 	        String contactMobile = getValue(vendorData, "Mobile No");

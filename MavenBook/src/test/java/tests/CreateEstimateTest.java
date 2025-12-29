@@ -34,7 +34,7 @@ public class CreateEstimateTest extends BaseTest {
     	        String filePath = System.getProperty("user.dir") + "/src/test/resources/EstimateData.xlsx";
     	        List<Map<String, Object>> allEstimates =
     	                ExcelReader.getMasterDetailData(filePath, "EstimateHeader", "EstimateItems");
-    	        //System.out.println("Total records read: " + allEstimates.size());
+    	       // System.out.println("Total records read: " + allEstimates.size());
 
     	        CreateEstimatePage estimatePage = new CreateEstimatePage(driver);
 
@@ -46,6 +46,11 @@ public class CreateEstimateTest extends BaseTest {
     	        	String salesPerson   = ExcelReader.getValue(estimate, "Sales Person");
     	        	String estimateDate  = ExcelReader.getValue(estimate, "Estimate Date");
     	        	String expiryDate    = ExcelReader.getValue(estimate, "Expiry Date");
+    	        	String priceList	 = ExcelReader.getValue(estimate, "Price List");
+    	        	String taxType       = ExcelReader.getValue(estimate, "Tax");
+    	        	String customerNote  = ExcelReader.getValue(estimate, "Customer Notes");
+    	        	String terms         = ExcelReader.getValue(estimate, "Terms And Conditions");
+    	        	String saveAs        = ExcelReader.getValue(estimate, "Save As");
 
     	            @SuppressWarnings("unchecked")
     	            List<Map<String, String>> items =
@@ -61,17 +66,19 @@ public class CreateEstimateTest extends BaseTest {
     	             String[] itemQtys = items.stream()
     	                     .map(i -> i.getOrDefault("Item Quantity", "").trim())
     	                     .toArray(String[]::new);
+    	             String[] discountType=items.stream().map(i ->i.getOrDefault("Discount Type", "").trim()).toArray(String[]::new);
+    	             String[] discount=items.stream().map(i ->i.getOrDefault("Discount", "").trim()).toArray(String[]::new);
+    	             
     	            // --- UI actions ---
     	            estimatePage.navigateToNewEstimate();
     	            estimatePage.fillEstimateHeader(customerName, referenceNo, subject,
-    	                    salesPerson, estimateDate, expiryDate);
+    	                    salesPerson, estimateDate, expiryDate,taxType,priceList);
     	            String estNo = estimatePage.estimatenumber();
-    	            estimatePage.addItems(itemNames, itemQtys);
+    	            estimatePage.addItems(itemNames, itemQtys,discountType,discount);
     	            estimatePage.addNotesAndTerms(
-    	                    "Dear " + customerName + ", " + estNo + " created by Automation",
-    	                    "This is a system-generated document."
-    	            );
-    	            estimatePage.saveAsDraft();
+    	               "Dear " + customerName + ", " + estNo + " created by Automation. "+customerNote,
+    	               "This is a system-generated document. "+terms);   	            
+    	            estimatePage.saveAsMethod(saveAs);
     	            SoftAssert soft=new SoftAssert();
     	            soft.assertTrue(estimatePage.verifyEstimateCreated(estNo),
     	                    "Estimate not found : " + estNo);

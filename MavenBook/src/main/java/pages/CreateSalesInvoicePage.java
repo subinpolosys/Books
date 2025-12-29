@@ -38,18 +38,21 @@ public class CreateSalesInvoicePage {
     private final By salesInvoiceNumberfield=By.id("sales_invoice_no");
     private final By orderNumberField = By.id("order_number");
     
-    private final By invoiceDateField=By.id("date");
+    private final By invoiceDateField=By.xpath("//label[@title='Invoice Date']//following-sibling::div/div/div/div/input");
     private final By subjectField = By.id("subject");
     private final By searchSalesPersonField=By.xpath("//label[contains(text(),'Sales Person')]/following-sibling::input[@type='text']");	    
-    private final By selectSalesPersonField = By.xpath("//ul/li[1]/span");
-    
-    private final By supplyDateField=By.id("supply_date");
+    private final By selectSalesPersonField = By.xpath("//ul/li[1]/span"); 
+    private final By supplyDateField=By.xpath("//label[@title='Supply Date']//following-sibling::div/div/div/div/input");
     
     private final By searchPaymentTermsField=By.xpath("//label[contains(text(),'Payment Terms')]/following-sibling::input[@type='text']");	    
     private final By selectPaymentTermsField = By.xpath("//ul/li[1]/span");
     private final By searchTransactionTypeField=By.xpath("//label[contains(text(),'Transaction Type')]/following-sibling::input[@type='text']");	    
     private final By selectTransactionTypeField = By.xpath("//ul/li[1]/span");
-    
+    private final By searchPriceListField=By.xpath("//input[@placeholder='Price List' and @type='text']");	    
+    private final By selectPriceListField = By.xpath("//ul/li[1]"); 
+     
+    private final By searchTaxField=By.xpath("//input[@placeholder='Tax' and @type='text']");
+    private final By selectTaxField = By.xpath("//ul/li[1]");
     
     // ──────────────── Item Fields ────────────────
     private final By itemDetailsField = By.xpath("//table[@class=' w-full ']/thead/tr[1]/td[1]");
@@ -62,6 +65,9 @@ public class CreateSalesInvoicePage {
 
     // ──────────────── Action Buttons ────────────────
     private final By saveAsDraftButtonField = By.xpath("//button[contains(text(),'Save as Draft')]");
+    private final By saveAsArrowBtnField=By.xpath("//div[@class=' bg-accent w-44 flex items-center justify-center rounded-[4px] h-9 relative text-white shadow-sm']/div/div/div[1]");
+    private final By saveAndApproveBtnField=By.xpath("//button[@name='s_approve']/div[text()='Save And Approve']"); 
+    private final By saveAndSubmitBtnField=By.xpath("//button[@name='s_submit']/div[text()='Save and Submit']");
     private final By invoiceNoinListField = By.xpath("(//tr/td[3])[1]/div/div");
 
     // ──────────────── Actions ────────────────
@@ -81,33 +87,12 @@ public class CreateSalesInvoicePage {
     }
     /** Fill in header details (customer, ref no, subject) 
      * @throws InterruptedException */
-    public void fillSalesInvoiceHeader(String customerName, String orderNo, String subject,String salesPerson,String invDate,String paymentTerms,String supDate,String transactionType) throws InterruptedException {
+    public void fillSalesInvoiceHeader(String customerName, String orderNo, String subject,String salesPerson,String invDate,String paymentTerms,String supDate,String transactionType,String taxType,String priceList) throws InterruptedException {
     	//System.out.println(customerName+" : "+orderNo+" : "+subject+" : "+salesPerson+" : "+invDate+" : "+supDate+" : "+paymentTerms+" : "+transactionType);
     	Utilities.waitForPageToLoad(driver);
-    	if (customerName != null && !customerName  .trim().isEmpty()) {
-    		try {
-    		wait.until(ExpectedConditions.elementToBeClickable(customerDropdownField)).click();
-	        driver.findElement(customerDropdownField).sendKeys(customerName);       
-	        List<WebElement> options = driver.findElements(firstCustomerOptionField); // adjust locator as needed
-	        boolean found = false;
-            for (WebElement option : options) {
-                if (option.getText().equalsIgnoreCase(customerName)) {
-                    option.click();
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-            	 throw new NoSuchElementException(
-                         "Customer name '" + customerName + "' not found in the dropdown list."
-                     );
-            }	        
-	       // wait.until(ExpectedConditions.elementToBeClickable(firstCustomerOptionField)).click();
-    		}catch(Exception e) {
-    			 throw new RuntimeException("Error selecting customer: " + e.getMessage(), e);
-    		}
+    	if (customerName != null && !customerName  .trim().isEmpty()) {	
+			Utilities.selectCustomer(driver,customerDropdownField, customerName);
     	}
-
         driver.findElement(orderNumberField).sendKeys(orderNo);
         
         JavascriptExecutor sp1 = (JavascriptExecutor) driver;
@@ -116,8 +101,8 @@ public class CreateSalesInvoicePage {
         
         if (invDate != null && !invDate.trim().isEmpty()) {
         	//System.out.println("inv Date:");
-        	Thread.sleep(3000);
-        	Utilities.waitForPageLoad(driver);
+        	//Thread.sleep(3000);
+        	//Utilities.waitForPageLoad(driver);
     		wait.until(ExpectedConditions.visibilityOfElementLocated(invoiceDateField)).sendKeys(invDate);
     	}
         
@@ -125,11 +110,8 @@ public class CreateSalesInvoicePage {
     		Utilities.selectIfListed(driver, searchPaymentTermsField, selectPaymentTermsField,paymentTerms);
     	}
         
-         
         if (supDate != null && !supDate.trim().isEmpty()) {
-        	//System.out.println("sup Date:");
-        	Thread.sleep(2000);
-        	Utilities.waitForPageLoad(driver);
+        	
         	wait.until(ExpectedConditions.visibilityOfElementLocated(supplyDateField)).sendKeys(supDate);
     	}
         if (transactionType!= null && !transactionType.trim().isEmpty()) {
@@ -149,12 +131,22 @@ public class CreateSalesInvoicePage {
         driver.findElement(subjectField).click();
         driver.findElement(subjectField).sendKeys(subject);
         }
+        if (priceList != null && !priceList .trim().isEmpty()) {
+    		Utilities.selectIfListed(driver, searchPriceListField, selectPriceListField,priceList);
+    	}
+        if (taxType == null || taxType.trim().isEmpty()|| "Exclusive".equalsIgnoreCase(taxType)) 
+        {
+        	System.out.println("Default Tax Exclusive");
+        }
+        else if ("Inclusive".equalsIgnoreCase(taxType)) {
+    		Utilities.selectIfListed(driver, searchTaxField, selectTaxField,taxType);
+    	}
          Thread.sleep(200);
     }
 
     /** Add multiple items dynamically 
      * @throws InterruptedException */
-    public void addItems(String[] itemNames, String[] itemQtys) throws InterruptedException {    	
+    public void addItems(String[] itemNames, String[] itemQtys,String[] discType,String[] discount) throws InterruptedException {    	
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		WebElement itemdetail  = driver.findElement(itemDetailsField);
 	    js.executeScript("arguments[0].scrollIntoView();",itemdetail);  
@@ -173,6 +165,29 @@ public class CreateSalesInvoicePage {
             qtyField.clear();
             qtyField.sendKeys(itemQtys[i]);
             Thread.sleep(500);
+            if (discType[i] != null && !discType[i].trim().isEmpty() && discount[i] != null && !discount[i].trim().isEmpty()) {
+            	if("%".equalsIgnoreCase(discType[i])) {
+            		
+            		WebElement discountField=driver.findElement(By.xpath("//tbody/tr[" + (i + 1) + "]/td[6]/div[1]/input"));
+            		discountField.clear();
+            		discountField.sendKeys(discount[i]);
+            	}
+            	else {
+            		By discDropdown=By.xpath(("//tbody/tr[" + (i + 1) + "]/td[6]/div[1]/div"));
+            		WebElement discontDropdownField=driver.findElement(discDropdown);
+            		wait.until(ExpectedConditions.elementToBeClickable(discDropdown));
+            		discontDropdownField.click();
+            		WebElement discountTypeAmountField=driver.findElement(By.xpath("//tbody/tr[" + (i + 1) + "]/td[6]/div[1]/div/div/div/ul/li[2]"));
+            		discountTypeAmountField.click();
+            		WebElement discountField=driver.findElement(By.xpath("//tbody/tr[" + (i + 1) + "]/td[6]/div[1]/input"));
+            		discountField.clear();
+            		System.out.println(discount[i]);
+            		discountField.sendKeys(discount[i]);
+            	}
+            } else {
+                // One or both values missing → no discount
+                System.out.println("Discount not applied (type or value missing)");
+            }
         }
     }
     /** Add optional notes and terms */
@@ -185,14 +200,29 @@ public class CreateSalesInvoicePage {
         }
     }
     /** Save the estimate as draft */
-    public void saveAsDraft() {
+    public void saveAsMethod(String saveAs) {
+    	//System.out.println("SAve as : "+saveAs);
+    	if (saveAs == null || saveAs.trim().isEmpty()|| "SAVE AS DRAFT".equalsIgnoreCase(saveAs))   	        
+         {    	        
         wait.until(ExpectedConditions.elementToBeClickable(saveAsDraftButtonField)).click();
+    	 }
+    	 //System.out.println("Estimate date field value: " + driver.findElement(estimateDateField).getAttribute("value"));
+    	 
+    	 else if(("SAVE AND APPROVE".equalsIgnoreCase(saveAs))) {
+    		 
+    		 wait.until(ExpectedConditions.elementToBeClickable(saveAsArrowBtnField)).click();
+    		 wait.until(ExpectedConditions.elementToBeClickable(saveAndApproveBtnField)).click();
+    	 }
+    	 else if("SAVE AND SUBMIT".equalsIgnoreCase(saveAs)) {
+    		 wait.until(ExpectedConditions.elementToBeClickable(saveAsArrowBtnField)).click();
+    		 wait.until(ExpectedConditions.elementToBeClickable(saveAndSubmitBtnField)).click();
+    	 }
     }
     /** Verify estimate saved by checking list */
     public boolean verifySalesInvoiceCreated(String expectedInvoiceNo) {
     	try {
         wait.until(ExpectedConditions.visibilityOfElementLocated(invoiceNoinListField));
-        String actualInvoiceNo = driver.findElement(invoiceNoinListField).getText();
+        String actualInvoiceNo = Utilities.getTextWithRetry(driver,invoiceNoinListField);
         //System.out.println("actual SI NO: "+actualInvoiceNo);
         return actualInvoiceNo.equalsIgnoreCase(expectedInvoiceNo);
     	}

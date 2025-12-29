@@ -31,8 +31,8 @@ public class CreatePurchaseOrderPage {
 	    private final By referenceNumberField = By.id("reference");
 	    private final By deliverToOrgField=By.xpath("(//input[@type='radio'])[1]");
 	    
-	    private final By poDateField=By.id("date"); 
-	    private final By deliverDateField=By.id("expected_delivery_date"); 
+	    private final By poDateField=By.xpath("//label[@title='purchase order date']//following-sibling::div/div/div/div/input"); 
+	    private final By deliverDateField=By.xpath("//label[@title='Expected Delivery Date']//following-sibling::div/div/div/div/input"); 
 	    private final By searchPaymentTermsField=By.xpath("//label[contains(text(),'Payment Terms')]/following-sibling::input[@type='text']");	    
 	    private final By selectPaymentTermsField = By.xpath("//ul/li[1]/span");
 	    
@@ -73,26 +73,8 @@ public class CreatePurchaseOrderPage {
 	    public void fillPurchaseOrderHeader(String vendorName, String referenceNo, String poDate,String paymentTerms,String deliveryDate) throws InterruptedException {
 	    	System.out.println(vendorName+" : "+referenceNo+" PO date : "+poDate+" Delivery Date : "+deliveryDate);
 	    	
-	    	if (vendorName != null && !vendorName  .trim().isEmpty()) {
-	    		try {
-		    		wait.until(ExpectedConditions.elementToBeClickable(vendorDropdownField)).click();
-			        driver.findElement(vendorDropdownField).sendKeys(vendorName);
-			        
-			        List<WebElement> options = driver.findElements(firstVendorOptionField); // adjust locator as needed
-			        boolean found = false;
-		            for (WebElement option : options) {
-		                if (option.getText().equalsIgnoreCase(vendorName)) {
-		                    option.click();
-		                    found = true;
-		                    break;
-		                }
-		            }
-		            if (!found) {
-		            	 throw new NoSuchElementException("Vendor name '" + vendorName + "' not found in the dropdown list.");         
-		            }	        
-	    		}catch(Exception e) {
-	    			 throw new RuntimeException("Error selecting vendor: " + e.getMessage(), e);
-	    		}
+	    	if (vendorName != null && !vendorName  .trim().isEmpty()) {	
+				Utilities.selectCustomer(driver,vendorDropdownField, vendorName);
 	    	}
 	    	 wait.until(ExpectedConditions.elementToBeSelected(deliverToOrgField));
 	        if(referenceNo!= null && !referenceNo.trim().isEmpty()) {
@@ -101,16 +83,16 @@ public class CreatePurchaseOrderPage {
 	        	driver.findElement(referenceNumberField).sendKeys(referenceNo);
 	        }
 	        if (poDate != null && !poDate.trim().isEmpty()) {
-	        	Thread.sleep(3000);
-	        	Utilities.waitForPageLoad(driver);
-	        
+//	        	Thread.sleep(3000);
+//	        	Utilities.waitForPageLoad(driver);
+//	        
 	    		wait.until(ExpectedConditions.visibilityOfElementLocated(poDateField)).sendKeys(poDate);
 	    	}	
 	        Thread.sleep(200);
 	        if (deliveryDate != null && !deliveryDate.trim().isEmpty()) {
 	        	//System.out.println("delivery  Date:"+deliveryDate);
-	        	Thread.sleep(2000);
-	        	Utilities.waitForPageLoad(driver);
+//	        	Thread.sleep(2000);
+//	        	Utilities.waitForPageLoad(driver);
 	        	wait.until(ExpectedConditions.visibilityOfElementLocated(deliverDateField)).sendKeys(deliveryDate);
 	    	}
 	        Thread.sleep(200);
@@ -160,7 +142,7 @@ public class CreatePurchaseOrderPage {
 	    /** Verify estimate saved by checking list */
 	    public boolean verifyPurchaseOrderCreated(String expectedPurchaseOrderNo) {
 	        wait.until(ExpectedConditions.visibilityOfElementLocated(purchaseOrderNoinListField));
-	        String actualPurchaseOrderNo = driver.findElement(purchaseOrderNoinListField).getText();
+	        String actualPurchaseOrderNo = Utilities.getTextWithRetry(driver,purchaseOrderNoinListField);
 	        return actualPurchaseOrderNo.equalsIgnoreCase(expectedPurchaseOrderNo);
 	    }
 	}

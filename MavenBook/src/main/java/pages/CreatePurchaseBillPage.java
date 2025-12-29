@@ -33,13 +33,10 @@ public class CreatePurchaseBillPage {
     private final By firstVendorOptionField =  By.xpath("//div[@class='flex flex-col gap-4 px-10 py-5']/div/div/div/div/div/div/div/ul/li[1]/div/div/h1");
     private final By purchaseBillNumberfield=By.id("purchase_invoice_no");
     
-    private final By entrydateField=By.id("entry_date");
-    private final By billDateField=By.id("date");
-//    private final By subjectField = By.id("subject");
-//    private final By searchSalesPersonField=By.xpath("//label[contains(text(),'Sales Person')]/following-sibling::input[@type='text']");	    
-//    private final By selectSalesPersonField = By.xpath("//ul/li[1]/span");
-    
-    private final By deliveryDateField=By.id("expected_delivery_date");
+    private final By entrydateField=By.xpath("//label[@title='Entry date']//following-sibling::div/div/div/div/input");
+    private final By billDateField=By.xpath("//label[@title='Invoice Date']//following-sibling::div/div/div/div/input");
+
+    private final By deliveryDateField=By.xpath("//label[@title='Expected Delivery Date']//following-sibling::div/div/div/div/input");
     private final By referenceNumberField = By.id("reference_number");
     private final By searchPaymentTermsField=By.xpath("//label[contains(text(),'Payment Terms')]/following-sibling::input[@type='text']");	    
     private final By selectPaymentTermsField = By.xpath("//ul/li[1]/span");
@@ -82,34 +79,16 @@ public class CreatePurchaseBillPage {
     	String ctime=Utilities.dateTime(); 
     	referenceNumber=referenceNumber+":"+ctime.split(" ")[1];
     	//System.out.println(refNo);
-    	if (vendorName != null && !vendorName  .trim().isEmpty()) {
-    		try {
-    		wait.until(ExpectedConditions.elementToBeClickable(vendorDropdownField)).click();
-	        driver.findElement(vendorDropdownField).sendKeys(vendorName);       
-	        List<WebElement> options = driver.findElements(firstVendorOptionField); 
-	        boolean found = false;
-            for (WebElement option : options) {
-                if (option.getText().equalsIgnoreCase(vendorName)) {
-                    option.click();
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-           	 throw new NoSuchElementException(
-                        "Customer name '" + vendorName + "' not found in the dropdown list."
-                    );
-           }	        
-	       // wait.until(ExpectedConditions.elementToBeClickable(firstCustomerOptionField)).click();
-   		}catch(Exception e) {
-   			 throw new RuntimeException("Error selecting Vendor: " + e.getMessage(), e);
-   		}
+    	if (vendorName != null && !vendorName  .trim().isEmpty()) {	
+			Utilities.selectCustomer(driver,vendorDropdownField, vendorName);
     	}
        // driver.findElement(orderNumberField).sendKeys(orderNo);    
-    	 
+    	  if (entryDate != null && !entryDate.trim().isEmpty()) {
+    		  wait.until(ExpectedConditions.visibilityOfElementLocated(entrydateField)).sendKeys(entryDate);
+    	  }
         if (billDate != null && !billDate.trim().isEmpty()) {
-        	Thread.sleep(3000);
-        	Utilities.waitForPageLoad(driver);
+        	//Thread.sleep(3000);
+        	//Utilities.waitForPageLoad(driver);
     		wait.until(ExpectedConditions.visibilityOfElementLocated(billDateField)).sendKeys(billDate);
     	}
        
@@ -122,8 +101,8 @@ public class CreatePurchaseBillPage {
     	}
          
         if (expectedDeliveryDate != null && !expectedDeliveryDate.trim().isEmpty()) {
-        	Thread.sleep(3000);
-        	Utilities.waitForPageLoad(driver);
+//        	Thread.sleep(3000);
+//        	Utilities.waitForPageLoad(driver);
         	wait.until(ExpectedConditions.visibilityOfElementLocated(deliveryDateField)).sendKeys(expectedDeliveryDate);
     	}
          Thread.sleep(200);
@@ -169,7 +148,7 @@ public class CreatePurchaseBillPage {
         while (attempts < 3) {
         	try {
 	        wait.until(ExpectedConditions.visibilityOfElementLocated(billNoinListField));
-	        String actualBillNo = driver.findElement(billNoinListField).getText();
+	        String actualBillNo = Utilities.getTextWithRetry(driver,billNoinListField);
 	        //System.out.println("actual SI NO: "+actualInvoiceNo);
 	        return actualBillNo.equalsIgnoreCase(expectedBillNo);
 	       	}

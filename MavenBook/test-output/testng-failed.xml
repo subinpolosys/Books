@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<suite name="Failed suite [Automation Suite]" guice-stage="DEVELOPMENT">
-  <test thread-count="5" name="Tests(failed)">
+<suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
+  <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="tests.CreateDeliverynoteTest">
+      <class name="tests.CreateRetainerInvoiceTest">
         <methods>
           <include name="setUp"/>
-          <include name="afterMethod"/>
           <include name="tearDown"/>
-          <include name="createDeliverynoteTest"/>
+          <include name="afterMethod"/>
+          <include name="createRetainerInvoiceTest"/>
           <include name="beforeMethod"/>
         </methods>
-      </class> <!-- tests.CreateDeliverynoteTest -->
+      </class> <!-- tests.CreateRetainerInvoiceTest -->
     </classes>
-  </test> <!-- Tests(failed) -->
-</suite> <!-- Failed suite [Automation Suite] -->
+  </test> <!-- Default test(failed) -->
+</suite> <!-- Failed suite [Default suite] -->

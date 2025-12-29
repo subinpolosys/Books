@@ -7,6 +7,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import utils.Utilities;
+
 public class LoginTPage {
 
 
@@ -24,7 +26,7 @@ public class LoginTPage {
     public boolean verifyuser(String usn) {
     	System.out.println(usn);
         wait.until(ExpectedConditions.visibilityOfElementLocated(usernameField));
-        String actualusn = driver.findElement(usernameField).getText();
+        String actualusn = Utilities.getTextWithRetry(driver,usernameField);
         System.err.println(actualusn);
         return actualusn.contains(usn);
     }

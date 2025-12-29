@@ -4,11 +4,14 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.NoSuchElementException;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.Point;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
@@ -63,6 +66,133 @@ public class Utilities {
 	    }
 	}
 
+	 public static void selectCustomer(WebDriver driver,By customerDropdownField, String customerName) throws InterruptedException {
+		 
+		WebDriverWait wait= new WebDriverWait(driver, Duration.ofSeconds(100));
+		 int maxAttempts = 3;
+
+		    for (int attempt = 1; attempt <= maxAttempts; attempt++) {
+		        try {
+		            // Click dropdown
+		            WebElement dropdown = wait.until(
+		                    ExpectedConditions.elementToBeClickable(customerDropdownField));
+		            
+		            dropdown.click();
+
+		            // Clear input
+		            dropdown.sendKeys(Keys.CONTROL + "a");
+		            dropdown.sendKeys(Keys.DELETE);
+
+		            // Type slowly to trigger backend search
+		            for (char c : customerName.toCharArray()) {
+		                dropdown.sendKeys(String.valueOf(c));
+		                Thread.sleep(100);
+		            }
+
+		            By optionsLocator = By.xpath("//li[@role='option']");
+
+		            // Wait until options appear
+		            wait.until(driv ->
+		                    driver.findElements(optionsLocator).size() > 0
+		            );
+
+		            List<WebElement> options = driver.findElements(optionsLocator);
+
+		            for (WebElement option : options) {
+		                if (option.getText().trim().equalsIgnoreCase(customerName)) {
+		                    wait.until(ExpectedConditions.elementToBeClickable(option));
+		                    option.click();
+		                    break;
+		                }
+		            }
+
+		            // 🔍 VERIFY customer is actually loaded
+		            if (isCustomerSelected(driver, customerDropdownField,customerName)) {
+		                System.out.println("Customer selected successfully: " + customerName);
+		                return;
+		            }
+
+		            System.out.println("Customer not loaded, retrying... Attempt: " + attempt);
+
+		        } catch (Exception e) {
+		            if (attempt == maxAttempts) {
+		                throw new RuntimeException(
+		                        "Failed to select customer after retries: " + customerName, e
+		                );
+		            }
+		        }
+		    }
+		}
+
+	 private static boolean isCustomerSelected(WebDriver driver,By customerDropdownField, String customerName) {
+		    try {
+		        WebElement dropdown = driver.findElement(customerDropdownField);
+
+		        String value = dropdown.getAttribute("value");
+		        if (value != null && value.trim().equalsIgnoreCase(customerName)) {
+		            return true;
+		        }
+
+		        // Some UI frameworks don’t use value attribute
+		        String text = dropdown.getText();
+		        return text != null && text.trim().equalsIgnoreCase(customerName);
+
+		    } catch (Exception e) {
+		        return false;
+		    }
+		}
+	 public static String getTextWithRetry(WebDriver driver,By locator) {
+		 WebDriverWait wait= new WebDriverWait(driver, Duration.ofSeconds(20));
+	        int attempts = 0;
+
+	        while (attempts < 3) {
+	            try {
+	                WebElement element = wait.until(
+	                        ExpectedConditions.visibilityOfElementLocated(locator)
+	                );
+	                return element.getText().trim();
+	            } catch (StaleElementReferenceException e) {
+	                attempts++;
+	            }
+	        }
+	        throw new RuntimeException("Element still stale after retries: " + locator);
+	    }
+
+	 public static boolean isNotBlank(String value) {
+		    return value != null && !value.trim().isEmpty();
+		}
+	 
+	 
+//		 try {
+//	    		wait.until(ExpectedConditions.elementToBeClickable(customerDropdownField)).click();
+//		        driver.findElement(customerDropdownField).sendKeys(customerName);	     
+//		       // List<WebElement> options = driver.findElements(By.xpath("//li[@role='option'][1]/div/div/h1"));
+//		        List<WebElement> options = driver.findElements(By.xpath("//li[@role='option']"));
+//		        boolean found = false;
+//		        wait.until(d ->optons.size() > 0);
+//	            for (WebElement option : options) {
+//	                if (option.getText().equalsIgnoreCase(customerName)) {
+//	                  Thread.sleep(2500);
+//	                 
+//	          
+//	                	option.click();
+//	                    found = true;
+//	                    break;
+//	                }
+//	            }
+//	            if (!found) {
+//	           	 throw new NoSuchElementException("Customer name '" + customerName + "' not found in the dropdown list.");
+//	           }	        
+//	   		}catch(Exception e) {
+//	   			 throw new RuntimeException("Error selecting customer: " + e.getMessage(), e);
+//	   		}
+//		 
+//		 
+//		 
+//	       }
+	
+	
+	
 	
 //	public static void selectIfListed(WebDriver driver, By searchField, By listField, String value) 
 //		{

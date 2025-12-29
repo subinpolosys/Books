@@ -46,7 +46,11 @@ public class CreateSalesInvoiceTest extends BaseTest{
         	String transactionType  = ExcelReader.getValue(salesInvoice, "Transaction Type");
         	String salesPerson      = ExcelReader.getValue(salesInvoice, "Sales Person");
         	String subject          = ExcelReader.getValue(salesInvoice, "Subject");
-          
+        	String priceList	 = ExcelReader.getValue(salesInvoice, "Price List");
+        	String taxType       = ExcelReader.getValue(salesInvoice, "Tax");
+        	String customerNote  = ExcelReader.getValue(salesInvoice, "Customer Notes");
+        	String terms         = ExcelReader.getValue(salesInvoice, "Terms And Conditions");
+        	String saveAs        = ExcelReader.getValue(salesInvoice, "Save As");
             if (customerName.isEmpty()) {
                 throw new SkipException("❌ Skipping test: Customer Name is empty in Excel data");
             }
@@ -64,16 +68,18 @@ public class CreateSalesInvoiceTest extends BaseTest{
             String[] itemQtys = items.stream()
                     .map(i -> i.getOrDefault("Item Quantity", "").trim())
                     .toArray(String[]::new);
+            String[] discountType=items.stream().map(i ->i.getOrDefault("Discount Type", "").trim()).toArray(String[]::new);
+            String[] discount=items.stream().map(i ->i.getOrDefault("Discount", "").trim()).toArray(String[]::new);
             
             salesInvoicePage.navigateToNewSalesInvoice();
-            salesInvoicePage.fillSalesInvoiceHeader(customerName, orderNo, subject,salesPerson,invoiceDate,paymentTerms,supplyDate,transactionType);
+            salesInvoicePage.fillSalesInvoiceHeader(customerName, orderNo, subject,salesPerson,invoiceDate,paymentTerms,supplyDate,transactionType,taxType,priceList);
             String SINo=salesInvoicePage.salesInvoiceNumber();
-            salesInvoicePage.addItems(itemNames, itemQtys);
+            salesInvoicePage.addItems(itemNames, itemQtys,discountType,discount);
             salesInvoicePage.addNotesAndTerms(
                     "Dear " + customerName + ", " + SINo + " has been created by Automation",
                     "This is a system-generated document. Ensure accuracy before acceptance."
             );
-            salesInvoicePage.saveAsDraft();
+            salesInvoicePage.saveAsMethod(saveAs);
             SoftAssert soft = new SoftAssert();
             soft.assertTrue(salesInvoicePage.verifySalesInvoiceCreated(SINo),
                     "Sales Invoice not found or failed to create : " + SINo);

@@ -45,7 +45,11 @@ public class CreateSalesReturnTest extends BaseTest {
         	String salesReturnDate    = ExcelReader.getValue(salesReturn, "Return Date");
         	String referenceNumber    = ExcelReader.getValue(salesReturn, "Reference Number");
         	String transactionType    = ExcelReader.getValue(salesReturn, "Transaction Type");
-
+        	String priceList		  = ExcelReader.getValue(salesReturn, "Price List");
+        	String taxType       	  = ExcelReader.getValue(salesReturn, "Tax");
+        	String customerNote       = ExcelReader.getValue(salesReturn, "Customer Notes");
+        	String terms        	  = ExcelReader.getValue(salesReturn, "Terms And Conditions");
+        	String saveAs       	  = ExcelReader.getValue(salesReturn, "Save As");
             if (customerName.isEmpty()||invoiceNo.isEmpty()) {
                 throw new SkipException("❌ Skipping test: Customer Name is empty in Excel data");
             }
@@ -63,17 +67,20 @@ public class CreateSalesReturnTest extends BaseTest {
             String[] itemQtys = items.stream()
                     .map(i -> i.getOrDefault("Item Quantity", "").trim())
                     .toArray(String[]::new);
+            String[] discountType=items.stream().map(i ->i.getOrDefault("Discount Type", "").trim()).toArray(String[]::new);
+            String[] discount=items.stream().map(i ->i.getOrDefault("Discount", "").trim()).toArray(String[]::new);
+            
             salesReturnPage.navigateToNewSalesReturn();
             
-            salesReturnPage.fillSalesReturnHeader(customerName, invoiceNo, reason,salesPerson,salesReturnDate,referenceNumber,transactionType);
+            salesReturnPage.fillSalesReturnHeader(customerName, invoiceNo, reason,salesPerson,salesReturnDate,referenceNumber,transactionType,taxType,priceList);
             String SRNo=salesReturnPage.salesReturnNumber();
             //System.out.println(SRNo);
-            salesReturnPage.addItems(itemNames, itemQtys);
+            salesReturnPage.addItems(itemNames, itemQtys,discountType,discount);
             salesReturnPage.addNotesAndTerms(
                     "Dear " + customerName + ", " + SRNo + " has been created by Automation",
                     "This is a system-generated document. Ensure accuracy before acceptance."
             );
-            salesReturnPage.saveAsDraft();
+            salesReturnPage.saveAsMethod(saveAs);
             SoftAssert soft = new SoftAssert();
             soft.assertTrue(salesReturnPage.verifySalesReturnCreated(SRNo),
                     "Sales Return not found or failed to create : " + SRNo);

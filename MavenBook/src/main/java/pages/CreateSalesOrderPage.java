@@ -6,6 +6,7 @@ import java.util.NoSuchElementException;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -30,18 +31,22 @@ public class CreateSalesOrderPage {
 	    private final By customerDropdownField = By.xpath("//input[@placeholder='Select Customer Name']");
 	    private final By firstCustomerOptionField =  By.xpath("//div[@class='flex flex-col gap-4 px-10 py-5']/div/div/div/div/div/div/div/ul/li[1]/div/div/h1");
 	    private final By salesOrderNumberfield=By.id("sales_order_no");
-	    private final By referenceNumberField = By.id("reference");
+	    private final By referenceNumberField =By.id("reference");
 	    
-	    private final By soDateField=By.id("date"); 
-	    private final By deliverDateField=By.id("expected_delivery_date"); 
+	    private final By soDateField=By.xpath("//label[@title='Sale Order Date']//following-sibling::div/div/div/div/input"); 
+	    private final By deliverDateField=By.xpath("//label[@title='Expected Delivery Date']//following-sibling::div/div/div/div/input"); 
 	    private final By searchPaymentTermsField=By.xpath("//label[contains(text(),'Payment Terms')]/following-sibling::input[@type='text']");	    
 	    private final By selectPaymentTermsField = By.xpath("//ul/li[1]/span");
-	    
-	    
 	    
 	    // private final By subjectField = By.id("subject");
 	    private final By searchSalesPersonField=By.xpath("//label[contains(text(),'Sales Person')]/following-sibling::input[@type='text']");	    
 	    private final By selectSalesPersonField = By.xpath("//ul/li[1]/span");
+	    private final By searchPriceListField=By.xpath("//input[@placeholder='Price List' and @type='text']");	    
+	    private final By selectPriceListField = By.xpath("//ul/li[1]"); 
+	     
+	    private final By searchTaxField=By.xpath("//input[@placeholder='Tax' and @type='text']");
+	    private final By selectTaxField = By.xpath("//ul/li[1]");
+	      
 	    // ──────────────── Item Fields ────────────────
 	    private final By itemDetailsField = By.xpath("//table[@class=' w-full ']/thead/tr[1]/td[1]");
 	    private final By itemListField = By.xpath("//input[@placeholder='Type or click to add items']");
@@ -53,6 +58,9 @@ public class CreateSalesOrderPage {
 
 	    // ──────────────── Action Buttons ────────────────
 	    private final By saveAsDraftButtonField = By.xpath("//button[contains(text(),'Save as Draft')]");
+	    private final By saveAsArrowBtnField=By.xpath("//div[@class=' bg-accent w-44 flex items-center justify-center rounded-[4px] h-9 relative text-white shadow-sm']/div/div/div[1]");
+	    private final By saveAndApproveBtnField=By.xpath("//button[@name='s_approve']/div[text()='Save And Approve']"); 
+	    private final By saveAndSubmitBtnField=By.xpath("//button[@name='s_submit']/div[text()='Save and Submit']");
 	    private final By salesOrderNoinListField = By.xpath("(//tr/td[3])[1]/div/div");
 
 	    // ──────────────── Actions ────────────────
@@ -70,30 +78,10 @@ public class CreateSalesOrderPage {
 	    }
 	    /** Fill in header details (customer, ref no, subject) 
 	     * @throws InterruptedException */
-	    public void fillSalesOrderHeader(String customerName, String referenceNo,String soDate,String expDeliDate,String paymentTerms, String salesPerson) throws InterruptedException {
-	    	System.out.println(customerName+" : "+referenceNo+" : "+soDate+" :"+expDeliDate+": "+salesPerson+":"+paymentTerms);
-	    	if (customerName != null && !customerName  .trim().isEmpty()) {
-	    		try {
-	    		wait.until(ExpectedConditions.elementToBeClickable(customerDropdownField)).click();
-		        driver.findElement(customerDropdownField).sendKeys(customerName);
-		        
-		        List<WebElement> options = driver.findElements(firstCustomerOptionField); // adjust locator as needed
-		        boolean found = false;
-	            for (WebElement option : options) {
-	                if (option.getText().equalsIgnoreCase(customerName)) {
-	                    option.click();
-	                    found = true;
-	                    break;
-	                }
-	            }
-	            if (!found) {
-	            	 throw new NoSuchElementException(
-	                         "Customer name '" + customerName + "' not found in the dropdown list."
-	                     );
-	            }	        
-	    		}catch(Exception e) {
-	    			 throw new RuntimeException("Error selecting customer: " + e.getMessage(), e);
-	    		}
+	    public void fillSalesOrderHeader(String customerName, String referenceNo,String soDate,String expDeliDate,String paymentTerms, String salesPerson,String taxType,String priceList) throws InterruptedException {
+	    	//System.out.println(customerName+" : "+referenceNo+" : "+soDate+" :"+expDeliDate+": "+salesPerson+":"+paymentTerms);
+	    	if (customerName != null && !customerName  .trim().isEmpty()) {	
+    			Utilities.selectCustomer(driver,customerDropdownField, customerName);
 	    	}
 	    	if(referenceNo != null && !referenceNo.trim().isEmpty()) {
 	    		String ctime=Utilities.dateTime(); 
@@ -103,26 +91,38 @@ public class CreateSalesOrderPage {
 	        if (soDate != null && !soDate.trim().isEmpty()) {
 	        	//System.out.println("inv Date:");
 	    		wait.until(ExpectedConditions.visibilityOfElementLocated(soDateField)).sendKeys(soDate);
+	    		Thread.sleep(100);
 	    	}	        
 	        if (paymentTerms!= null && !paymentTerms.trim().isEmpty()) {
 	    		Utilities.selectIfListed(driver, searchPaymentTermsField, selectPaymentTermsField,paymentTerms);
+	    		Thread.sleep(100);
 	    	}	         
 	        if (expDeliDate != null && !expDeliDate.trim().isEmpty()) {
 	        	//System.out.println("sup Date:");
 	        	wait.until(ExpectedConditions.visibilityOfElementLocated(deliverDateField)).sendKeys(expDeliDate);
+	        	Thread.sleep(100);
 	    	}
 	        JavascriptExecutor sp = (JavascriptExecutor) driver;
 	        WebElement salesP  = driver.findElement(searchSalesPersonField);
-		    sp.executeScript("arguments[0].scrollIntoView();",salesP); 
-	        
+		    sp.executeScript("arguments[0].scrollIntoView();",salesP);  
 	        if (salesPerson != null && !salesPerson .trim().isEmpty()) {
 	    		Utilities.selectIfListed(driver, searchSalesPersonField, selectSalesPersonField,salesPerson);
+	    	}
+	        if (priceList != null && !priceList .trim().isEmpty()) {
+	    		Utilities.selectIfListed(driver, searchPriceListField, selectPriceListField,priceList);
+	    	}
+	        if (taxType == null || taxType.trim().isEmpty()|| "Exclusive".equalsIgnoreCase(taxType)) 
+	        {
+	        	System.out.println("Default Tax Exclusive");
+	        }
+	        else if ("Inclusive".equalsIgnoreCase(taxType)) {
+	    		Utilities.selectIfListed(driver, searchTaxField, selectTaxField,taxType);
 	    	}
 	         Thread.sleep(200);
 	    }
 	    /** Add multiple items dynamically 
 	     * @throws InterruptedException */
-	    public void addItems(String[] itemNames, String[] itemQtys) throws InterruptedException {	    	
+	    public void addItems(String[] itemNames, String[] itemQtys,String[] discType,String[] discount) throws InterruptedException {	    	
 			JavascriptExecutor js = (JavascriptExecutor) driver;
 			WebElement itemdetail  = driver.findElement(itemDetailsField);
 		    js.executeScript("arguments[0].scrollIntoView();",itemdetail);  
@@ -141,6 +141,29 @@ public class CreateSalesOrderPage {
 	            qtyField.clear();
 	            qtyField.sendKeys(itemQtys[i]);
 	            Thread.sleep(500);
+	            if (discType[i] != null && !discType[i].trim().isEmpty() && discount[i] != null && !discount[i].trim().isEmpty()) {
+	            	if("%".equalsIgnoreCase(discType[i])) {
+	            		
+	            		WebElement discountField=driver.findElement(By.xpath("//tbody/tr[" + (i + 1) + "]/td[6]/div[1]/input"));
+	            		discountField.clear();
+	            		discountField.sendKeys(discount[i]);
+	            	}
+	            	else {
+	            		By discDropdown=By.xpath(("//tbody/tr[" + (i + 1) + "]/td[6]/div[1]/div"));
+	            		WebElement discontDropdownField=driver.findElement(discDropdown);
+	            		wait.until(ExpectedConditions.elementToBeClickable(discDropdown));
+	            		discontDropdownField.click();
+	            		WebElement discountTypeAmountField=driver.findElement(By.xpath("//tbody/tr[" + (i + 1) + "]/td[6]/div[1]/div/div/div/ul/li[2]"));
+	            		discountTypeAmountField.click();
+	            		WebElement discountField=driver.findElement(By.xpath("//tbody/tr[" + (i + 1) + "]/td[6]/div[1]/input"));
+	            		discountField.clear();
+	            		System.out.println(discount[i]);
+	            		discountField.sendKeys(discount[i]);
+	            	}
+	            } else {
+	                // One or both values missing → no discount
+	                System.out.println("Discount not applied (type or value missing)");
+	            }
 	        }
 	    }
 
@@ -154,14 +177,33 @@ public class CreateSalesOrderPage {
 	        }
 	    }
 	    /** Save the estimate as draft */
-	    public void saveAsDraft() {
+	    public void saveAsMethod(String saveAs) {
+	    	//System.out.println("SAve as : "+saveAs);
+	    	if (saveAs == null || saveAs.trim().isEmpty()|| "SAVE AS DRAFT".equalsIgnoreCase(saveAs))   	        
+	         {    	        
 	        wait.until(ExpectedConditions.elementToBeClickable(saveAsDraftButtonField)).click();
+	    	 }
+	    	 //System.out.println("Estimate date field value: " + driver.findElement(estimateDateField).getAttribute("value"));
+	    	 
+	    	 else if(("SAVE AND APPROVE".equalsIgnoreCase(saveAs))) {
+	    		 
+	    		 wait.until(ExpectedConditions.elementToBeClickable(saveAsArrowBtnField)).click();
+	    		 wait.until(ExpectedConditions.elementToBeClickable(saveAndApproveBtnField)).click();
+	    	 }
+	    	 else if("SAVE AND SUBMIT".equalsIgnoreCase(saveAs)) {
+	    		 wait.until(ExpectedConditions.elementToBeClickable(saveAsArrowBtnField)).click();
+	    		 wait.until(ExpectedConditions.elementToBeClickable(saveAndSubmitBtnField)).click();
+	    	 }
 	    }
-
 	    /** Verify estimate saved by checking list */
 	    public boolean verifySalesOrderCreated(String expectedSalesOrderNo) {
+	    	try {
 	        wait.until(ExpectedConditions.visibilityOfElementLocated(salesOrderNoinListField));
-	        String actualSalesOrderNo = driver.findElement(salesOrderNoinListField).getText();
+	        String actualSalesOrderNo = Utilities.getTextWithRetry(driver,salesOrderNoinListField);
 	        return actualSalesOrderNo.equalsIgnoreCase(expectedSalesOrderNo);
+	    	}
+	    	catch(TimeoutException e) {
+	    		return false;
+	    	}
 	    }
 	}

@@ -54,7 +54,7 @@ public class CreateCustomerPage {
     private final By facebookField=By.id("facebook");
     private final By twitterField=By.id("twitter");
     //===================More Details=========================================  
-    private final By addmoreDetailsField=By.xpath("//p[text()='Add more Details']");
+    private final By addmoreDetailsField=By.xpath("//p[text()='add more details']");
     private final By designationField=By.id("designation");
     private final By departmentField=By.id("department");  
     //===================Billing & Shipping Address===========================
@@ -71,9 +71,9 @@ public class CreateCustomerPage {
     private final By selectStateField=By.id("//ul/li[1]/span");
     
     private final By addressL2Field=By.id("address_2");
-    private final By addressL2LabelField=By.xpath("//label[@title='Address line 2']");
+    private final By addressL2LabelField=By.xpath("//label[@title='address line 2']");
     private final By addressL3Field=By.id("address_3");
-    private final By addressL3LabelField=By.xpath("//label[@title='Address line 3']");
+    private final By addressL3LabelField=By.xpath("//label[@title='address line 3']");
     private final By cityField=By.id("city");
     private final By landMarkField=By.id("landmark");
     private final By zipCodeField=By.id("zip_code");
@@ -105,7 +105,7 @@ public class CreateCustomerPage {
     	    String mobileNumber, String creditLimit, String taxTreatment, String trn, String placeOfSupply,
     	    String currency, String exchangeRate, String openingBalance, String terms, String priceList,
     	    String website, String facebook, String twitter, String designation, String department) throws InterruptedException{ 
-    	//System.out.println(salutation + ", " + firstName + ", " + lastName + ", " + companyName + ", " + companyDisplayName + ", " + companyDispNameArabic + ", " + primaryEmail + ", " + secondaryEmail + ", Work Phone:" + workPhone + ", " + mobileNumber + ", " + creditLimit + ", " + taxTreatment + ", " + trn + ", " + placeOfSupply + ", " + currency + ", " + exchangeRate + ", " + openingBalance + ", " + terms + ", " + priceList + ", " + website + ", " + facebook + ", " + twitter + ", " + designation + ", " + department);
+    	System.out.println(salutation + ", " + firstName + ", " + lastName + ", " + companyName + ", " + companyDisplayName + ", " + companyDispNameArabic + ", " + primaryEmail + ", " + secondaryEmail + ", Work Phone:" + workPhone + ", " + mobileNumber + ", " + creditLimit + ", " + taxTreatment + ", " + trn + ", " + placeOfSupply + ", " + currency + ", " + exchangeRate + ", " + openingBalance + ", " + terms + ", " + priceList + ", " + website + ", " + facebook + ", " + twitter + ", " + designation + ", " + department);
 
     	if (salutation!= null && !salutation .trim().isEmpty()) {
     		Utilities.selectIfListed(driver, searchSalutationField, selectSalutationField,salutation);
@@ -207,16 +207,21 @@ public class CreateCustomerPage {
     	if (twitter!= null && !twitter.trim().isEmpty()) { 
     		wait.until(ExpectedConditions.visibilityOfElementLocated(twitterField)).sendKeys(twitter);
     	}
-    	if (designation!= null && !designation.trim().isEmpty()) { 
+    	if (designation!= null && !designation.trim().isEmpty() || department!= null && !department.trim().isEmpty()) { 	
+    		JavascriptExecutor js1 = (JavascriptExecutor) driver;
+    		WebElement mDetails  = driver.findElement(addmoreDetailsField);
+    	    js.executeScript("arguments[0].scrollIntoView();",mDetails); 
+    	    if (designation!= null && !designation.trim().isEmpty()) {
+    		wait.until(ExpectedConditions.visibilityOfElementLocated(addmoreDetailsField));
     		driver.findElement(addmoreDetailsField).click();
     		 Thread.sleep(300);
     		
     		wait.until(ExpectedConditions.visibilityOfElementLocated(designationField)).sendKeys(designation);
-    	}
-    	if (department!= null && !department.trim().isEmpty()) { 
+    	    }
+    	    if (department!= null && !department.trim().isEmpty()) { 
     		wait.until(ExpectedConditions.visibilityOfElementLocated(departmentField)).sendKeys(department);
-    	}
-    	    	   	
+    	    }
+    	 } 	   	
     }
     public void customerBillingAddress(String attention, String addressLine1, String country, String state, String addressLine2,
 		    String addressLine3, String city, String landmark, String zipCode, String addressPhone,String fax) throws InterruptedException {

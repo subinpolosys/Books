@@ -33,7 +33,7 @@ public class CreateVendorCreditPage {
     private final By firstVendorOptionField =  By.xpath("//div[@class='flex flex-col gap-4 px-10 py-5']/div/div/div/div/div/div/div/ul/li[1]/div/div/h1");  private final By salesReturnNumberField=By.id("sales_return_no");
     private final By vendorCreditNumberField=By.id("vendor_credit_no");
     
-    private final By vendorCreditDateField=By.id("date");
+    private final By vendorCreditDateField=By.xpath("//label[@title='Vendor Credit Date']//following-sibling::div/div/div/div/input");
     private final By orderNumberField = By.id("order_number");
     
     private final By searchBillField=By.xpath("//label[contains(text(),'Bill')]/following-sibling::input[@type='text']");	    
@@ -75,27 +75,10 @@ public class CreateVendorCreditPage {
     /** Fill in header details (customer, ref no, subject) 
      * @throws InterruptedException */
     public void fillVendorCreditHeader(String vendorName, String billNo, String vendorCreditDate,String orderNo) throws InterruptedException {
-    	System.out.println(vendorName+" : "+billNo+" : "+vendorCreditDate+" : "+orderNo);
+    	//System.out.println(vendorName+" : "+billNo+" : "+vendorCreditDate+" : "+orderNo);
     	
-    	if (vendorName != null && !vendorName  .trim().isEmpty()) {
-    		try {
-    		wait.until(ExpectedConditions.elementToBeClickable(vendorDropdownField)).click();
-	        driver.findElement(vendorDropdownField).sendKeys(vendorName);	        
-	        List<WebElement> options = driver.findElements(firstVendorOptionField); // adjust locator as needed
-	        boolean found = false;
-            for (WebElement option : options) {
-                if (option.getText().equalsIgnoreCase(vendorName)) {
-                    option.click();
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-           	 throw new NoSuchElementException("Vendor name '" + vendorName + "' not found in the dropdown list.");
-           }	        
-   		}catch(Exception e) {
-   			 throw new RuntimeException("Error selecting vendor: " + e.getMessage(), e);
-   		}
+    	if (vendorName != null && !vendorName  .trim().isEmpty()) {	
+			Utilities.selectCustomer(driver,vendorDropdownField, vendorName);
     	}
         if (vendorCreditDate != null && !vendorCreditDate.trim().isEmpty()) {
         	WebElement srdate = driver.findElement(vendorCreditDateField);
@@ -170,7 +153,7 @@ public class CreateVendorCreditPage {
 	    	try {
 	    	//System.out.println("expected VC number : "+expectedVendorCreditNo);
 	        wait.until(ExpectedConditions.visibilityOfElementLocated(vendorCreditNoinListField));
-	        String actualVendorCreditNo = driver.findElement(vendorCreditNoinListField).getText();
+	        String actualVendorCreditNo = Utilities.getTextWithRetry(driver,vendorCreditNoinListField);
 	        //System.out.println("Actual VC number :"+actualVendorCreditNo);
 	        return actualVendorCreditNo.equalsIgnoreCase(expectedVendorCreditNo);
 	    	}

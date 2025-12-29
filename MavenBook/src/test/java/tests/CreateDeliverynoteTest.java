@@ -36,7 +36,12 @@ public class CreateDeliverynoteTest extends BaseTest {
 	        	String referenceNo  = ExcelReader.getValue(dnote, "Reference");
 	        	String dnDate       = ExcelReader.getValue(dnote, "Date");
 	        	String dnType       = ExcelReader.getValue(dnote, "Challan Type");
-            
+	        	String priceList	 = ExcelReader.getValue(dnote, "Price List");
+	        	String taxType       = ExcelReader.getValue(dnote, "Tax");
+	        	String customerNote  = ExcelReader.getValue(dnote, "Customer Notes");
+	        	String terms         = ExcelReader.getValue(dnote, "Terms And Conditions");
+	        	String saveAs        = ExcelReader.getValue(dnote, "Save As");
+	                   
 	            if (customerName.isEmpty()) {
 	                throw new SkipException("❌ Skipping test: Customer Name is empty in Excel data");
 	            }
@@ -53,15 +58,18 @@ public class CreateDeliverynoteTest extends BaseTest {
 	             String[] itemQtys = items.stream()
 	                     .map(i -> i.getOrDefault("Item Quantity", "").trim())
 	                     .toArray(String[]::new);
+	             String[] discountType=items.stream().map(i ->i.getOrDefault("Discount Type", "").trim()).toArray(String[]::new);
+	             String[] discount=items.stream().map(i ->i.getOrDefault("Discount", "").trim()).toArray(String[]::new);
+	             
 	            deliverynotePage.navigateToNewDeliverynote();
-	            deliverynotePage.fillEstimateHeader(customerName, referenceNo,dnDate,dnType);
+	            deliverynotePage.fillEstimateHeader(customerName, referenceNo,dnDate,dnType,taxType,priceList);
 	            String DNNo=deliverynotePage.delivernoteNumber();
-	            deliverynotePage.addItems(itemNames, itemQtys);
+	            deliverynotePage.addItems(itemNames, itemQtys,discountType,discount);
 	            deliverynotePage.addNotesAndTerms(
-	                    "Dear " + customerName + ", " + DNNo + " has been created by Automation",
-	                    "This is a system-generated document. Ensure accuracy before acceptance."
+	                    "Dear " + customerName + ", " + DNNo + " has been created by Automation."+customerNote,
+	                    "This is a system-generated document. Ensure accuracy before acceptance."+terms
 	            );
-	            deliverynotePage.saveAsDraft();
+	            deliverynotePage.saveAsMethod(saveAs);
 	            SoftAssert soft=new SoftAssert();
 	            soft.assertTrue(deliverynotePage.verifyDeliverynoteCreated(DNNo),
 	                    "Delivery Note not found or failed to create : " + DNNo);

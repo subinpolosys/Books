@@ -3,17 +3,26 @@
 <suite name="Automation Suite" verbose="1" parallel="false">
     <test name="Tests">
         <classes>
-          <!--  <class name="tests.CreateEstimateTest"/>
-            <class name="tests.CreateSalesOrderTest"/>
-        
-            <class name="tests.CreateSalesInvoiceTest"/>
-            <class name="tests.CreateSalesReturnTest"/>
+        	
+        	<!--
+				<class name="tests.LoginTest"/>      	
+        	<class name="tests.CreateItemTest"/>
+        	<class name="tests.CreateCustomerTest"/>
+        	 <class name="tests.CreateVendorTest"/>
+        	 -->
+            <class name="tests.CreateEstimateTest"/>
             <class name="tests.CreateRetainerInvoiceTest"/>
-            
-            <class name="tests.CreateDeliverynoteTest"/>
-            <class name="tests.CreatePurchaseOrderTest"/>
-            <class name="tests.CreatePurchaseBillTest"/>-->
+             <class name="tests.CreateSalesReturnTest"/>
+             <class name="tests.CreatePurchaseBillTest"/>
              <class name="tests.CreateVendorCreditTest"/>
+            <class name="tests.CreateSalesOrderTest"/>
+            
+            <class name="tests.CreateSalesInvoiceTest"/>
+                    
+            <class name="tests.CreateDeliverynoteTest"/>
+           
+            <class name="tests.CreatePurchaseOrderTest"/>
+            
         </classes>
     </test>
 </suite>

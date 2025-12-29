@@ -60,7 +60,7 @@ public class CreateItemPage {
 	    private final By createdItemNameField = By.xpath("//h1");
 	    private final By nameAlreadyExistalertField=By.xpath("//div[@role='alert']/div[2]");
 	    public void navigateToNewItem() throws InterruptedException {
-	    	 wait.until(ExpectedConditions.elementToBeClickable(dashboardField)).click();
+	    	wait.until(ExpectedConditions.elementToBeClickable(dashboardField)).click();
 	        wait.until(ExpectedConditions.elementToBeClickable(itemMasterMenuField)).click();
 	        wait.until(ExpectedConditions.elementToBeClickable(itemsMenufield)).click();
 	        wait.until(ExpectedConditions.elementToBeClickable(newItemButtonField)).click();
@@ -149,7 +149,7 @@ public class CreateItemPage {
 	   public boolean verifyItemCreated(String expectedItemName) {
 	    	try {
 	        wait.until(ExpectedConditions.visibilityOfElementLocated(createdItemNameField));
-	        String actualItemName = driver.findElement(createdItemNameField).getText();
+	        String actualItemName = Utilities.getTextWithRetry(driver,createdItemNameField);
 	        System.out.println("Created Item : "+actualItemName);
 	        return actualItemName.contains(expectedItemName);
 	    	}catch(Exception e) {

@@ -19,9 +19,7 @@ public class CreateItemTest extends BaseTest {
 	 private Login loginPage;
 
     @BeforeMethod
-    public void beforeMethod() throws InterruptedException {
-    	
-    	
+    public void beforeMethod() throws InterruptedException {	
         loginPage = new Login(driver);
         loginPage.login();
     }
