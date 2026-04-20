@@ -15,7 +15,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
-        <selenium.version>4.25.0</selenium.version>
+        <selenium.version>4.30.0</selenium.version>
         <testng.version>7.10.2</testng.version>
         <log4j2.version>2.24.1</log4j2.version>
         <poi.version>5.3.0</poi.version>
@@ -49,12 +49,12 @@
         </exclusion>
     </exclusions>
  </dependency>
-
+<!-- 
  <dependency>
     <groupId>org.apache.poi</groupId>
     <artifactId>poi-ooxml</artifactId>
     <version>5.3.0</version>
- </dependency>
+ </dependency> -->
 
 <!-- Ensure latest Commons IO version -->
     <dependency>
@@ -90,12 +90,12 @@
         </dependency>
 
         <!-- ✅ Excel / Apache POI -->
-        <dependency>
+  <!--       <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
             <version>${poi.version}</version>
         </dependency>
-
+-->
         <!-- ✅ Commons IO -->
        
 

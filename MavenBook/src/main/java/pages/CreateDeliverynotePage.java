@@ -28,8 +28,8 @@ public class CreateDeliverynotePage {
 
 	    // ──────────────── Navigation Elements ────────────────
 	    private final By dashboardField=By.xpath("//a[text()='Dashboard']"); 
-	    private final By salesMenuField = By.xpath("//div[@title='sales']/a[contains(text(),'Sales')]");
-	    private final By deliveryNoteMenuField = By.xpath("//div[@title='delivery note']/span[contains(text(),'Delivery Note')]");
+	    private final By salesMenuField = By.xpath("//a[contains(text(),'Sales')]");
+	    private final By deliveryNoteMenuField = By.xpath("//span[contains(text(),'Delivery Note')]");
 	    private final By newDeliverynoteButtonField = By.xpath("//button/p[contains(text(),'new')]");
 
 	    // ──────────────── Header / Customer Fields ────────────────
@@ -41,8 +41,8 @@ public class CreateDeliverynotePage {
 	    private final By dNDateField=By.xpath("//label[@title='Date']//following-sibling::div/div/div/div/input");
 	   // private final By expirydateField=By.id("expected_delivery_date");
 	    
-	   // private final By subjectField = By.id("subject");
-	    private final By searchDNoteTypeField=By.xpath("//label[contains(text(),'Challan Type')]/following-sibling::input[@type='text']");	    
+	    private final By dateLabelField = By.xpath("//label[text()='Date']");
+	    private final By searchDNoteTypeField=By.xpath("//label[contains(text(),'Transaction Type')]/following-sibling::input[@type='text']");	    
 	    private final By selectDNoteTypeField = By.xpath("//ul/li[1]/span");
 	    private final By searchPriceListField=By.xpath("//input[@placeholder='Price List' and @type='text']");	    
 	    private final By selectPriceListField = By.xpath("//ul/li[1]"); 
@@ -81,45 +81,60 @@ public class CreateDeliverynotePage {
 	    }
 	    /** Fill in header details (customer, ref no, subject) 
 	     * @throws InterruptedException */
-	    public void fillEstimateHeader(String customerName, String referenceNo,String dNDate,String challanType,String taxType,String priceList) throws InterruptedException {
-	    	System.out.println(customerName+" : "+referenceNo+" : Date : "+dNDate+" : "+challanType);
-
-	    	if (customerName != null && !customerName  .trim().isEmpty()) {
-	    			Utilities.selectCustomer(driver,customerDropdownField, customerName);
+	    String customerName="";
+	    public void fillDeliveryNoteHeader(
+	    		String customerName1, 
+	    		String referenceNo,
+	    		String dNDate,
+	    		String challanType,
+	    		String taxType,
+	    		String priceList) throws InterruptedException {
+	    	//System.out.println(customerName+" : "+referenceNo+" : Date : "+dNDate+" : "+challanType);
+	    	customerName=customerName1;
+	    	if (Utilities.isNotEmpty(customerName)) {
+	    		 Utilities.selectCustomer(driver,customerDropdownField, customerName);
 	    		}
  	 	
-	        if (referenceNo != null && !referenceNo .trim().isEmpty()) {
+	        if (Utilities.isNotEmpty(referenceNo)) {
 	        	String ctime=utils.Utilities.dateTime(); 
 	        	referenceNo=referenceNo+":"+ctime.split(" ")[1];
 	        driver.findElement(referenceNumberField).sendKeys(referenceNo);
 	        }
 	        Thread.sleep(200);
-	        if (dNDate != null && !dNDate.trim().isEmpty()) {
+	        if (Utilities.isNotEmpty(dNDate)) {
 	        	wait.until(ExpectedConditions.visibilityOfElementLocated(dNDateField)).sendKeys(dNDate);
-	  	        }
-	        else {
-//	    		 
-	    	 }
-	        Thread.sleep(2000);	        
-	        if (challanType != null && !challanType .trim().isEmpty()) {
+	        	Thread.sleep(100);
+	        }
+	        //driver.findElement(dateLabelField).click();
+	        Thread.sleep(2000);	       
+	        
+	        if (Utilities.isNotEmpty(challanType)) {
 	    		utils.Utilities.selectIfListed(driver, searchDNoteTypeField, selectDNoteTypeField, challanType);
 	    	}   
-	        if (priceList != null && !priceList .trim().isEmpty()) {
+	        if (Utilities.isNotEmpty(priceList)) {
 	    		Utilities.selectIfListed(driver, searchPriceListField, selectPriceListField,priceList);
 	    	}
 	        if (taxType == null || taxType.trim().isEmpty()|| "Exclusive".equalsIgnoreCase(taxType)) 
 	        {
-	        	System.out.println("Default Tax Exclusive");
+	        	//System.out.println("Default Tax Exclusive");
 	        }
 	        else if ("Inclusive".equalsIgnoreCase(taxType)) {
 	    		Utilities.selectIfListed(driver, searchTaxField, selectTaxField,taxType);
 	    	}
+	        if(driver.findElement(customerDropdownField).getAttribute("value").isEmpty()) {
+	            Utilities.selectCustomer(driver, customerDropdownField, customerName);
+	            System.out.println("Customer first time not loaded");
+	        }
+	         
 	    }
 
 	    /** Add multiple items dynamically 
 	     * @throws InterruptedException */
-	    public void addItems(String[] itemNames, String[] itemQtys,String[] discType,String[] discount) throws InterruptedException {
-	    	
+	    public void addItems(
+	    		String[] itemNames, 
+	    		String[] itemQtys,
+	    		String[] discType,
+	    		String[] discount) throws InterruptedException {	    	
 			JavascriptExecutor js = (JavascriptExecutor) driver;
 			WebElement itemdetail  = driver.findElement(itemDetailsField);
 		    js.executeScript("arguments[0].scrollIntoView();",itemdetail);  
@@ -152,10 +167,11 @@ public class CreateDeliverynotePage {
 	            		discontDropdownField.click();
 	            		WebElement discountTypeAmountField=driver.findElement(By.xpath("//tbody/tr[" + (i + 1) + "]/td[6]/div[1]/div/div/div/ul/li[2]"));
 	            		discountTypeAmountField.click();
-	            		WebElement discountField=driver.findElement(By.xpath("//tbody/tr[" + (i + 1) + "]/td[6]/div[1]/input"));
-	            		discountField.clear();
-	            		System.out.println(discount[i]);
-	            		discountField.sendKeys(discount[i]);
+	            		 By discountField=By.xpath("(//tbody/tr[" + (i + 1) + "]/td[6]/div[1]/input)[1]");
+	            		 WebElement discField=wait.until(ExpectedConditions.visibilityOfElementLocated(discountField));
+	            		discField.clear();
+	            		//System.out.println(discount[i]);
+	            		discField.sendKeys(discount[i]);
 	            	}
 	            } else {
 	                // One or both values missing → no discount
@@ -167,15 +183,22 @@ public class CreateDeliverynotePage {
 	    public void addNotesAndTerms(String customerNote, String terms) {
 //	    	String dateValue = driver.findElement(dNDateField).getAttribute("value"); //
 //	    	System.out.println("Date value: " + dateValue);                          //                    
-	        if (customerNote != null && !customerNote.isEmpty()) {
+	        if (Utilities.isNotEmpty(customerNote)) {
 	            driver.findElement(customerNoteField).sendKeys(customerNote);
 	        }
-	        if (terms != null && !terms.isEmpty()) {
+	        if (Utilities.isNotEmpty(terms)) {
 	            driver.findElement(termsField).sendKeys(terms);
 	        }
 	    }
-	    /** Save the estimate as draft */
-	    public void saveAsMethod(String saveAs)  {	
+	    /** Save the estimate as draft 
+	     * @throws InterruptedException */
+	    public void saveAsMethod(String saveAs) throws InterruptedException  {	
+	    	
+	    	if(driver.findElement(customerDropdownField).getAttribute("value").isEmpty()) {
+	            Utilities.selectCustomer(driver, customerDropdownField, customerName);
+	            System.out.println("Customer second time not loaded");
+	        }
+	    	
 	    	if (saveAs == null || saveAs.trim().isEmpty()|| "SAVE AS DRAFT".equalsIgnoreCase(saveAs))   	        
 	         {    	        
 	        wait.until(ExpectedConditions.elementToBeClickable(saveAsDraftButtonField)).click();

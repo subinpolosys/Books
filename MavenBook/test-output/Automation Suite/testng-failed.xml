@@ -2,16 +2,16 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <suite name="Failed suite [Automation Suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Tests(failed)">
+    <parameter name="browser" value="chrome"/>
     <classes>
-      <class name="tests.CreateDeliverynoteTest">
+      <class name="tests.SalesOrderTest">
         <methods>
           <include name="setUp"/>
-          <include name="afterMethod"/>
+          <include name="loginToApp"/>
           <include name="tearDown"/>
-          <include name="createDeliverynoteTest"/>
-          <include name="beforeMethod"/>
+          <include name="salesOrderTest" invocation-numbers="0"/>
         </methods>
-      </class> <!-- tests.CreateDeliverynoteTest -->
+      </class> <!-- tests.SalesOrderTest -->
     </classes>
   </test> <!-- Tests(failed) -->
 </suite> <!-- Failed suite [Automation Suite] -->

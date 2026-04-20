@@ -11,7 +11,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import utils.DiscountUtils;
 import utils.Utilities;
+import utils.WaitUtils;
 
 public class CreatePurchaseBillPage {
 	private final WebDriver driver;
@@ -20,12 +23,11 @@ public class CreatePurchaseBillPage {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(15));
     }
-
     // ──────────────── Navigation Elements ────────────────
   
     private final By dashboardField=By.xpath("//a[text()='Dashboard']"); 
-    private final By purchaseMenuField = By.xpath("//div[@title='purchase']/a[contains(text(),'Purchase')]");
-    private final By purchaseBillMenuField = By.xpath("//div[@title='bills']/span[contains(text(),'Purchase Bills')]");
+    private final By purchaseMenuField = By.xpath("//a[contains(text(),'Purchase')]");
+    private final By purchaseBillMenuField = By.xpath("//span[contains(text(),'Purchase Bills')]");
     private final By newPurchaseBillButtonField = By.xpath("//button/p[contains(text(),'new')]");
 
     // ──────────────── Header / Customer Fields ────────────────
@@ -42,6 +44,14 @@ public class CreatePurchaseBillPage {
     private final By selectPaymentTermsField = By.xpath("//ul/li[1]/span");
 //    private final By searchTransactionTypeField=By.xpath("//label[contains(text(),'Transaction Type')]/following-sibling::input[@type='text']");	    
 //    private final By selectTransactionTypeField = By.xpath("//ul/li[1]/span");
+    private final By discountLevelTypeDropdownField = By.xpath("//a[text()='Discount Type']//parent::div/div/div/div/button");
+    private final By selectItemLevelDiscountField = By.xpath("//a[text()='Discount Type']//parent::div/div/div/div/ul/li[1]");
+	
+	
+    private final By searchPriceListField=By.xpath("//input[@placeholder='Price List' and @type='text']");	    
+    private final By selectPriceListField = By.xpath("//ul/li[1]"); 
+    private final By searchTaxField=By.xpath("//input[@placeholder='Tax' and @type='text']");
+    private final By selectTaxField = By.xpath("//ul/li[1]");
     
     
     // ──────────────── Item Fields ────────────────
@@ -53,10 +63,20 @@ public class CreatePurchaseBillPage {
     private final By noteField = By.id("notes");
 //    private final By termsField = By.id("terms_and_conditions");
 
+ // ──────────────── Transaction level Discount ────────────────
+    private final By addDiscountLinkField=By.xpath("//a[text()=' Add Discount']");
+    private final By transactionLevelDiscountField=By.xpath("//input[@tabindex=0 and @type='number']");
+    private final By searchDiscountAccountField=By.xpath("//div[text()='Discount Account']//following-sibling::div/div/div/div/button/div/input");
+    private final By selectDiscountAccountField=By.xpath("//div[text()='Discount Account']//following-sibling::div/div/div/ul/div/li[3]");
+
     // ──────────────── Action Buttons ────────────────
     private final By saveAsDraftButtonField = By.xpath("//button[contains(text(),'Save as Draft')]");
+    private final By saveAsArrowBtnField=By.xpath("//div[@class=' bg-accent w-44 flex items-center justify-center rounded-[4px] h-9 relative text-white shadow-sm']/div/div/div[1]");
+    private final By saveAndApproveBtnField=By.xpath("//button[@name='s_open']/div[text()='Save And Approve']"); 
+    private final By saveAndSubmitBtnField=By.xpath("//button[@name='s_submit']");
+    
     private final By billNoinListField = By.xpath("(//tr/td[3])[1]/div/div");
-
+    
     // ──────────────── Actions ────────────────
 
     /** Navigate to Create Estimate Page */
@@ -73,75 +93,182 @@ public class CreatePurchaseBillPage {
     	return BiNO;
     }
     /** Fill in header details (customer, ref no, subject) 
-     * @throws InterruptedException */
-    public void fillPurchaseBillHeader(String vendorName, String entryDate, String billDate,String expectedDeliveryDate,String referenceNumber,String paymentTerms) throws InterruptedException {
-    	//System.out.println(vendorName+" : "+refNo+" : "+subject+" : "+salesPerson+" : "+billDate+" :  "+paymentTerms+" : "+transactionType);
+     * @throws Exception */
+    public int fillPurchaseBillHeader(
+    		String vendorName, 
+    		String entryDate, 
+    		String billDate,
+    		String expectedDeliveryDate,
+    		String referenceNumber,
+    		String paymentTerms,
+    		String taxType,
+    		String priceList,
+    		String discountLevel) throws Exception {
+//    	System.out.println("\n Vendor : "+vendorName+"\n Ref No: "+referenceNumber+"\n Bill Date : "+
+//    		billDate+"\n Payment Terms : "+paymentTerms+"\n Entry date  : "+entryDate+"\n Expected delivery date  : "+
+//    		expectedDeliveryDate);
+    	int discLevel = DiscountUtils.resolveDiscountLevel(discountLevel);
     	String ctime=Utilities.dateTime(); 
-    	referenceNumber=referenceNumber+":"+ctime.split(" ")[1];
+    	ctime=ctime.split(" ")[1];
+    	referenceNumber=referenceNumber+":"+ctime;
     	//System.out.println(refNo);
-    	if (vendorName != null && !vendorName  .trim().isEmpty()) {	
+    	if (Utilities.isNotEmpty(vendorName))
+    	{	
 			Utilities.selectCustomer(driver,vendorDropdownField, vendorName);
     	}
-       // driver.findElement(orderNumberField).sendKeys(orderNo);    
-    	  if (entryDate != null && !entryDate.trim().isEmpty()) {
-    		  wait.until(ExpectedConditions.visibilityOfElementLocated(entrydateField)).sendKeys(entryDate);
+    	// WaitUtils.waitForUi(driver);
+   
+    	if (Utilities.isNotEmpty(entryDate)) {
+    		 wait.until(ExpectedConditions.visibilityOfElementLocated(entrydateField));
+    		 Utilities.selectDateByValue(driver,entrydateField ,entryDate);
     	  }
-        if (billDate != null && !billDate.trim().isEmpty()) {
-        	//Thread.sleep(3000);
-        	//Utilities.waitForPageLoad(driver);
-    		wait.until(ExpectedConditions.visibilityOfElementLocated(billDateField)).sendKeys(billDate);
+    	if (Utilities.isNotEmpty(billDate)) { 
+    		wait.until(ExpectedConditions.visibilityOfElementLocated(billDateField));
+    		Utilities.selectDateByValue(driver,billDateField ,billDate);
     	}
        
-        if(referenceNumber!= null && !referenceNumber.trim().isEmpty()) {
-        driver.findElement(referenceNumberField).sendKeys(referenceNumber);
+    	if (Utilities.isNotEmpty(referenceNumber))  {
+    		driver.findElement(referenceNumberField).sendKeys(referenceNumber);
         }
-        
-        if (paymentTerms!= null && !paymentTerms.trim().isEmpty()) {
+    	if (Utilities.isNotEmpty(paymentTerms))  {
     		Utilities.selectIfListed(driver, searchPaymentTermsField, selectPaymentTermsField,paymentTerms);
     	}
-         
-        if (expectedDeliveryDate != null && !expectedDeliveryDate.trim().isEmpty()) {
-//        	Thread.sleep(3000);
-//        	Utilities.waitForPageLoad(driver);
-        	wait.until(ExpectedConditions.visibilityOfElementLocated(deliveryDateField)).sendKeys(expectedDeliveryDate);
+    	if (Utilities.isNotEmpty(expectedDeliveryDate))  {
+        	//Utilities.waitForPageLoad(driver);
+        	wait.until(ExpectedConditions.visibilityOfElementLocated(deliveryDateField));
+        	Utilities.selectDateByValue(driver,deliveryDateField ,expectedDeliveryDate);
     	}
-         Thread.sleep(200);
-    }
-    /** Add multiple items dynamically 
-     * @throws InterruptedException */
-    public void addItems(String[] itemNames, String[] itemQtys) throws InterruptedException {    	
-    	
+        WaitUtils.waitForUi(driver);
+        
+//         if (discountLevel == null || discountLevel.trim().isEmpty()|| "At transaction level".equalsIgnoreCase(discountLevel)) 
+//	        {
+//	        	//System.out.println("Transaction level discount");
+//	        	discLevel=0; 	
+//	        }
+//	        else if ("At Line Item Level".equalsIgnoreCase(discountLevel)) {
+         if(discLevel==1) {
+	        	//System.out.println("at line item level select. "+discountLevel);
+	       	        	
+	        	wait.until(ExpectedConditions.visibilityOfElementLocated(discountLevelTypeDropdownField)).click();
+	        	wait.until(ExpectedConditions.invisibilityOfElementLocated(
+	        	By.cssSelector(".loading, .spinner")));		        	
+	        	wait.until(ExpectedConditions.visibilityOfElementLocated(selectItemLevelDiscountField));
+	        	wait.until(ExpectedConditions.visibilityOfElementLocated(selectItemLevelDiscountField)).click();			        		  
+	     }
+         if (Utilities.isNotEmpty(priceList))  {
+	    		Utilities.selectIfListed(driver, searchPriceListField, selectPriceListField,priceList);
+	     }
+	     if (taxType == null || taxType.trim().isEmpty()|| "Exclusive".equalsIgnoreCase(taxType)){ 
+	        
+	        	//System.out.println("Default Tax Exclusive");
+	     }
+	     else if ("Inclusive".equalsIgnoreCase(taxType)) {
+	    		Utilities.selectIfListed(driver, searchTaxField, selectTaxField,taxType);
+	     }
+	        WaitUtils.waitForUi(driver);
+	      if(driver.findElement(vendorDropdownField).getAttribute("value").isEmpty()) {
+	            Utilities.selectCustomer(driver, vendorDropdownField, vendorName);
+	            System.out.println("Vendor first time not loaded");
+	        }
+	         return discLevel;
+    }    
+    /** Add multiple items dynamically  * @throws InterruptedException */  
+    public void addItems(
+    		String[] itemNames, 
+    		String[] itemQtys,
+    		String[] discType,
+    		String[] discount,
+    		int discLevel) throws InterruptedException {    	   	
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		WebElement itemdetail  = driver.findElement(itemDetailsField);
 	    js.executeScript("arguments[0].scrollIntoView();",itemdetail);  
 		driver.findElement(itemDetailsField).click();  //#####  
 		Thread.sleep(500);	
         for (int i = 0; i < itemNames.length; i++) {
-        	System.out.println("Item Name: "+itemNames[i]+" --- Item Qty : "+itemQtys[i]);
+        	//System.out.println("Item Name: "+itemNames[i]+" --- Item Qty : "+itemQtys[i]+"-- disc Tpe"+discType[i]+"-- Discount --"+discount[i]);
             wait.until(ExpectedConditions.elementToBeClickable(itemListField)).click();
             driver.findElement(itemListField).sendKeys(itemNames[i]);
-            Thread.sleep(1000);
+            Thread.sleep(500);
             // Select item dynamically
             By selectItem = By.xpath(String.format(itemSelectField, 1));
             wait.until(ExpectedConditions.elementToBeClickable(selectItem)).click();
-            Thread.sleep(500);
+            Thread.sleep(200);
             // Fill item quantity
             WebElement qtyField = driver.findElement(By.xpath("//tbody/tr[" + (i + 1) + "]/td[5]//input"));
             qtyField.clear();
             qtyField.sendKeys(itemQtys[i]);
-            Thread.sleep(500);
+            //WaitUtils.waitForUi(driver);
+            if(discLevel!=0) {
+            	if (discType[i] != null && !discType[i].trim().isEmpty() && discount[i] != null && !discount[i].trim().isEmpty()) {
+            		if("%".equalsIgnoreCase(discType[i])) {
+            		
+	            		WebElement discountField=driver.findElement(By.xpath("//tbody/tr[" + (i + 1) + "][1]/td[7]/div[1]/input"));
+	            		discountField.clear();
+	            		discountField.sendKeys(discount[i]);
+            		}
+	            	else {
+	            		By discDropdown = By.xpath("//tbody/tr[" + (i + 1) + "]/td[7]/div[1]/div");
+	            		WebElement dropdown = wait.until(ExpectedConditions.elementToBeClickable(discDropdown));
+	            		dropdown.click();
+	            		// Wait for dropdown options globally
+	            		By optionLocator = By.xpath("//ul/li[2]");
+	            		WebElement option = wait.until(ExpectedConditions.elementToBeClickable(optionLocator));
+	            		option.click();
+	            		// Now enter value
+	            		By discountFieldLocator = By.xpath("(//tbody/tr[" + (i + 1) + "]/td[7]//input)[1]");
+	            		WebElement discountField = wait.until(ExpectedConditions.visibilityOfElementLocated(discountFieldLocator));
+	            		discountField.clear();
+	            		discountField.sendKeys(discount[i]);
+	            	}
+	            } else {
+	                // One or both values missing → no discount
+	                //System.out.println("Discount not applied (type or value missing)");
+	            }
+            }
         }
     }
+    
+    /** Add Transaction level discount */ 
+    public void applyTransactionLevelDiscount(String discountAfterBeforeTax,
+            String discountType,
+            String discountValue,
+            String discountAccount) {
+
+    		Utilities.addTransactionLevelDiscount(
+    				driver,
+    				wait,
+    				addDiscountLinkField,
+    				transactionLevelDiscountField,
+    				discountAfterBeforeTax,
+    				discountType,
+    				discountValue,
+    				discountAccount);
+    }    
     /** Add optional notes and terms */
     public void addNotesAndTerms(String note, String terms) {
-        if (note != null && !note.isEmpty()) {
+    	JavascriptExecutor js = (JavascriptExecutor) driver;
+        WebElement notes  = driver.findElement(noteField);
+  	    js.executeScript("arguments[0].scrollIntoView();",notes);
+    	if (Utilities.isNotEmpty(note))  {
             driver.findElement(noteField).sendKeys(note);
         }   
     }
-    /** Save the estimate as draft */
-    public void saveAsDraft() {
-        wait.until(ExpectedConditions.elementToBeClickable(saveAsDraftButtonField)).click();
-    }
+    /** Save the Purchase Bill */
+    public void saveAsMethod(String saveAs) {
+    	if (saveAs == null || saveAs.trim().isEmpty()|| "SAVE AS DRAFT".equalsIgnoreCase(saveAs))   	        
+        {
+    		wait.until(ExpectedConditions.elementToBeClickable(saveAsDraftButtonField)).click();
+        }
+	   	 //System.out.println("Estimate date field value: " + driver.findElement(estimateDateField).getAttribute("value"));	    	 
+	   	 else if(("SAVE AND APPROVE".equalsIgnoreCase(saveAs))) {	    		 
+	   		 wait.until(ExpectedConditions.elementToBeClickable(saveAsArrowBtnField)).click();
+	   		 wait.until(ExpectedConditions.elementToBeClickable(saveAndApproveBtnField)).click();
+	   	 }
+	   	 else if("SAVE AND SUBMIT".equalsIgnoreCase(saveAs)) {
+	   		// wait.until(ExpectedConditions.elementToBeClickable(saveAsArrowBtnField)).click();
+	   		 wait.until(ExpectedConditions.elementToBeClickable(saveAndSubmitBtnField)).click();
+	   	 }
+     }
     /** Verify estimate saved by checking list */
     public boolean verifyPurchaseBillCreated(String expectedBillNo) {
     	int attempts = 0;

@@ -23,11 +23,12 @@ public class LoginTest extends BaseTest {
  }
  @Test
  public void loginTest() throws InterruptedException {  
+	 System.out.println("__________Login___________");
 	  LoginTPage loginP = new LoginTPage(driver);
 	 // loginP.verifyuser("");
 	  SoftAssert soft=new SoftAssert();
 	  soft.assertTrue(loginP.verifyuser(eid),
-              "Estimate not found or failed to login : " + eid);
+              "Dashboard not found or failed to login : " + eid);
 	  soft.assertAll();
  } 
 }

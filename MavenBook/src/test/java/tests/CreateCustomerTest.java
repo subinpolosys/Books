@@ -31,6 +31,7 @@ public class CreateCustomerTest extends BaseTest{
    }
   @Test
   public void createCustomerTest() throws IOException, InterruptedException {
+	  System.out.println("_____________Create Customer___________________");
 	  String filePath = System.getProperty("user.dir") + "/src/test/resources/CustomerData.xlsx";
 	  List<Map<String, Object>> allCustomers =
               CustomerExcelReader.getTestData(filePath, "Customer", "Address", "Contact Person");

@@ -21,7 +21,7 @@ public class CreateVendorPage {
     }
     //==================New customer Navigation=========================   
     private final By dashboardField=By.xpath("//a[text()='Dashboard']");
-    private final By purchaseMenuField = By.xpath("//div[@title='purchase']/a[contains(text(),'Purchase')]");
+    private final By purchaseMenuField = By.xpath("//a[contains(text(),'Purchase')]");
     private final By vendorMenuField = By.xpath("//span[text()='Vendors']");
     private final By newVendorField = By.xpath("//button/p[contains(text(),'new')]");
     
@@ -31,7 +31,7 @@ public class CreateVendorPage {
     private final By firstNameField=By.id("first_name");
     private final By lastNameField=By.id("last_name");
     private final By companyNameField=By.id("company_name");
-    private final By companyDisplayNameField=By.xpath("//input[@placeholder='Vendor Display Name']");
+    private final By companyDisplayNameField=By.xpath("//input[@placeholder='vendor display name'] ");
     private final By companyDispNameArabicField=By.id("company_display_name_ar");
     private final By primaryEmailField=By.id("email_1");
     private final By secondaryEmailField=By.id("email_2");
@@ -56,7 +56,7 @@ public class CreateVendorPage {
     private final By facebookField=By.id("facebook");
     private final By twitterField=By.id("twitter");
     //===================More Details=========================================  
-    private final By addmoreDetailsField=By.xpath("//p[text()='Add more Details']");
+    private final By addmoreDetailsField=By.xpath("//p[text()='add more details']");
     private final By designationField=By.id("designation");
     private final By departmentField=By.id("department");  
     //===================Billing & Shipping Address===========================
@@ -228,7 +228,7 @@ public class CreateVendorPage {
     public void vendorBillingAddress(String attention, String addressLine1, String country, String state, String addressLine2,
 		    String addressLine3, String city, String landmark, String zipCode, String addressPhone,String fax) throws InterruptedException {
 		    
-    	System.out.println(" Zip: "+zipCode+" phone: "+addressPhone+" fax : "+fax);
+    	//System.out.println(" Zip: "+zipCode+" phone: "+addressPhone+" fax : "+fax);
     	wait.until(ExpectedConditions.elementToBeClickable(addressTabField)).click();
     	wait.until(ExpectedConditions.elementToBeClickable(newBillingAddressField)).click();
     	Thread.sleep(300);
@@ -320,7 +320,7 @@ public class CreateVendorPage {
     
     public void vendorContactAddress(String contactSalutation, String contactFirstName,String contactLastName, String contactEmail, 
     		String contactWorkPhone, String contactMobile) throws InterruptedException{
-    	System.out.println("Work Phone : "+contactWorkPhone+" Contact Mobile: "+ contactMobile);
+    	//System.out.println("Work Phone : "+contactWorkPhone+" Contact Mobile: "+ contactMobile);
     	Thread.sleep(20);
     	
     	JavascriptExecutor js = (JavascriptExecutor) driver;
@@ -370,7 +370,7 @@ public class CreateVendorPage {
     	try {
         wait.until(ExpectedConditions.visibilityOfElementLocated(createdVendorNameField));
         String actualVendorName = Utilities.getTextWithRetry(driver,createdVendorNameField);
-        System.out.println("Created Vendor : "+actualVendorName);
+        //System.out.println("Created Vendor : "+actualVendorName);
         return actualVendorName.contains(expectedVendorName);
     	}catch(Exception e) {
     		return false;

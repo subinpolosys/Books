@@ -26,13 +26,13 @@ public class CreateSalesReturnPage {
     // ──────────────── Navigation Elements ────────────────
   
     private final By dashboardField=By.xpath("//a[text()='Dashboard']"); 
-    private final By salesMenuField = By.xpath("//div[@title='sales']/a[contains(text(),'Sales')]");
-    private final By salesReturnMenuField = By.xpath("//div[@title='sales return']/span[contains(text(),'Sales Return')]");
+    private final By salesMenuField = By.xpath("//a[contains(text(),'Sales')]");
+    private final By salesReturnMenuField = By.xpath("//span[contains(text(),'Sales Return')]");
     private final By newSalesReturnButtonField = By.xpath("//button/p[contains(text(),'new')]");
 
     // ──────────────── Header / Customer Fields ────────────────
     private final By customerDropdownField = By.xpath("//input[@placeholder='Select Customer Name']");
-    private final By firstCustomerOptionField =  By.xpath("//div[@class='flex flex-col gap-4 px-10 py-5']/div/div/div/div/div/div/div/ul/li[1]/div/div/h1");
+    //private final By firstCustomerOptionField =  By.xpath("//div[@class='flex flex-col gap-4 px-10 py-5']/div/div/div/div/div/div/div/ul/li[1]/div/div/h1");
     private final By salesReturnNumberField=By.id("sales_return_no");
     //private final By orderNumberField = By.id("order_number");
     
@@ -41,7 +41,7 @@ public class CreateSalesReturnPage {
     
     private final By searchInvoiceField=By.xpath("//label[contains(text(),'Invoices')]/following-sibling::input[@type='text']");	    
     private final By selectInvoiceField = By.xpath("//ul/li[1]/span");
-    private final By searchSalesPersonLabelField=By.xpath("//label[contains(text(),'Sales Person')]");
+    //private final By searchSalesPersonLabelField=By.xpath("//label[contains(text(),'Sales Person')]");
     private final By searchSalesPersonField=By.xpath("//label[contains(text(),'Sales Person')]/following-sibling::input[@type='text']");	    
     private final By selectSalesPersonField = By.xpath("//ul/li[1]/span");
     
@@ -143,12 +143,16 @@ public class CreateSalesReturnPage {
     	}
         if (taxType == null || taxType.trim().isEmpty()|| "Exclusive".equalsIgnoreCase(taxType)) 
         {
-        	System.out.println("Default Tax Exclusive");
+        	//System.out.println("Default Tax Exclusive");
         }
         else if ("Inclusive".equalsIgnoreCase(taxType)) {
     		Utilities.selectIfListed(driver, searchTaxField, selectTaxField,taxType);
     	}
          Thread.sleep(200);
+         if(driver.findElement(customerDropdownField).getAttribute("value").isEmpty()) {
+             Utilities.selectCustomer(driver, customerDropdownField, customerName);
+             System.out.println("Customer first time not loaded");
+         }
     }
 
     /** Add multiple items dynamically 
@@ -186,10 +190,11 @@ public class CreateSalesReturnPage {
             		discontDropdownField.click();
             		WebElement discountTypeAmountField=driver.findElement(By.xpath("//tbody/tr[" + (i + 1) + "]/td[6]/div[1]/div/div/div/ul/li[2]"));
             		discountTypeAmountField.click();
-            		WebElement discountField=driver.findElement(By.xpath("//tbody/tr[" + (i + 1) + "]/td[6]/div[1]/input"));
-            		discountField.clear();
-            		System.out.println(discount[i]);
-            		discountField.sendKeys(discount[i]);
+            		By discountField=By.xpath("(//tbody/tr[" + (i + 1) + "]/td[6]/div[1]/input)[1]");
+            		WebElement discField=wait.until(ExpectedConditions.visibilityOfElementLocated(discountField));
+            		discField.clear();            		
+            		//System.out.println(discount[i]);
+            		discField.sendKeys(discount[i]);
             	}
             } else {
                 // One or both values missing → no discount

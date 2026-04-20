@@ -24,10 +24,10 @@ public class LoginTPage {
     private final By usernameField = By.xpath("//a[@class='text-sm']");
     
     public boolean verifyuser(String usn) {
-    	System.out.println(usn);
+    	//System.out.println(usn);
         wait.until(ExpectedConditions.visibilityOfElementLocated(usernameField));
         String actualusn = Utilities.getTextWithRetry(driver,usernameField);
-        System.err.println(actualusn);
+        //System.err.println(actualusn);
         return actualusn.contains(usn);
     }
 

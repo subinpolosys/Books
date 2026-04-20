@@ -52,6 +52,7 @@ public class CreateItemTest extends BaseTest {
           String openingStockRate,
           String reorderPoint
           ) throws InterruptedException {	  
+	  System.out.println("______________Create Item______________");
 	  if (name == null || name.trim().isEmpty()) {
 	        throw new SkipException("Item Name cannot be empty — skipping test case.");
 	    }

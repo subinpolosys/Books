@@ -150,7 +150,7 @@ public class CreateItemPage {
 	    	try {
 	        wait.until(ExpectedConditions.visibilityOfElementLocated(createdItemNameField));
 	        String actualItemName = Utilities.getTextWithRetry(driver,createdItemNameField);
-	        System.out.println("Created Item : "+actualItemName);
+	        //System.out.println("Created Item : "+actualItemName);
 	        return actualItemName.contains(expectedItemName);
 	    	}catch(Exception e) {
 	    		return false;

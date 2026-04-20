@@ -27,6 +27,7 @@ public class CreateDeliverynoteTest extends BaseTest {
 	   }
 	    @Test
 	    public void createDeliverynoteTest() throws IOException, InterruptedException {
+	    	System.out.println("___________Create Delivery Note______________________");
 	        String filePath = System.getProperty("user.dir") + "/src/test/resources/DeliverynoteData.xlsx";
 	        List<Map<String, Object>> allDeliverynote =
 	                ExcelReader.getMasterDetailData(filePath, "DeliverynoteHeader", "deliverynoteItems");
@@ -62,7 +63,7 @@ public class CreateDeliverynoteTest extends BaseTest {
 	             String[] discount=items.stream().map(i ->i.getOrDefault("Discount", "").trim()).toArray(String[]::new);
 	             
 	            deliverynotePage.navigateToNewDeliverynote();
-	            deliverynotePage.fillEstimateHeader(customerName, referenceNo,dnDate,dnType,taxType,priceList);
+	            deliverynotePage.fillDeliveryNoteHeader(customerName, referenceNo,dnDate,dnType,taxType,priceList);
 	            String DNNo=deliverynotePage.delivernoteNumber();
 	            deliverynotePage.addItems(itemNames, itemQtys,discountType,discount);
 	            deliverynotePage.addNotesAndTerms(

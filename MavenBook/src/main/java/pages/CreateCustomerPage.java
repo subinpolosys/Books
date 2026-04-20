@@ -105,7 +105,7 @@ public class CreateCustomerPage {
     	    String mobileNumber, String creditLimit, String taxTreatment, String trn, String placeOfSupply,
     	    String currency, String exchangeRate, String openingBalance, String terms, String priceList,
     	    String website, String facebook, String twitter, String designation, String department) throws InterruptedException{ 
-    	System.out.println(salutation + ", " + firstName + ", " + lastName + ", " + companyName + ", " + companyDisplayName + ", " + companyDispNameArabic + ", " + primaryEmail + ", " + secondaryEmail + ", Work Phone:" + workPhone + ", " + mobileNumber + ", " + creditLimit + ", " + taxTreatment + ", " + trn + ", " + placeOfSupply + ", " + currency + ", " + exchangeRate + ", " + openingBalance + ", " + terms + ", " + priceList + ", " + website + ", " + facebook + ", " + twitter + ", " + designation + ", " + department);
+    	//System.out.println(salutation + ", " + firstName + ", " + lastName + ", " + companyName + ", " + companyDisplayName + ", " + companyDispNameArabic + ", " + primaryEmail + ", " + secondaryEmail + ", Work Phone:" + workPhone + ", " + mobileNumber + ", " + creditLimit + ", " + taxTreatment + ", " + trn + ", " + placeOfSupply + ", " + currency + ", " + exchangeRate + ", " + openingBalance + ", " + terms + ", " + priceList + ", " + website + ", " + facebook + ", " + twitter + ", " + designation + ", " + department);
 
     	if (salutation!= null && !salutation .trim().isEmpty()) {
     		Utilities.selectIfListed(driver, searchSalutationField, selectSalutationField,salutation);
@@ -226,7 +226,7 @@ public class CreateCustomerPage {
     public void customerBillingAddress(String attention, String addressLine1, String country, String state, String addressLine2,
 		    String addressLine3, String city, String landmark, String zipCode, String addressPhone,String fax) throws InterruptedException {
 		    
-    	System.out.println(" Zip: "+zipCode+" phone: "+addressPhone+" fax : "+fax);
+    	//System.out.println(" Zip: "+zipCode+" phone: "+addressPhone+" fax : "+fax);
     	wait.until(ExpectedConditions.elementToBeClickable(addressTabField)).click();
     	wait.until(ExpectedConditions.elementToBeClickable(newBillingAddressField)).click();
     	Thread.sleep(300);
@@ -321,7 +321,7 @@ public class CreateCustomerPage {
     
     public void customerContactAddress(String contactSalutation, String contactFirstName,String contactLastName, String contactEmail, 
     		String contactWorkPhone, String contactMobile) throws InterruptedException{
-    	System.out.println("Work Phone : "+contactWorkPhone+" Contact Mobile: "+ contactMobile);
+    	//System.out.println("Work Phone : "+contactWorkPhone+" Contact Mobile: "+ contactMobile);
     	Thread.sleep(20);
     	
     	JavascriptExecutor js = (JavascriptExecutor) driver;
@@ -371,7 +371,7 @@ public class CreateCustomerPage {
     	try {
         wait.until(ExpectedConditions.visibilityOfElementLocated(createdCustomerNameField));
         String actualCustomerName = driver.findElement(createdCustomerNameField).getText();
-        System.out.println("Created Customer : "+actualCustomerName);
+        //System.out.println("Created Customer : "+actualCustomerName);
         return actualCustomerName.contains(expectedCustomerName);
     	}catch(Exception e) {
     		return false;

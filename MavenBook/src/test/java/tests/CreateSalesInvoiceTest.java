@@ -29,6 +29,7 @@ public class CreateSalesInvoiceTest extends BaseTest{
    }
     @Test
     public void createSalesInvoiceTest() throws IOException, InterruptedException {
+    	System.out.println("_________________Create Sales Invoice________________");
         String filePath = System.getProperty("user.dir") + "/src/test/resources/SalesInvoiceData.xlsx";
         List<Map<String, Object>> allSalesInvoice =
                 ExcelReader.getMasterDetailData(filePath, "SalesInvoiceHeader", "SalesInvoiceItems");
@@ -76,8 +77,8 @@ public class CreateSalesInvoiceTest extends BaseTest{
             String SINo=salesInvoicePage.salesInvoiceNumber();
             salesInvoicePage.addItems(itemNames, itemQtys,discountType,discount);
             salesInvoicePage.addNotesAndTerms(
-                    "Dear " + customerName + ", " + SINo + " has been created by Automation",
-                    "This is a system-generated document. Ensure accuracy before acceptance."
+                    "Dear " + customerName + ", " + SINo + " has been created by Automation."+customerNote,
+                    "This is a system-generated document. Ensure accuracy before acceptance."+terms
             );
             salesInvoicePage.saveAsMethod(saveAs);
             SoftAssert soft = new SoftAssert();

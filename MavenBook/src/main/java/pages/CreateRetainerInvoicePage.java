@@ -88,6 +88,10 @@ public class CreateRetainerInvoicePage {
 	    	if ( terms!= null && !terms .trim().isEmpty()) {  
 	    		driver.findElement(termsField).sendKeys(terms);
 	    	}
+	    	 if(driver.findElement(customerDropdownField).getAttribute("value").isEmpty()) {
+		            Utilities.selectCustomer(driver, customerDropdownField, customerName);
+		            System.out.println("Customer first time not loaded");
+		        }
 	    }
 	    public void saveAsMethod(String saveAs) {
 	    	//System.out.println("SAve as : "+saveAs);

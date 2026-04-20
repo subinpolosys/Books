@@ -1,7 +1,9 @@
 package utils;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -20,6 +22,8 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+
 
 public class Utilities {
 	
@@ -65,65 +69,116 @@ public class Utilities {
 	        e.printStackTrace();
 	    }
 	}
+// Old ------------------------------------------********************************************
+//	 public static void selectCustomer(WebDriver driver,By customerDropdownField, String customerName) throws InterruptedException {
+//		 
+//		WebDriverWait wait= new WebDriverWait(driver, Duration.ofSeconds(100));
+//		 int maxAttempts = 3;
+//
+//		    for (int attempt = 1; attempt <= maxAttempts; attempt++) {
+//		        try {
+//		            // Click dropdown
+//		            WebElement dropdown = wait.until(
+//		                    ExpectedConditions.elementToBeClickable(customerDropdownField));		            
+//		            dropdown.click();
+//		            // Clear input
+//		            dropdown.sendKeys(Keys.CONTROL + "a");
+//		            dropdown.sendKeys(Keys.DELETE);
+//		            // Type slowly to trigger backend search
+//		            for (char c : customerName.toCharArray()) {
+//		                dropdown.sendKeys(String.valueOf(c));
+//		                Thread.sleep(100);
+//		            }
+//		            By optionsLocator = By.xpath("//li[@role='option']");
+//		            // Wait until options appear
+//		            wait.until(driv ->
+//		                    driver.findElements(optionsLocator).size() > 0
+//		            );
+//
+//		            List<WebElement> options = driver.findElements(optionsLocator);
+//		            for (WebElement option : options) {
+//		                if (option.getText().trim().equalsIgnoreCase(customerName)) {
+//		                    wait.until(ExpectedConditions.elementToBeClickable(option));
+//		                    option.click();
+//		                    break;
+//		                }
+//		            }
+//		            // 🔍 VERIFY customer is actually loaded
+//		            if (isCustomerSelected(driver, customerDropdownField,customerName)) {
+//		                System.out.println("Customer selected successfully: " + customerName);
+//		                return;
+//		            }
+//
+//		            System.out.println("Customer not loaded, retrying... Attempt: " + attempt);
+//
+//		        } catch (Exception e) {
+//		            if (attempt == maxAttempts) {
+//		                throw new RuntimeException(
+//		                        "Failed to select customer after retries: " + customerName, e
+//		                );
+//		            }
+//		        }
+//		    }
+//		}
 
-	 public static void selectCustomer(WebDriver driver,By customerDropdownField, String customerName) throws InterruptedException {
-		 
-		WebDriverWait wait= new WebDriverWait(driver, Duration.ofSeconds(100));
-		 int maxAttempts = 3;
+	//------------------------New customer selection : 21 March 2026--------------------------
+	public static void selectCustomer(WebDriver driver, By customerDropdownField, String customerName) {
+	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+	    int maxAttempts = 3;
 
-		    for (int attempt = 1; attempt <= maxAttempts; attempt++) {
-		        try {
-		            // Click dropdown
-		            WebElement dropdown = wait.until(
-		                    ExpectedConditions.elementToBeClickable(customerDropdownField));
-		            
-		            dropdown.click();
+	    for (int attempt = 1; attempt <= maxAttempts; attempt++) {
+	        try {
+	            WebElement dropdown = wait.until(ExpectedConditions.elementToBeClickable(customerDropdownField));
+	            
+	            dropdown.click();
 
-		            // Clear input
-		            dropdown.sendKeys(Keys.CONTROL + "a");
-		            dropdown.sendKeys(Keys.DELETE);
+	            // Clear field properly
+	            dropdown.sendKeys(Keys.CONTROL + "a");
+	            dropdown.sendKeys(Keys.DELETE);
 
-		            // Type slowly to trigger backend search
-		            for (char c : customerName.toCharArray()) {
-		                dropdown.sendKeys(String.valueOf(c));
-		                Thread.sleep(100);
-		            }
+	            // Type full name (no need char-by-char unless required)
+	            dropdown.sendKeys(customerName);
 
-		            By optionsLocator = By.xpath("//li[@role='option']");
+	            // Wait for dropdown options to be visible
+	            By optionsLocator = By.xpath("//li[@role='option']");
+	            wait.until(ExpectedConditions.visibilityOfElementLocated(optionsLocator));
 
-		            // Wait until options appear
-		            wait.until(driv ->
-		                    driver.findElements(optionsLocator).size() > 0
-		            );
+	            // Wait until at least one matching option appears
+	            wait.until(driver1 -> driver1.findElements(optionsLocator)
+	                    .stream()
+	                    .anyMatch(el -> el.getText().trim().equalsIgnoreCase(customerName))
+	            );
 
-		            List<WebElement> options = driver.findElements(optionsLocator);
+	            List<WebElement> options = driver.findElements(optionsLocator);
 
-		            for (WebElement option : options) {
-		                if (option.getText().trim().equalsIgnoreCase(customerName)) {
-		                    wait.until(ExpectedConditions.elementToBeClickable(option));
-		                    option.click();
-		                    break;
-		                }
-		            }
+	            for (WebElement option : options) {
+	            	if (option.getText().trim().equalsIgnoreCase(customerName)) {
+	                    wait.until(ExpectedConditions.elementToBeClickable(option));
+	                    option.click();
+	                    break;
+	                }
+	            }
 
-		            // 🔍 VERIFY customer is actually loaded
-		            if (isCustomerSelected(driver, customerDropdownField,customerName)) {
-		                System.out.println("Customer selected successfully: " + customerName);
-		                return;
-		            }
+	            // 🔥 IMPORTANT: wait until value is actually set
+	            boolean selected = wait.until(driver1 -> isCustomerSelected(driver1, customerDropdownField, customerName));
 
-		            System.out.println("Customer not loaded, retrying... Attempt: " + attempt);
+	            if (selected) {
+	                System.out.println("Customer selected successfully: " + customerName);
+	                return;
+	            }
 
-		        } catch (Exception e) {
-		            if (attempt == maxAttempts) {
-		                throw new RuntimeException(
-		                        "Failed to select customer after retries: " + customerName, e
-		                );
-		            }
-		        }
-		    }
-		}
+	            System.out.println("Retrying customer selection... Attempt: " + attempt);
 
+	        } catch (Exception e) {
+	            if (attempt == maxAttempts) {
+	                throw new RuntimeException("Failed to select customer: " + customerName, e);
+	            }
+	        }
+	    }
+	}
+	
+	
+	
 	 private static boolean isCustomerSelected(WebDriver driver,By customerDropdownField, String customerName) {
 		    try {
 		        WebElement dropdown = driver.findElement(customerDropdownField);
@@ -158,112 +213,9 @@ public class Utilities {
 	        throw new RuntimeException("Element still stale after retries: " + locator);
 	    }
 
-	 public static boolean isNotBlank(String value) {
+	        public static boolean isNotBlank(String value) {
 		    return value != null && !value.trim().isEmpty();
-		}
-	 
-	 
-//		 try {
-//	    		wait.until(ExpectedConditions.elementToBeClickable(customerDropdownField)).click();
-//		        driver.findElement(customerDropdownField).sendKeys(customerName);	     
-//		       // List<WebElement> options = driver.findElements(By.xpath("//li[@role='option'][1]/div/div/h1"));
-//		        List<WebElement> options = driver.findElements(By.xpath("//li[@role='option']"));
-//		        boolean found = false;
-//		        wait.until(d ->optons.size() > 0);
-//	            for (WebElement option : options) {
-//	                if (option.getText().equalsIgnoreCase(customerName)) {
-//	                  Thread.sleep(2500);
-//	                 
-//	          
-//	                	option.click();
-//	                    found = true;
-//	                    break;
-//	                }
-//	            }
-//	            if (!found) {
-//	           	 throw new NoSuchElementException("Customer name '" + customerName + "' not found in the dropdown list.");
-//	           }	        
-//	   		}catch(Exception e) {
-//	   			 throw new RuntimeException("Error selecting customer: " + e.getMessage(), e);
-//	   		}
-//		 
-//		 
-//		 
-//	       }
-	
-	
-	
-	
-//	public static void selectIfListed(WebDriver driver, By searchField, By listField, String value) 
-//		{
-//		    if (value != null && !value.trim().isEmpty()) {
-//		        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-//
-//		        // Step 1: Click the input to open the dropdown
-//		        WebElement inputField = wait.until(ExpectedConditions.elementToBeClickable(searchField));
-//		        //inputField.click();
-//		        inputField.clear();
-//		        inputField.sendKeys(value);
-//
-//		        try {
-//		            // Step 2: Wait until the dropdown options are visible
-//		            List<WebElement> options = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
-//		                By.xpath("//ul[contains(@id,'headlessui-combobox-options')]//li")
-//		            ));
-//
-//		            boolean found = false;
-//		            for (WebElement option : options) {
-//		                String optionText = option.getText().trim();
-//		               // System.out.println("Found option: " + optionText);
-//
-//		                if (optionText.equalsIgnoreCase(value)) {
-//		                    option.click();
-//		                   // System.out.println("✅ Selected option: " + optionText);
-//		                    found = true;
-//		                    break;
-//		                }
-//		            }
-//
-//		            if (!found) {
-//		                System.out.println("⚠️ Value not found in dropdown: " + value);
-//		            }
-//
-//		        } catch (Exception e) {
-//		            System.out.println("❌ " + value + ": Not Found OR Dropdown not loaded properly.");
-//		            e.printStackTrace();
-//		        }
-//		    } else {
-//		        System.out.println("⚠️ Skipped selection: value is null or empty");
-//		    }
-//		}
-/*____________________________OLD____________________*/
-	public static void selectValuFromDropdown(WebDriver driver, By searchField, By listField, String value) {
-		String datanotfoundField="//ul/div[1]";
-	    if (value != null && !value.trim().isEmpty()) {
-	        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-	        wait.until(ExpectedConditions.visibilityOfElementLocated(searchField)).clear();
-	        driver.findElement(searchField).sendKeys(value);
-	        try {
-	            WebDriverWait shortWait = new WebDriverWait(driver, Duration.ofSeconds(3));
-	            List<WebElement> options = shortWait
-	                    .until(ExpectedConditions.presenceOfAllElementsLocatedBy(listField));
-                   // System.out.println(options);
-	            if (!options.isEmpty()) {
-	                options.get(0).click();
-	                System.out.println("Dropdown :"+options.get(0)); 
-	            } else {
-	                System.out.println("Value not found in dropdown: " + value);
-	            }    
-	        } catch (Exception e) {
-	            System.out.println(value +": Not Found OR Dropdown not loaded or failed ");
-	        }
-	    } else {
-	        System.out.println("Skipped selection: value is null or empty");
-	    }
-	}
-/*________________________________________________*/
-	
-	
+		    }
 
 	public static void waitForPageToLoad(WebDriver driver) {
 	    JavascriptExecutor js = (JavascriptExecutor) driver;
@@ -401,7 +353,199 @@ public class Utilities {
 	            throw e;
 	        }
 	    }
-	
-	
 
+//------ new
+	 public static void selectHeadlessUIDropdownValue(
+		        WebDriver driver,
+		        By inputField,
+		        String value
+		) throws InterruptedException {
+
+		    if (value == null || value.trim().isEmpty()) {
+		        System.out.println("⚠️ Skipped selection: value is null or empty");
+		        return;
+		    }
+
+		    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+
+		    // HeadlessUI dropdown container
+		    By optionsContainer =By.xpath("//ul[contains(@id,'headlessui-combobox-options')]");
+
+		    // ✅ Exact selectable option (ignores group labels)
+		    By exactOption = By.xpath("//li[@role='option' and normalize-space()='" + value + "']");
+
+		    // Step 1: Type text to filter
+		    WebElement input = wait.until(ExpectedConditions.elementToBeClickable(inputField));
+		    //input.click();
+		    input.clear();
+		    Thread.sleep(200);
+		    input.sendKeys(value);
+
+		    // Step 2: Wait for dropdown
+		    wait.until(ExpectedConditions.visibilityOfElementLocated(optionsContainer));
+
+		    // Step 3: Click exact option with retry (stale-safe)
+		    for (int i = 0; i < 3; i++) {
+		        try {
+		            WebElement option = wait.until(ExpectedConditions.elementToBeClickable(exactOption));
+		            option.click();
+		            break;
+		        } catch (StaleElementReferenceException e) {
+		            System.out.println("🔄 Retrying due to stale element (" + (i + 1) + ")");
+		        }
+		    }
+
+		    // Step 4: Verify value committed
+		    String selectedValue = input.getAttribute("value");
+		    if (!value.equalsIgnoreCase(selectedValue)) {
+		        throw new RuntimeException(
+		                "❌ Dropdown selection failed. Expected: " + value +
+		                ", Actual: " + selectedValue
+		        );
+		    }
+
+		    //System.out.println("✅ Selected dropdown value: " + value);
+		}
+public static void selectDateByValue(WebDriver driver,By dateField, String dateValue) throws Exception {
+
+		    // Parse incoming date value dd-MM-yyyy
+		    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+		    LocalDate target = LocalDate.parse(dateValue, formatter);
+
+		    LocalDate today = LocalDate.now();
+
+		    // Block past dates
+		    if (target.isBefore(today)) {
+		    	   System.out.println("Past date provided, skipping selection: " + dateValue);
+		       // throw new Exception("Past date not allowed : " + dateValue);
+		    	return;
+		    }
+		    // Open datepicker
+		    driver.findElement(dateField).click();
+
+		    // loop until target month-year is visible
+		    while (true) {
+
+		        // read currently displayed month & year
+		        String monthYear = driver.findElement(
+		                By.cssSelector(".react-datepicker__current-month")
+		        ).getText(); // Example: January 2026
+
+		        DateTimeFormatter headerFormat = DateTimeFormatter.ofPattern("MMMM yyyy");
+		        YearMonth displayed = YearMonth.parse(monthYear, headerFormat);
+
+		        YearMonth targetMonthYear = YearMonth.of(target.getYear(), target.getMonth());
+
+		        if (displayed.equals(targetMonthYear)) {
+		            break; // correct month year found
+		        }
+
+		        // if target is future -> click Next
+		        if (displayed.isBefore(targetMonthYear)) {
+		            driver.findElement(
+		                    By.cssSelector("button.react-datepicker__navigation--next")
+		            ).click();
+		        }
+		        // if needed you can handle prev also
+		        else {
+		            driver.findElement(
+		                    By.cssSelector("button.react-datepicker__navigation--previous")
+		            ).click();
+		        }
+		    }
+
+		    // Now click the day
+		    int day = target.getDayOfMonth();
+
+		    driver.findElement(
+		            By.xpath("//div[contains(@class,'react-datepicker__day') and text()='" + day + "']")
+		    ).click();
+		}
+public static boolean isNotEmpty(String value) {
+    return value != null && !value.trim().isEmpty();
+}
+public static void addTransactionLevelDiscount(WebDriver driver,
+        WebDriverWait wait,
+        By addDiscountLinkField,
+        By transactionLevelDiscountField,
+        String discountAfterBeforeTax,
+        String discountType,
+        String discountValue,
+        String discountAccount) {
+
+boolean isAfterTax = "After Tax".equalsIgnoreCase(discountAfterBeforeTax);
+JavascriptExecutor js = (JavascriptExecutor) driver;
+
+// STEP 1: Check and click Add Discount
+try {
+WebElement addDiscount = driver.findElement(addDiscountLinkField);
+js.executeScript("arguments[0].scrollIntoView(true);", addDiscount);
+wait.until(ExpectedConditions.elementToBeClickable(addDiscount));
+addDiscount.click();
+} catch (Exception e) {
+System.out.println("Add Discount link not present. Skipping transaction discount.");
+return;
+}
+
+// STEP 2: Handle After Tax (if applicable)
+if (isAfterTax) {
+try {
+By applyBtn = By.xpath("//div/div[text()='Discount']//parent::div/div[text()='Apply ']");
+wait.until(ExpectedConditions.elementToBeClickable(applyBtn));
+driver.findElement(applyBtn).click();
+} catch (Exception e) {
+System.out.println("After Tax Apply option not available. Continuing...");
+}
+}
+
+// STEP 3: Discount Type (Amount vs %)
+if (!"%".equalsIgnoreCase(discountType)) {
+selectAmountDiscountType(driver, wait);
+}
+
+// STEP 4: Enter Discount Value
+try {
+WebElement discountField = driver.findElement(transactionLevelDiscountField);
+wait.until(ExpectedConditions.visibilityOf(discountField));
+discountField.clear();
+discountField.sendKeys(discountValue);
+} catch (Exception e) {
+System.out.println("Discount input field not available.");
+}
+
+// STEP 5: Optional Discount Account
+/*
+try {
+Utilities.selectHeadlessUIDropdownValue(driver,
+searchDiscountAccountField,
+discountAccount);
+} catch (Exception e) {
+System.out.println("Discount account selection skipped.");
+}
+*/
+}
+
+// =========================
+// Helper Method
+// =========================
+public static void selectAmountDiscountType(WebDriver driver,
+    WebDriverWait wait) {
+
+try {
+By dropdown = By.xpath("(//button[@type='button' and starts-with(@id,'headlessui-listbox-button')])[2]");
+
+wait.until(ExpectedConditions.elementToBeClickable(dropdown));
+driver.findElement(dropdown).click();
+
+By amountOption = By.xpath(
+"//ul[@data-headlessui-state='open' and starts-with(@id,'headlessui-listbox-options')]/li[2]"
+);
+
+wait.until(ExpectedConditions.elementToBeClickable(amountOption));
+driver.findElement(amountOption).click();
+
+} catch (Exception e) {
+System.out.println("Discount type dropdown not available.");
+}
+}
 }

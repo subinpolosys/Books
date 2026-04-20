@@ -28,8 +28,8 @@ public class CreateSalesInvoicePage {
     // ──────────────── Navigation Elements ────────────────
   
     private final By dashboardField=By.xpath("//a[text()='Dashboard']"); 
-    private final By salesMenuField = By.xpath("//div[@title='sales']/a[contains(text(),'Sales')]");
-    private final By salesInvoiceMenuField = By.xpath("//div[@title='invoices']/span[contains(text(),'Invoices')]");
+    private final By salesMenuField = By.xpath("//a[contains(text(),'Sales')]");
+    private final By salesInvoiceMenuField = By.xpath("//span[contains(text(),'Invoices')]");
     private final By newSalesInvoiceButtonField = By.xpath("//button/p[contains(text(),'new')]");
 
     // ──────────────── Header / Customer Fields ────────────────
@@ -68,6 +68,7 @@ public class CreateSalesInvoicePage {
     private final By saveAsArrowBtnField=By.xpath("//div[@class=' bg-accent w-44 flex items-center justify-center rounded-[4px] h-9 relative text-white shadow-sm']/div/div/div[1]");
     private final By saveAndApproveBtnField=By.xpath("//button[@name='s_approve']/div[text()='Save And Approve']"); 
     private final By saveAndSubmitBtnField=By.xpath("//button[@name='s_submit']/div[text()='Save and Submit']");
+    private final By creditLimitProceedPopupField=By.xpath("//div[contains(@id,'headlessui-dialog-panel')]/div[2]/button[1]");
     private final By invoiceNoinListField = By.xpath("(//tr/td[3])[1]/div/div");
 
     // ──────────────── Actions ────────────────
@@ -82,39 +83,50 @@ public class CreateSalesInvoicePage {
 
     public String salesInvoiceNumber() {
     	String SONO=wait.until(ExpectedConditions.visibilityOfElementLocated(salesInvoiceNumberfield)).getAttribute("value");
-    	System.out.println("creat Invoice ID :"+SONO);
+    	//System.out.println("creat Invoice ID :"+SONO);
     	return SONO;
     }
     /** Fill in header details (customer, ref no, subject) 
      * @throws InterruptedException */
-    public void fillSalesInvoiceHeader(String customerName, String orderNo, String subject,String salesPerson,String invDate,String paymentTerms,String supDate,String transactionType,String taxType,String priceList) throws InterruptedException {
+    public void fillSalesInvoiceHeader(
+    		String customerName, 
+    		String orderNo, 
+    		String subject,
+    		String salesPerson,
+    		String invDate,
+    		String paymentTerms,
+    		String supDate,
+    		String transactionType,
+    		String taxType,
+    		String priceList) throws InterruptedException {
     	//System.out.println(customerName+" : "+orderNo+" : "+subject+" : "+salesPerson+" : "+invDate+" : "+supDate+" : "+paymentTerms+" : "+transactionType);
     	Utilities.waitForPageToLoad(driver);
-    	if (customerName != null && !customerName  .trim().isEmpty()) {	
+    	if (Utilities.isNotEmpty(customerName)) {	
 			Utilities.selectCustomer(driver,customerDropdownField, customerName);
     	}
+    	if (Utilities.isNotEmpty(orderNo)) {
         driver.findElement(orderNumberField).sendKeys(orderNo);
-        
+    	}
         JavascriptExecutor sp1 = (JavascriptExecutor) driver;
         WebElement invD  = driver.findElement(invoiceDateField);
 	    sp1.executeScript("arguments[0].scrollIntoView();",invD); 
         
-        if (invDate != null && !invDate.trim().isEmpty()) {
+        if (Utilities.isNotEmpty(invDate)) {
         	//System.out.println("inv Date:");
         	//Thread.sleep(3000);
         	//Utilities.waitForPageLoad(driver);
     		wait.until(ExpectedConditions.visibilityOfElementLocated(invoiceDateField)).sendKeys(invDate);
     	}
         
-        if (paymentTerms!= null && !paymentTerms.trim().isEmpty()) {
+        if (Utilities.isNotEmpty(paymentTerms)) {
     		Utilities.selectIfListed(driver, searchPaymentTermsField, selectPaymentTermsField,paymentTerms);
     	}
         
-        if (supDate != null && !supDate.trim().isEmpty()) {
+        if (Utilities.isNotEmpty(supDate)) {
         	
         	wait.until(ExpectedConditions.visibilityOfElementLocated(supplyDateField)).sendKeys(supDate);
     	}
-        if (transactionType!= null && !transactionType.trim().isEmpty()) {
+        if (Utilities.isNotEmpty(transactionType)) {
     		Utilities.selectIfListed(driver, searchTransactionTypeField, selectTransactionTypeField,transactionType);
     	}
         
@@ -122,31 +134,39 @@ public class CreateSalesInvoicePage {
         WebElement salesP  = driver.findElement(searchSalesPersonField);
 	    sp.executeScript("arguments[0].scrollIntoView();",salesP); 
         
-        if (salesPerson  != null && !salesPerson  .trim().isEmpty()) {
+        if (Utilities.isNotEmpty(salesPerson)) {
     		Utilities.selectIfListed(driver, searchSalesPersonField, selectSalesPersonField,salesPerson);
     	}
         
         salesP.sendKeys(Keys.ESCAPE);
-        if (subject != null && !subject .trim().isEmpty()) {
+        if (Utilities.isNotEmpty(subject)) {
         driver.findElement(subjectField).click();
         driver.findElement(subjectField).sendKeys(subject);
         }
-        if (priceList != null && !priceList .trim().isEmpty()) {
+        if (Utilities.isNotEmpty(priceList)) {
     		Utilities.selectIfListed(driver, searchPriceListField, selectPriceListField,priceList);
     	}
         if (taxType == null || taxType.trim().isEmpty()|| "Exclusive".equalsIgnoreCase(taxType)) 
         {
-        	System.out.println("Default Tax Exclusive");
+        	//System.out.println("Default Tax Exclusive");
         }
         else if ("Inclusive".equalsIgnoreCase(taxType)) {
     		Utilities.selectIfListed(driver, searchTaxField, selectTaxField,taxType);
     	}
          Thread.sleep(200);
+         if(driver.findElement(customerDropdownField).getAttribute("value").isEmpty()) {
+             Utilities.selectCustomer(driver, customerDropdownField, customerName);
+             System.out.println("Customer first time not loaded");
+         }
     }
 
     /** Add multiple items dynamically 
      * @throws InterruptedException */
-    public void addItems(String[] itemNames, String[] itemQtys,String[] discType,String[] discount) throws InterruptedException {    	
+    public void addItems(
+    		String[] itemNames, 
+    		String[] itemQtys,
+    		String[] discType,
+    		String[] discount) throws InterruptedException {    	
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		WebElement itemdetail  = driver.findElement(itemDetailsField);
 	    js.executeScript("arguments[0].scrollIntoView();",itemdetail);  
@@ -181,7 +201,7 @@ public class CreateSalesInvoicePage {
             		discountTypeAmountField.click();
             		WebElement discountField=driver.findElement(By.xpath("//tbody/tr[" + (i + 1) + "]/td[6]/div[1]/input"));
             		discountField.clear();
-            		System.out.println(discount[i]);
+            		//System.out.println(discount[i]);
             		discountField.sendKeys(discount[i]);
             	}
             } else {
@@ -192,10 +212,10 @@ public class CreateSalesInvoicePage {
     }
     /** Add optional notes and terms */
     public void addNotesAndTerms(String customerNote, String terms) {
-        if (customerNote != null && !customerNote.isEmpty()) {
+        if (Utilities.isNotEmpty(customerNote)) {
             driver.findElement(customerNoteField).sendKeys(customerNote);
         }
-        if (terms != null && !terms.isEmpty()) {
+        if (Utilities.isNotEmpty(terms)) {
             driver.findElement(termsField).sendKeys(terms);
         }
     }
@@ -217,6 +237,40 @@ public class CreateSalesInvoicePage {
     		 wait.until(ExpectedConditions.elementToBeClickable(saveAsArrowBtnField)).click();
     		 wait.until(ExpectedConditions.elementToBeClickable(saveAndSubmitBtnField)).click();
     	 }
+    	WebDriverWait popupwait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    	boolean creditLimitPopupHandled = false;
+    	boolean outOfStockPopupHandled = false;
+    	
+		try {
+		    WebElement popup = popupwait.until(ExpectedConditions.visibilityOfElementLocated(
+		        creditLimitProceedPopupField));
+		    popup.click();
+		    creditLimitPopupHandled = true;
+		    System.out.println("Customer's credit limit exceeded !!");
+		    // Optional: wait for popup to disappear
+		    popupwait.until(ExpectedConditions.invisibilityOf(popup));
+		    // Add delay or check for some stable element after popup
+		    // Example: wait for the form or a certain section to be visible
+		    popupwait.until(ExpectedConditions.visibilityOfElementLocated(saveAsDraftButtonField)); // or any stable element
+		} catch (TimeoutException e) {
+		    // No popup appeared, proceed normally
+		}
+    	try {  //h3[text()='Out of Stock']
+    		WebElement popup1 = popupwait.until(ExpectedConditions.visibilityOfElementLocated(
+			        creditLimitProceedPopupField));
+			    popup1.click();
+			    outOfStockPopupHandled  = true;
+			    System.out.println("Product Stocked out !!");
+			    // Optional: wait for popup to disappear
+			    popupwait.until(ExpectedConditions.invisibilityOf(popup1));
+			    // Add delay or check for some stable element after popup
+			    // Example: wait for the form or a certain section to be visible
+			    popupwait.until(ExpectedConditions.visibilityOfElementLocated(saveAsDraftButtonField));
+			       	    		
+    	}catch (TimeoutException e) {
+		    // No popup appeared, proceed normally
+		}
+    	
     }
     /** Verify estimate saved by checking list */
     public boolean verifySalesInvoiceCreated(String expectedInvoiceNo) {

@@ -26,6 +26,7 @@ public class CreateSalesOrderTest extends BaseTest {
    }
     @Test
     public void createSalesOrderTest() throws IOException, InterruptedException {
+    	System.out.println("___________________Create Sales Order_____________");
         String filePath = System.getProperty("user.dir") + "/src/test/resources/SalesOrderData.xlsx";
         List<Map<String, Object>> allSalesOrder =
                 ExcelReader.getMasterDetailData(filePath, "SalesOrderHeader", "SalesOrderItems");

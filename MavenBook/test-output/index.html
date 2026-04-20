@@ -7,7 +7,7 @@
 
     <link type="text/css" href="testng-reports1.css" rel="stylesheet" id="ultra" />
     <link type="text/css" href="testng-reports.css" rel="stylesheet" id="retro" disabled="false"/>
-    <script type="text/javascript" src="jquery.min.js"></script>
+    <script type="text/javascript" src="jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="testng-reports.js"></script>
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script type='text/javascript'>
@@ -21,8 +21,7 @@
      -->
   </head>
 
-  <body>
-    <div class="top-banner-root">
+  <body>    <div class="top-banner-root">
       <span class="top-banner-title-font">Test results</span>
       <button id="button" class="button">Switch Retro Theme</button> <!-- button -->
       <br/>
@@ -39,8 +38,8 @@
       <div class="suite">
         <div class="rounded-window">
           <div class="suite-header light-rounded-window-top">
-            <a href="#" panel-name="suite-Default_suite" class="navigator-link">
-              <span class="suite-name border-passed">Default suite</span>
+            <a href="#" panel-name="suite-Automation_Suite" class="navigator-link">
+              <span class="suite-name border-passed">Automation Suite</span>
             </a> <!-- navigator-link -->
           </div> <!-- suite-header light-rounded-window-top -->
           <div class="navigator-suite-content">
@@ -50,37 +49,37 @@
             <div class="suite-section-content">
               <ul>
                 <li>
-                  <a href="#" panel-name="test-xml-Default_suite" class="navigator-link ">
-                    <span>C:\Users\USER\AppData\Local\Temp\testng-eclipse-1923920164\testng-customsuite.xml</span>
+                  <a href="#" panel-name="test-xml-Automation_Suite" class="navigator-link ">
+                    <span>C:\Users\USER\git\Books\MavenBook\src\test\resources\testng-batch.xml</span>
                   </a> <!-- navigator-link  -->
                 </li>
                 <li>
-                  <a href="#" panel-name="testlist-Default_suite" class="navigator-link ">
+                  <a href="#" panel-name="testlist-Automation_Suite" class="navigator-link ">
                     <span class="test-stats">1 test</span>
                   </a> <!-- navigator-link  -->
                 </li>
                 <li>
-                  <a href="#" panel-name="group-Default_suite" class="navigator-link ">
+                  <a href="#" panel-name="group-Automation_Suite" class="navigator-link ">
                     <span>0 groups</span>
                   </a> <!-- navigator-link  -->
                 </li>
                 <li>
-                  <a href="#" panel-name="times-Default_suite" class="navigator-link ">
+                  <a href="#" panel-name="times-Automation_Suite" class="navigator-link ">
                     <span>Times</span>
                   </a> <!-- navigator-link  -->
                 </li>
                 <li>
-                  <a href="#" panel-name="reporter-Default_suite" class="navigator-link ">
+                  <a href="#" panel-name="reporter-Automation_Suite" class="navigator-link ">
                     <span>Reporter output</span>
                   </a> <!-- navigator-link  -->
                 </li>
                 <li>
-                  <a href="#" panel-name="ignored-methods-Default_suite" class="navigator-link ">
+                  <a href="#" panel-name="ignored-methods-Automation_Suite" class="navigator-link ">
                     <span>Ignored methods</span>
                   </a> <!-- navigator-link  -->
                 </li>
                 <li>
-                  <a href="#" panel-name="chronological-Default_suite" class="navigator-link ">
+                  <a href="#" panel-name="chronological-Automation_Suite" class="navigator-link ">
                     <span>Chronological view</span>
                   </a> <!-- navigator-link  -->
                 </li>
@@ -93,21 +92,126 @@
               <div class="suite-section-content">
                 <ul>
                   <li>
-                    <span class="method-stats">1 method,   1 passed</span>
+                    <span class="method-stats">22 methods,   22 passed</span>
                   </li>
                   <li>
                     <span class="method-list-title passed">Passed methods</span>
                     <span class="show-or-hide-methods passed">
-                      <a href="#" panel-name="suite-Default_suite" class="hide-methods passed suite-Default_suite"> (hide)</a> <!-- hide-methods passed suite-Default_suite -->
-                      <a href="#" panel-name="suite-Default_suite" class="show-methods passed suite-Default_suite"> (show)</a> <!-- show-methods passed suite-Default_suite -->
+                      <a href="#" panel-name="suite-Automation_Suite" class="hide-methods passed suite-Automation_Suite"> (hide)</a> <!-- hide-methods passed suite-Automation_Suite -->
+                      <a href="#" panel-name="suite-Automation_Suite" class="show-methods passed suite-Automation_Suite"> (show)</a> <!-- show-methods passed suite-Automation_Suite -->
                     </span>
-                    <div class="method-list-content passed suite-Default_suite">
+                    <div class="method-list-content passed suite-Automation_Suite">
                       <span>
                         <img src="passed.png" width="3%"/>
-                        <a href="#" panel-name="suite-Default_suite" title="tests.CreateRetainerInvoiceTest" class="method navigator-link" hash-for-method="createRetainerInvoiceTest">createRetainerInvoiceTest</a> <!-- method navigator-link -->
+                        <a href="#" panel-name="suite-Automation_Suite" title="tests.DeliveryNoteTest" class="method navigator-link" hash-for-method="deliveryNoteTest(DeliveryNoteData{Customer=&#039;SI Test&#039;})">deliveryNoteTest(DeliveryNoteData{Customer='SI Test'})</a> <!-- method navigator-link -->
                       </span>
                       <br/>
-                    </div> <!-- method-list-content passed suite-Default_suite -->
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Automation_Suite" title="tests.EstimateTest" class="method navigator-link" hash-for-method="estimateTest(EstimateData{Customer=&#039;Customer 2&#039;})">estimateTest(EstimateData{Customer='Customer 2'})</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Automation_Suite" title="tests.EstimateTest" class="method navigator-link" hash-for-method="estimateTest(EstimateData{Customer=&#039;Customer 1&#039;})">estimateTest(EstimateData{Customer='Customer 1'})</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Automation_Suite" title="tests.InvoicesTest" class="method navigator-link" hash-for-method="invoicesTest(InvoicesData{Customer=&#039;April one two&#039;})">invoicesTest(InvoicesData{Customer='April one two'})</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Automation_Suite" title="tests.InvoicesTest" class="method navigator-link" hash-for-method="invoicesTest(InvoicesData{Customer=&#039;April three&#039;})">invoicesTest(InvoicesData{Customer='April three'})</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Automation_Suite" title="tests.InvoicesTest" class="method navigator-link" hash-for-method="invoicesTest(InvoicesData{Customer=&#039;FEB 1&#039;})">invoicesTest(InvoicesData{Customer='FEB 1'})</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Automation_Suite" title="tests.InvoicesTest" class="method navigator-link" hash-for-method="invoicesTest(InvoicesData{Customer=&#039;FEB 1&#039;})">invoicesTest(InvoicesData{Customer='FEB 1'})</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Automation_Suite" title="tests.InvoicesTest" class="method navigator-link" hash-for-method="invoicesTest(InvoicesData{Customer=&#039;Joy&#039;})">invoicesTest(InvoicesData{Customer='Joy'})</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Automation_Suite" title="tests.InvoicesTest" class="method navigator-link" hash-for-method="invoicesTest(InvoicesData{Customer=&#039;FEB 1&#039;})">invoicesTest(InvoicesData{Customer='FEB 1'})</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Automation_Suite" title="tests.InvoicesTest" class="method navigator-link" hash-for-method="invoicesTest(InvoicesData{Customer=&#039;April three&#039;})">invoicesTest(InvoicesData{Customer='April three'})</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Automation_Suite" title="tests.InvoicesTest" class="method navigator-link" hash-for-method="invoicesTest(InvoicesData{Customer=&#039;Joy&#039;})">invoicesTest(InvoicesData{Customer='Joy'})</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Automation_Suite" title="tests.InvoicesTest" class="method navigator-link" hash-for-method="invoicesTest(InvoicesData{Customer=&#039;April three&#039;})">invoicesTest(InvoicesData{Customer='April three'})</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Automation_Suite" title="tests.InvoicesTest" class="method navigator-link" hash-for-method="invoicesTest(InvoicesData{Customer=&#039;April one two&#039;})">invoicesTest(InvoicesData{Customer='April one two'})</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Automation_Suite" title="tests.InvoicesTest" class="method navigator-link" hash-for-method="invoicesTest(InvoicesData{Customer=&#039;Joy&#039;})">invoicesTest(InvoicesData{Customer='Joy'})</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Automation_Suite" title="tests.InvoicesTest" class="method navigator-link" hash-for-method="invoicesTest(InvoicesData{Customer=&#039;April one two&#039;})">invoicesTest(InvoicesData{Customer='April one two'})</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Automation_Suite" title="tests.PaymentsTest" class="method navigator-link" hash-for-method="paymentTest(PaymentData{Vendor=&#039;Subin&#039;})">paymentTest(PaymentData{Vendor='Subin'})</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Automation_Suite" title="tests.PurchaseBillTest" class="method navigator-link" hash-for-method="purchaseBillTest(PurchaseBillData{Vendor=&#039;Subin&#039;})">purchaseBillTest(PurchaseBillData{Vendor='Subin'})</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Automation_Suite" title="tests.PurchaseOrderTest" class="method navigator-link" hash-for-method="purchaseOrderTest(PurchaseOrderData{Vendor=&#039;UAE Vendor&#039;})">purchaseOrderTest(PurchaseOrderData{Vendor='UAE Vendor'})</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Automation_Suite" title="tests.ReceiptTest" class="method navigator-link" hash-for-method="receiptTest(ReceiptData{Customer=&#039;JM Traders&#039;})">receiptTest(ReceiptData{Customer='JM Traders'})</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Automation_Suite" title="tests.SalesOrderTest" class="method navigator-link" hash-for-method="salesOrderTest(SalesOrderData{Customer=&#039;Customer 3&#039;})">salesOrderTest(SalesOrderData{Customer='Customer 3'})</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Automation_Suite" title="tests.SalesReturnTest" class="method navigator-link" hash-for-method="salesReturnTest(SalesReturnData{Customer=&#039;Customer 3&#039;})">salesReturnTest(SalesReturnData{Customer='Customer 3'})</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Automation_Suite" title="tests.VendorCreditTest" class="method navigator-link" hash-for-method="vendorCreditTest(PurchaseBillData{Vendor=&#039;Subin&#039;})">vendorCreditTest(PurchaseBillData{Vendor='Subin'})</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                    </div> <!-- method-list-content passed suite-Automation_Suite -->
                   </li>
                 </ul>
               </div> <!-- suite-section-content -->
@@ -118,129 +222,823 @@
     </div> <!-- navigator-root -->
     <div class="wrapper">
       <div class="main-panel-root">
-        <div panel-name="suite-Default_suite" class="panel Default_suite">
-          <div class="suite-Default_suite-class-passed">
+        <div panel-name="suite-Automation_Suite" class="panel Automation_Suite">
+          <div class="suite-Automation_Suite-class-passed">
             <div class="main-panel-header rounded-window-top">
               <img src="passed.png"/>
-              <span class="class-name">tests.CreateRetainerInvoiceTest</span>
+              <span class="class-name">tests.EstimateTest</span>
             </div> <!-- main-panel-header rounded-window-top -->
             <div class="main-panel-content rounded-window-bottom">
               <div class="method">
                 <div class="method-content">
-                  <a name="createRetainerInvoiceTest">
-                  </a> <!-- createRetainerInvoiceTest -->
-                  <span class="method-name">createRetainerInvoiceTest</span>
+                  <a name="estimateTest(EstimateData{Customer=&#039;Customer 2&#039;})">
+                  </a> <!-- estimateTest(EstimateData{Customer='Customer 2'}) -->
+                  <span class="method-name">estimateTest</span>
+                  <span class="parameters">(EstimateData{Customer='Customer 2'})</span>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="estimateTest(EstimateData{Customer=&#039;Customer 1&#039;})">
+                  </a> <!-- estimateTest(EstimateData{Customer='Customer 1'}) -->
+                  <span class="method-name">estimateTest</span>
+                  <span class="parameters">(EstimateData{Customer='Customer 1'})</span>
                 </div> <!-- method-content -->
               </div> <!-- method -->
             </div> <!-- main-panel-content rounded-window-bottom -->
-          </div> <!-- suite-Default_suite-class-passed -->
-        </div> <!-- panel Default_suite -->
-        <div panel-name="test-xml-Default_suite" class="panel">
+          </div> <!-- suite-Automation_Suite-class-passed -->
+          <div class="suite-Automation_Suite-class-passed">
+            <div class="main-panel-header rounded-window-top">
+              <img src="passed.png"/>
+              <span class="class-name">tests.ReceiptTest</span>
+            </div> <!-- main-panel-header rounded-window-top -->
+            <div class="main-panel-content rounded-window-bottom">
+              <div class="method">
+                <div class="method-content">
+                  <a name="receiptTest(ReceiptData{Customer=&#039;JM Traders&#039;})">
+                  </a> <!-- receiptTest(ReceiptData{Customer='JM Traders'}) -->
+                  <span class="method-name">receiptTest</span>
+                  <span class="parameters">(ReceiptData{Customer='JM Traders'})</span>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+            </div> <!-- main-panel-content rounded-window-bottom -->
+          </div> <!-- suite-Automation_Suite-class-passed -->
+          <div class="suite-Automation_Suite-class-passed">
+            <div class="main-panel-header rounded-window-top">
+              <img src="passed.png"/>
+              <span class="class-name">tests.PurchaseBillTest</span>
+            </div> <!-- main-panel-header rounded-window-top -->
+            <div class="main-panel-content rounded-window-bottom">
+              <div class="method">
+                <div class="method-content">
+                  <a name="purchaseBillTest(PurchaseBillData{Vendor=&#039;Subin&#039;})">
+                  </a> <!-- purchaseBillTest(PurchaseBillData{Vendor='Subin'}) -->
+                  <span class="method-name">purchaseBillTest</span>
+                  <span class="parameters">(PurchaseBillData{Vendor='Subin'})</span>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+            </div> <!-- main-panel-content rounded-window-bottom -->
+          </div> <!-- suite-Automation_Suite-class-passed -->
+          <div class="suite-Automation_Suite-class-passed">
+            <div class="main-panel-header rounded-window-top">
+              <img src="passed.png"/>
+              <span class="class-name">tests.PaymentsTest</span>
+            </div> <!-- main-panel-header rounded-window-top -->
+            <div class="main-panel-content rounded-window-bottom">
+              <div class="method">
+                <div class="method-content">
+                  <a name="paymentTest(PaymentData{Vendor=&#039;Subin&#039;})">
+                  </a> <!-- paymentTest(PaymentData{Vendor='Subin'}) -->
+                  <span class="method-name">paymentTest</span>
+                  <span class="parameters">(PaymentData{Vendor='Subin'})</span>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+            </div> <!-- main-panel-content rounded-window-bottom -->
+          </div> <!-- suite-Automation_Suite-class-passed -->
+          <div class="suite-Automation_Suite-class-passed">
+            <div class="main-panel-header rounded-window-top">
+              <img src="passed.png"/>
+              <span class="class-name">tests.PurchaseOrderTest</span>
+            </div> <!-- main-panel-header rounded-window-top -->
+            <div class="main-panel-content rounded-window-bottom">
+              <div class="method">
+                <div class="method-content">
+                  <a name="purchaseOrderTest(PurchaseOrderData{Vendor=&#039;UAE Vendor&#039;})">
+                  </a> <!-- purchaseOrderTest(PurchaseOrderData{Vendor='UAE Vendor'}) -->
+                  <span class="method-name">purchaseOrderTest</span>
+                  <span class="parameters">(PurchaseOrderData{Vendor='UAE Vendor'})</span>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+            </div> <!-- main-panel-content rounded-window-bottom -->
+          </div> <!-- suite-Automation_Suite-class-passed -->
+          <div class="suite-Automation_Suite-class-passed">
+            <div class="main-panel-header rounded-window-top">
+              <img src="passed.png"/>
+              <span class="class-name">tests.SalesReturnTest</span>
+            </div> <!-- main-panel-header rounded-window-top -->
+            <div class="main-panel-content rounded-window-bottom">
+              <div class="method">
+                <div class="method-content">
+                  <a name="salesReturnTest(SalesReturnData{Customer=&#039;Customer 3&#039;})">
+                  </a> <!-- salesReturnTest(SalesReturnData{Customer='Customer 3'}) -->
+                  <span class="method-name">salesReturnTest</span>
+                  <span class="parameters">(SalesReturnData{Customer='Customer 3'})</span>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+            </div> <!-- main-panel-content rounded-window-bottom -->
+          </div> <!-- suite-Automation_Suite-class-passed -->
+          <div class="suite-Automation_Suite-class-passed">
+            <div class="main-panel-header rounded-window-top">
+              <img src="passed.png"/>
+              <span class="class-name">tests.SalesOrderTest</span>
+            </div> <!-- main-panel-header rounded-window-top -->
+            <div class="main-panel-content rounded-window-bottom">
+              <div class="method">
+                <div class="method-content">
+                  <a name="salesOrderTest(SalesOrderData{Customer=&#039;Customer 3&#039;})">
+                  </a> <!-- salesOrderTest(SalesOrderData{Customer='Customer 3'}) -->
+                  <span class="method-name">salesOrderTest</span>
+                  <span class="parameters">(SalesOrderData{Customer='Customer 3'})</span>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+            </div> <!-- main-panel-content rounded-window-bottom -->
+          </div> <!-- suite-Automation_Suite-class-passed -->
+          <div class="suite-Automation_Suite-class-passed">
+            <div class="main-panel-header rounded-window-top">
+              <img src="passed.png"/>
+              <span class="class-name">tests.VendorCreditTest</span>
+            </div> <!-- main-panel-header rounded-window-top -->
+            <div class="main-panel-content rounded-window-bottom">
+              <div class="method">
+                <div class="method-content">
+                  <a name="vendorCreditTest(PurchaseBillData{Vendor=&#039;Subin&#039;})">
+                  </a> <!-- vendorCreditTest(PurchaseBillData{Vendor='Subin'}) -->
+                  <span class="method-name">vendorCreditTest</span>
+                  <span class="parameters">(PurchaseBillData{Vendor='Subin'})</span>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+            </div> <!-- main-panel-content rounded-window-bottom -->
+          </div> <!-- suite-Automation_Suite-class-passed -->
+          <div class="suite-Automation_Suite-class-passed">
+            <div class="main-panel-header rounded-window-top">
+              <img src="passed.png"/>
+              <span class="class-name">tests.DeliveryNoteTest</span>
+            </div> <!-- main-panel-header rounded-window-top -->
+            <div class="main-panel-content rounded-window-bottom">
+              <div class="method">
+                <div class="method-content">
+                  <a name="deliveryNoteTest(DeliveryNoteData{Customer=&#039;SI Test&#039;})">
+                  </a> <!-- deliveryNoteTest(DeliveryNoteData{Customer='SI Test'}) -->
+                  <span class="method-name">deliveryNoteTest</span>
+                  <span class="parameters">(DeliveryNoteData{Customer='SI Test'})</span>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+            </div> <!-- main-panel-content rounded-window-bottom -->
+          </div> <!-- suite-Automation_Suite-class-passed -->
+          <div class="suite-Automation_Suite-class-passed">
+            <div class="main-panel-header rounded-window-top">
+              <img src="passed.png"/>
+              <span class="class-name">tests.InvoicesTest</span>
+            </div> <!-- main-panel-header rounded-window-top -->
+            <div class="main-panel-content rounded-window-bottom">
+              <div class="method">
+                <div class="method-content">
+                  <a name="invoicesTest(InvoicesData{Customer=&#039;April one two&#039;})">
+                  </a> <!-- invoicesTest(InvoicesData{Customer='April one two'}) -->
+                  <span class="method-name">invoicesTest</span>
+                  <span class="parameters">(InvoicesData{Customer='April one two'})</span>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="invoicesTest(InvoicesData{Customer=&#039;April three&#039;})">
+                  </a> <!-- invoicesTest(InvoicesData{Customer='April three'}) -->
+                  <span class="method-name">invoicesTest</span>
+                  <span class="parameters">(InvoicesData{Customer='April three'})</span>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="invoicesTest(InvoicesData{Customer=&#039;FEB 1&#039;})">
+                  </a> <!-- invoicesTest(InvoicesData{Customer='FEB 1'}) -->
+                  <span class="method-name">invoicesTest</span>
+                  <span class="parameters">(InvoicesData{Customer='FEB 1'})</span>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="invoicesTest(InvoicesData{Customer=&#039;FEB 1&#039;})">
+                  </a> <!-- invoicesTest(InvoicesData{Customer='FEB 1'}) -->
+                  <span class="method-name">invoicesTest</span>
+                  <span class="parameters">(InvoicesData{Customer='FEB 1'})</span>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="invoicesTest(InvoicesData{Customer=&#039;Joy&#039;})">
+                  </a> <!-- invoicesTest(InvoicesData{Customer='Joy'}) -->
+                  <span class="method-name">invoicesTest</span>
+                  <span class="parameters">(InvoicesData{Customer='Joy'})</span>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="invoicesTest(InvoicesData{Customer=&#039;FEB 1&#039;})">
+                  </a> <!-- invoicesTest(InvoicesData{Customer='FEB 1'}) -->
+                  <span class="method-name">invoicesTest</span>
+                  <span class="parameters">(InvoicesData{Customer='FEB 1'})</span>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="invoicesTest(InvoicesData{Customer=&#039;April three&#039;})">
+                  </a> <!-- invoicesTest(InvoicesData{Customer='April three'}) -->
+                  <span class="method-name">invoicesTest</span>
+                  <span class="parameters">(InvoicesData{Customer='April three'})</span>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="invoicesTest(InvoicesData{Customer=&#039;Joy&#039;})">
+                  </a> <!-- invoicesTest(InvoicesData{Customer='Joy'}) -->
+                  <span class="method-name">invoicesTest</span>
+                  <span class="parameters">(InvoicesData{Customer='Joy'})</span>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="invoicesTest(InvoicesData{Customer=&#039;April three&#039;})">
+                  </a> <!-- invoicesTest(InvoicesData{Customer='April three'}) -->
+                  <span class="method-name">invoicesTest</span>
+                  <span class="parameters">(InvoicesData{Customer='April three'})</span>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="invoicesTest(InvoicesData{Customer=&#039;April one two&#039;})">
+                  </a> <!-- invoicesTest(InvoicesData{Customer='April one two'}) -->
+                  <span class="method-name">invoicesTest</span>
+                  <span class="parameters">(InvoicesData{Customer='April one two'})</span>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="invoicesTest(InvoicesData{Customer=&#039;Joy&#039;})">
+                  </a> <!-- invoicesTest(InvoicesData{Customer='Joy'}) -->
+                  <span class="method-name">invoicesTest</span>
+                  <span class="parameters">(InvoicesData{Customer='Joy'})</span>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="invoicesTest(InvoicesData{Customer=&#039;April one two&#039;})">
+                  </a> <!-- invoicesTest(InvoicesData{Customer='April one two'}) -->
+                  <span class="method-name">invoicesTest</span>
+                  <span class="parameters">(InvoicesData{Customer='April one two'})</span>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+            </div> <!-- main-panel-content rounded-window-bottom -->
+          </div> <!-- suite-Automation_Suite-class-passed -->
+        </div> <!-- panel Automation_Suite -->
+        <div panel-name="test-xml-Automation_Suite" class="panel">
           <div class="main-panel-header rounded-window-top">
-            <span class="header-content">C:\Users\USER\AppData\Local\Temp\testng-eclipse-1923920164\testng-customsuite.xml</span>
+            <span class="header-content">C:\Users\USER\git\Books\MavenBook\src\test\resources\testng-batch.xml</span>
           </div> <!-- main-panel-header rounded-window-top -->
           <div class="main-panel-content rounded-window-bottom">
             <pre>
 &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
 &lt;!DOCTYPE suite SYSTEM &quot;https://testng.org/testng-1.0.dtd&quot;&gt;
-&lt;suite name=&quot;Default suite&quot; guice-stage=&quot;DEVELOPMENT&quot;&gt;
-  &lt;test thread-count=&quot;5&quot; name=&quot;Default test&quot; verbose=&quot;2&quot;&gt;
+&lt;suite name=&quot;Automation Suite&quot; guice-stage=&quot;DEVELOPMENT&quot;&gt;
+  &lt;test thread-count=&quot;5&quot; name=&quot;Tests&quot;&gt;
+    &lt;parameter name=&quot;browser&quot; value=&quot;chrome&quot;/&gt;
     &lt;classes&gt;
-      &lt;class name=&quot;tests.CreateRetainerInvoiceTest&quot;/&gt;
+      &lt;class name=&quot;tests.EstimateTest&quot;/&gt;
+      &lt;class name=&quot;tests.SalesOrderTest&quot;/&gt;
+      &lt;class name=&quot;tests.InvoicesTest&quot;/&gt;
+      &lt;class name=&quot;tests.DeliveryNoteTest&quot;/&gt;
+      &lt;class name=&quot;tests.SalesReturnTest&quot;/&gt;
+      &lt;class name=&quot;tests.PurchaseOrderTest&quot;/&gt;
+      &lt;class name=&quot;tests.PurchaseBillTest&quot;/&gt;
+      &lt;class name=&quot;tests.VendorCreditTest&quot;/&gt;
+      &lt;class name=&quot;tests.ReceiptTest&quot;/&gt;
+      &lt;class name=&quot;tests.PaymentsTest&quot;/&gt;
     &lt;/classes&gt;
-  &lt;/test&gt; &lt;!-- Default test --&gt;
-&lt;/suite&gt; &lt;!-- Default suite --&gt;
+  &lt;/test&gt; &lt;!-- Tests --&gt;
+&lt;/suite&gt; &lt;!-- Automation Suite --&gt;
             </pre>
           </div> <!-- main-panel-content rounded-window-bottom -->
         </div> <!-- panel -->
-        <div panel-name="testlist-Default_suite" class="panel">
+        <div panel-name="testlist-Automation_Suite" class="panel">
           <div class="main-panel-header rounded-window-top">
-            <span class="header-content">Tests for Default suite</span>
+            <span class="header-content">Tests for Automation Suite</span>
           </div> <!-- main-panel-header rounded-window-top -->
           <div class="main-panel-content rounded-window-bottom">
             <ul>
               <li>
-                <span class="test-name">Default test (1 class)</span>
+                <span class="test-name">Tests (10 classes)</span>
               </li>
             </ul>
           </div> <!-- main-panel-content rounded-window-bottom -->
         </div> <!-- panel -->
-        <div panel-name="group-Default_suite" class="panel">
+        <div panel-name="group-Automation_Suite" class="panel">
           <div class="main-panel-header rounded-window-top">
-            <span class="header-content">Groups for Default suite</span>
+            <span class="header-content">Groups for Automation Suite</span>
           </div> <!-- main-panel-header rounded-window-top -->
           <div class="main-panel-content rounded-window-bottom">
           </div> <!-- main-panel-content rounded-window-bottom -->
         </div> <!-- panel -->
-        <div panel-name="times-Default_suite" class="panel">
+        <div panel-name="times-Automation_Suite" class="panel">
           <div class="main-panel-header rounded-window-top">
-            <span class="header-content">Times for Default suite</span>
+            <span class="header-content">Times for Automation Suite</span>
           </div> <!-- main-panel-header rounded-window-top -->
           <div class="main-panel-content rounded-window-bottom">
             <div class="times-div">
               <script type="text/javascript">
-suiteTableInitFunctions.push('tableData_Default_suite');
-function tableData_Default_suite() {
+suiteTableInitFunctions.push('tableData_Automation_Suite');
+function tableData_Automation_Suite() {
 var data = new google.visualization.DataTable();
 data.addColumn('number', 'Number');
 data.addColumn('string', 'Method');
 data.addColumn('string', 'Class');
 data.addColumn('number', 'Time (ms)');
-data.addRows(1);
+data.addRows(22);
 data.setCell(0, 0, 0)
-data.setCell(0, 1, 'createRetainerInvoiceTest')
-data.setCell(0, 2, 'tests.CreateRetainerInvoiceTest')
-data.setCell(0, 3, 20431);
-window.suiteTableData['Default_suite']= { tableData: data, tableDiv: 'times-div-Default_suite'}
+data.setCell(0, 1, 'invoicesTest')
+data.setCell(0, 2, 'tests.InvoicesTest')
+data.setCell(0, 3, 34954);
+data.setCell(1, 0, 1)
+data.setCell(1, 1, 'invoicesTest')
+data.setCell(1, 2, 'tests.InvoicesTest')
+data.setCell(1, 3, 34824);
+data.setCell(2, 0, 2)
+data.setCell(2, 1, 'invoicesTest')
+data.setCell(2, 2, 'tests.InvoicesTest')
+data.setCell(2, 3, 34702);
+data.setCell(3, 0, 3)
+data.setCell(3, 1, 'invoicesTest')
+data.setCell(3, 2, 'tests.InvoicesTest')
+data.setCell(3, 3, 34623);
+data.setCell(4, 0, 4)
+data.setCell(4, 1, 'invoicesTest')
+data.setCell(4, 2, 'tests.InvoicesTest')
+data.setCell(4, 3, 34484);
+data.setCell(5, 0, 5)
+data.setCell(5, 1, 'invoicesTest')
+data.setCell(5, 2, 'tests.InvoicesTest')
+data.setCell(5, 3, 34380);
+data.setCell(6, 0, 6)
+data.setCell(6, 1, 'invoicesTest')
+data.setCell(6, 2, 'tests.InvoicesTest')
+data.setCell(6, 3, 34225);
+data.setCell(7, 0, 7)
+data.setCell(7, 1, 'salesOrderTest')
+data.setCell(7, 2, 'tests.SalesOrderTest')
+data.setCell(7, 3, 34210);
+data.setCell(8, 0, 8)
+data.setCell(8, 1, 'invoicesTest')
+data.setCell(8, 2, 'tests.InvoicesTest')
+data.setCell(8, 3, 34112);
+data.setCell(9, 0, 9)
+data.setCell(9, 1, 'invoicesTest')
+data.setCell(9, 2, 'tests.InvoicesTest')
+data.setCell(9, 3, 34068);
+data.setCell(10, 0, 10)
+data.setCell(10, 1, 'invoicesTest')
+data.setCell(10, 2, 'tests.InvoicesTest')
+data.setCell(10, 3, 33986);
+data.setCell(11, 0, 11)
+data.setCell(11, 1, 'invoicesTest')
+data.setCell(11, 2, 'tests.InvoicesTest')
+data.setCell(11, 3, 33882);
+data.setCell(12, 0, 12)
+data.setCell(12, 1, 'invoicesTest')
+data.setCell(12, 2, 'tests.InvoicesTest')
+data.setCell(12, 3, 33124);
+data.setCell(13, 0, 13)
+data.setCell(13, 1, 'estimateTest')
+data.setCell(13, 2, 'tests.EstimateTest')
+data.setCell(13, 3, 18526);
+data.setCell(14, 0, 14)
+data.setCell(14, 1, 'vendorCreditTest')
+data.setCell(14, 2, 'tests.VendorCreditTest')
+data.setCell(14, 3, 15848);
+data.setCell(15, 0, 15)
+data.setCell(15, 1, 'purchaseBillTest')
+data.setCell(15, 2, 'tests.PurchaseBillTest')
+data.setCell(15, 3, 15744);
+data.setCell(16, 0, 16)
+data.setCell(16, 1, 'estimateTest')
+data.setCell(16, 2, 'tests.EstimateTest')
+data.setCell(16, 3, 15372);
+data.setCell(17, 0, 17)
+data.setCell(17, 1, 'salesReturnTest')
+data.setCell(17, 2, 'tests.SalesReturnTest')
+data.setCell(17, 3, 15222);
+data.setCell(18, 0, 18)
+data.setCell(18, 1, 'deliveryNoteTest')
+data.setCell(18, 2, 'tests.DeliveryNoteTest')
+data.setCell(18, 3, 14515);
+data.setCell(19, 0, 19)
+data.setCell(19, 1, 'purchaseOrderTest')
+data.setCell(19, 2, 'tests.PurchaseOrderTest')
+data.setCell(19, 3, 12940);
+data.setCell(20, 0, 20)
+data.setCell(20, 1, 'receiptTest')
+data.setCell(20, 2, 'tests.ReceiptTest')
+data.setCell(20, 3, 10154);
+data.setCell(21, 0, 21)
+data.setCell(21, 1, 'paymentTest')
+data.setCell(21, 2, 'tests.PaymentsTest')
+data.setCell(21, 3, 8264);
+window.suiteTableData['Automation_Suite']= { tableData: data, tableDiv: 'times-div-Automation_Suite'}
 return data;
 }
               </script>
-              <span class="suite-total-time">Total running time: 20 seconds</span>
-              <div id="times-div-Default_suite">
-              </div> <!-- times-div-Default_suite -->
+              <span class="suite-total-time">Total running time: 9 minutes</span>
+              <div id="times-div-Automation_Suite">
+              </div> <!-- times-div-Automation_Suite -->
             </div> <!-- times-div -->
           </div> <!-- main-panel-content rounded-window-bottom -->
         </div> <!-- panel -->
-        <div panel-name="reporter-Default_suite" class="panel">
+        <div panel-name="reporter-Automation_Suite" class="panel">
           <div class="main-panel-header rounded-window-top">
-            <span class="header-content">Reporter output for Default suite</span>
+            <span class="header-content">Reporter output for Automation Suite</span>
           </div> <!-- main-panel-header rounded-window-top -->
           <div class="main-panel-content rounded-window-bottom">
           </div> <!-- main-panel-content rounded-window-bottom -->
         </div> <!-- panel -->
-        <div panel-name="ignored-methods-Default_suite" class="panel">
+        <div panel-name="ignored-methods-Automation_Suite" class="panel">
           <div class="main-panel-header rounded-window-top">
             <span class="header-content">0 ignored methods</span>
           </div> <!-- main-panel-header rounded-window-top -->
           <div class="main-panel-content rounded-window-bottom">
           </div> <!-- main-panel-content rounded-window-bottom -->
         </div> <!-- panel -->
-        <div panel-name="chronological-Default_suite" class="panel">
+        <div panel-name="chronological-Automation_Suite" class="panel">
           <div class="main-panel-header rounded-window-top">
             <span class="header-content">Methods in chronological order</span>
           </div> <!-- main-panel-header rounded-window-top -->
           <div class="main-panel-content rounded-window-bottom">
             <div class="chronological-class">
-              <div class="chronological-class-name">tests.CreateRetainerInvoiceTest</div> <!-- chronological-class-name -->
+              <div class="chronological-class-name">tests.EstimateTest</div> <!-- chronological-class-name -->
               <div class="configuration-method before">
-                <span class="method-name">setUp</span>
+                <span class="method-name">setUp(chrome)</span>
                 <span class="method-start">0 ms</span>
               </div> <!-- configuration-method before -->
               <div class="configuration-method before">
-                <span class="method-name">beforeMethod</span>
-                <span class="method-start">1293 ms</span>
+                <span class="method-name">loginToApp</span>
+                <span class="method-start">26027 ms</span>
               </div> <!-- configuration-method before -->
               <div class="test-method">
-                <span class="method-name">createRetainerInvoiceTest</span>
-                <span class="method-start">8400 ms</span>
+                <span class="method-name">estimateTest(EstimateData{Customer='Customer 2'})</span>
+                <span class="method-start">33916 ms</span>
               </div> <!-- test-method -->
               <div class="configuration-method after">
-                <span class="method-name">afterMethod</span>
-                <span class="method-start">28832 ms</span>
+                <span class="method-name">tearDown</span>
+                <span class="method-start">52444 ms</span>
               </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp(chrome)</span>
+                <span class="method-start">56667 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">loginToApp</span>
+                <span class="method-start">57492 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">estimateTest(EstimateData{Customer='Customer 1'})</span>
+                <span class="method-start">65683 ms</span>
+              </div> <!-- test-method -->
               <div class="configuration-method after">
                 <span class="method-name">tearDown</span>
-                <span class="method-start">43090 ms</span>
+                <span class="method-start">81056 ms</span>
+              </div> <!-- configuration-method after -->
+            </div> <!-- chronological-class -->
+            <div class="chronological-class">
+              <div class="chronological-class-name">tests.SalesOrderTest</div> <!-- chronological-class-name -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp(chrome)</span>
+                <span class="method-start">85298 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">loginToApp</span>
+                <span class="method-start">86057 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">salesOrderTest(SalesOrderData{Customer='Customer 3'})</span>
+                <span class="method-start">93962 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">128173 ms</span>
+              </div> <!-- configuration-method after -->
+            </div> <!-- chronological-class -->
+            <div class="chronological-class">
+              <div class="chronological-class-name">tests.InvoicesTest</div> <!-- chronological-class-name -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp(chrome)</span>
+                <span class="method-start">129281 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">loginToApp</span>
+                <span class="method-start">130083 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">invoicesTest(InvoicesData{Customer='Joy'})</span>
+                <span class="method-start">138266 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">173090 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp(chrome)</span>
+                <span class="method-start">174100 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">loginToApp</span>
+                <span class="method-start">174883 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">invoicesTest(InvoicesData{Customer='FEB 1'})</span>
+                <span class="method-start">182914 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">217538 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp(chrome)</span>
+                <span class="method-start">218663 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">loginToApp</span>
+                <span class="method-start">219478 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">invoicesTest(InvoicesData{Customer='April three'})</span>
+                <span class="method-start">227585 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">261965 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp(chrome)</span>
+                <span class="method-start">263008 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">loginToApp</span>
+                <span class="method-start">263835 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">invoicesTest(InvoicesData{Customer='April one two'})</span>
+                <span class="method-start">271899 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">305782 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp(chrome)</span>
+                <span class="method-start">306790 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">loginToApp</span>
+                <span class="method-start">307565 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">invoicesTest(InvoicesData{Customer='Joy'})</span>
+                <span class="method-start">315549 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">349661 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp(chrome)</span>
+                <span class="method-start">350857 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">loginToApp</span>
+                <span class="method-start">351636 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">invoicesTest(InvoicesData{Customer='FEB 1'})</span>
+                <span class="method-start">359718 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">393943 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp(chrome)</span>
+                <span class="method-start">395084 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">loginToApp</span>
+                <span class="method-start">395900 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">invoicesTest(InvoicesData{Customer='April three'})</span>
+                <span class="method-start">405840 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">439908 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp(chrome)</span>
+                <span class="method-start">440941 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">loginToApp</span>
+                <span class="method-start">441725 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">invoicesTest(InvoicesData{Customer='April one two'})</span>
+                <span class="method-start">451244 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">484368 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp(chrome)</span>
+                <span class="method-start">485462 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">loginToApp</span>
+                <span class="method-start">486291 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">invoicesTest(InvoicesData{Customer='Joy'})</span>
+                <span class="method-start">494413 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">529367 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp(chrome)</span>
+                <span class="method-start">530509 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">loginToApp</span>
+                <span class="method-start">531280 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">invoicesTest(InvoicesData{Customer='FEB 1'})</span>
+                <span class="method-start">541267 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">575969 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp(chrome)</span>
+                <span class="method-start">577022 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">loginToApp</span>
+                <span class="method-start">577805 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">invoicesTest(InvoicesData{Customer='April three'})</span>
+                <span class="method-start">585902 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">620387 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp(chrome)</span>
+                <span class="method-start">621385 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">loginToApp</span>
+                <span class="method-start">622157 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">invoicesTest(InvoicesData{Customer='April one two'})</span>
+                <span class="method-start">630269 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">664255 ms</span>
+              </div> <!-- configuration-method after -->
+            </div> <!-- chronological-class -->
+            <div class="chronological-class">
+              <div class="chronological-class-name">tests.DeliveryNoteTest</div> <!-- chronological-class-name -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp(chrome)</span>
+                <span class="method-start">665312 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">loginToApp</span>
+                <span class="method-start">666091 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">deliveryNoteTest(DeliveryNoteData{Customer='SI Test'})</span>
+                <span class="method-start">674268 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">688783 ms</span>
+              </div> <!-- configuration-method after -->
+            </div> <!-- chronological-class -->
+            <div class="chronological-class">
+              <div class="chronological-class-name">tests.SalesReturnTest</div> <!-- chronological-class-name -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp(chrome)</span>
+                <span class="method-start">693066 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">loginToApp</span>
+                <span class="method-start">693849 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">salesReturnTest(SalesReturnData{Customer='Customer 3'})</span>
+                <span class="method-start">703305 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">718527 ms</span>
+              </div> <!-- configuration-method after -->
+            </div> <!-- chronological-class -->
+            <div class="chronological-class">
+              <div class="chronological-class-name">tests.PurchaseOrderTest</div> <!-- chronological-class-name -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp(chrome)</span>
+                <span class="method-start">722830 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">loginToApp</span>
+                <span class="method-start">723593 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">purchaseOrderTest(PurchaseOrderData{Vendor='UAE Vendor'})</span>
+                <span class="method-start">731649 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">744590 ms</span>
+              </div> <!-- configuration-method after -->
+            </div> <!-- chronological-class -->
+            <div class="chronological-class">
+              <div class="chronological-class-name">tests.PurchaseBillTest</div> <!-- chronological-class-name -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp(chrome)</span>
+                <span class="method-start">748782 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">loginToApp</span>
+                <span class="method-start">749563 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">purchaseBillTest(PurchaseBillData{Vendor='Subin'})</span>
+                <span class="method-start">757707 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">773451 ms</span>
+              </div> <!-- configuration-method after -->
+            </div> <!-- chronological-class -->
+            <div class="chronological-class">
+              <div class="chronological-class-name">tests.VendorCreditTest</div> <!-- chronological-class-name -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp(chrome)</span>
+                <span class="method-start">777194 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">loginToApp</span>
+                <span class="method-start">777961 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">vendorCreditTest(PurchaseBillData{Vendor='Subin'})</span>
+                <span class="method-start">786116 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">801965 ms</span>
+              </div> <!-- configuration-method after -->
+            </div> <!-- chronological-class -->
+            <div class="chronological-class">
+              <div class="chronological-class-name">tests.ReceiptTest</div> <!-- chronological-class-name -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp(chrome)</span>
+                <span class="method-start">806335 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">loginToApp</span>
+                <span class="method-start">807099 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">receiptTest(ReceiptData{Customer='JM Traders'})</span>
+                <span class="method-start">815138 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">825292 ms</span>
+              </div> <!-- configuration-method after -->
+            </div> <!-- chronological-class -->
+            <div class="chronological-class">
+              <div class="chronological-class-name">tests.PaymentsTest</div> <!-- chronological-class-name -->
+              <div class="configuration-method before">
+                <span class="method-name">setUp(chrome)</span>
+                <span class="method-start">827439 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">loginToApp</span>
+                <span class="method-start">828227 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">paymentTest(PaymentData{Vendor='Subin'})</span>
+                <span class="method-start">836328 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">tearDown</span>
+                <span class="method-start">844593 ms</span>
               </div> <!-- configuration-method after -->
           </div> <!-- main-panel-content rounded-window-bottom -->
         </div> <!-- panel -->

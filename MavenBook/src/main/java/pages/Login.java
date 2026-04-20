@@ -1,28 +1,25 @@
 package pages;
-
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-
+import drivers.DriverFactory;
 import utils.ConfigReader;
 import utils.Utilities;
-
 public class Login {
-
     private WebDriver driver;
     private WebDriverWait wait;
     private boolean recaptchaSolved = false;
-
     private String loginUrl = ConfigReader.get("url");
     private String username = ConfigReader.get("username");
     private String password = ConfigReader.get("password");
-
+    private By logininLoginPagefield=By.xpath("//h5[text()='Login']");
+    private By logininLandingPagefield=By.xpath("//a[@href='/login']/p[text()='Login']");
     private By usernameField = By.id("username");
     private By passwordField = By.id("password");
     private By loginButton = By.xpath("//button[contains(text(),'Login')]");
@@ -33,119 +30,64 @@ public class Login {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(25));
     }
+    public void login() {
+        //long start = System.currentTimeMillis();
 
-    public void login() throws InterruptedException {
-    //==================New Captcha==================//
-    int flag=0;
-    int i=0;
-    do{
-    	 i++;
-    	// ✅ SAFE navigation WITHOUT TestNG
-         Utilities.openUrlSafely(driver, loginUrl);
-    	 
-//    	try { 
-//	    driver.get(loginUrl);
-//    	} catch (WebDriverException e) {
-//    	    if (e.getMessage().contains("ERR_CONNECTION_REFUSED")) {
-//    	        throw new SkipException("Skipping test: Application is down");
-//    	    }
-//    	}
-	    Thread.sleep(500);
-	    wait.until(ExpectedConditions.visibilityOfElementLocated(usernameField));
-	    driver.findElement(usernameField).sendKeys(username);
-	    Thread.sleep(500);
-	    driver.findElement(passwordField).sendKeys(password);
-	    Thread.sleep(500);
-	    wait.until(ExpectedConditions.elementToBeClickable(loginButton)).click();	
-    	
-//        int retries = 0;
-//       int maxRetries = 3;
-//
-//        while (!recaptchaSolved && retries < maxRetries) {
-//            retries++;
-//            driver.get(loginUrl);
-//            Thread.sleep(500);
-//            List<WebElement> captchas = driver.findElements(By.xpath("//iframe[@title='reCAPTCHA']"));
-//            if (!captchas.isEmpty()) {
-//                recaptchaSolved = handleCaptcha();
-//            }
-//        }
+        WebDriverWait shortWait = new WebDriverWait(driver, Duration.ofSeconds(6));
+        int attempts = 0;
 
-//        if (!recaptchaSolved) {
-//            throw new RuntimeException("CAPTCHA could not be solved after " + maxRetries + " attempts.");
-//        }
-//        driver.switchTo().defaultContent();
-//        wait.until(ExpectedConditions.visibilityOfElementLocated(usernameField));
-//        driver.findElement(usernameField).sendKeys(username);
-//        driver.findElement(passwordField).sendKeys(password);
-//        wait.until(ExpectedConditions.elementToBeClickable(loginButton)).click();
+        while (attempts < 2) {           
+            attempts++;
 
-//        try 
-//		{
-//			WebDriverWait localWait = new WebDriverWait(driver, Duration.ofSeconds(15));
-//			localWait.until(ExpectedConditions.presenceOfElementLocated(verifyRecaptchafield));
-//			Thread.sleep(200);
-//			driver.findElement(loginButton).click();
-//		        //dr.switchTo().frame(iframe);
-//		}catch(Exception e) 
-//		{	
-//		}
-//        
-        try {
-            wait.until(ExpectedConditions.visibilityOfElementLocated(continueButton)).click();
-            flag=1;
-            wait.until(ExpectedConditions.visibilityOfElementLocated(dashboardMenu));
-            driver.findElement(dashboardMenu).click();
-        } catch (Exception ignored) {
-        	flag=0;
-        	}
-        //System.out.println("I: "+i);
-    	}
-    	while(flag==0 && i<4);
-        if(i>3) {
-        	System.out.println("CAPTCHA could not be solved after " + i + " attempts.");
+            Utilities.openUrlSafely(driver, loginUrl);
+
+            try {
+                // detect login page
+                shortWait.until(ExpectedConditions.visibilityOfElementLocated(usernameField));
+
+                driver.findElement(usernameField).clear();
+                driver.findElement(usernameField).sendKeys(username);
+
+                driver.findElement(passwordField).clear();
+                driver.findElement(passwordField).sendKeys(password);
+
+                driver.findElement(loginButton).click();
+
+                // optional continue
+                try {
+                    shortWait.until(ExpectedConditions.elementToBeClickable(continueButton)).click();
+                } catch (Exception ignored) {}
+
+                // wait for dashboard
+                shortWait.until(ExpectedConditions.visibilityOfElementLocated(dashboardMenu));
+
+                //System.out.println("Login success in attempt " + attempts);
+                long end = System.currentTimeMillis();
+               // System.out.println("Login time taken = " + (end - start) + " ms");
+                return;   
+            }
+            catch (Exception e) {
+                System.out.println("Login attempt failed: " + attempts);
+            }
         }
+
+        throw new RuntimeException("Login failed after " + attempts + " attempts");
     }
 
-//    private boolean handleCaptcha() {
-//        try {
-//            WebElement iframe = wait.until(ExpectedConditions.presenceOfElementLocated(
-//                    By.xpath("//iframe[@title='reCAPTCHA']")));
-//            driver.switchTo().frame(iframe);
-//            WebElement checkbox = wait.until(ExpectedConditions.elementToBeClickable(
-//                    By.xpath("//div[@class='recaptcha-checkbox-border']")));
-//            checkbox.click();
-//            driver.switchTo().defaultContent();
-//            return true;
-//        } catch (Exception e) {
-//            driver.switchTo().defaultContent();
-//            return false;
-//        }
-//    }
-
     public void logout() {
-    	try {
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        try {
+            WebDriver driver = DriverFactory.getDriver();
 
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
             By profileBtn = By.xpath("//img[@alt='profile']");
             By signOut = By.xpath("//p[contains(text(),'Sign Out')]");
             By toast = By.xpath("//div[contains(@class,'Toastify__toast')]");
-
-            // Wait for toast to disappear (if present)
             wait.until(ExpectedConditions.invisibilityOfElementLocated(toast));
-
-            // Wait until profile button is clickable
             wait.until(ExpectedConditions.elementToBeClickable(profileBtn)).click();
-
-            // Wait until Sign Out is clickable
             wait.until(ExpectedConditions.elementToBeClickable(signOut)).click();
-
         } catch (Exception e) {
-            System.out.println("Exception during logout: " + e.getMessage());
+            System.out.println("⚠️ Exception during logout: " + e.getMessage());
         }
     }
-   
-    private String currentDateTime() {
-        return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-    }
+
 }

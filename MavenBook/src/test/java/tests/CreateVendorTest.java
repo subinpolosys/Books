@@ -30,7 +30,7 @@ public class CreateVendorTest extends BaseTest{
    }
   @Test
   public void createVendorTest() throws InterruptedException, IOException {
-	  
+	  System.out.println("__________________Create Vendor_______________");
 	  String filePath = System.getProperty("user.dir") + "/src/test/resources/VendorData.xlsx";
 	  List<Map<String, Object>> allVendors =
               CustomerExcelReader.getTestData(filePath, "Vendor", "Address", "Contact Person");
