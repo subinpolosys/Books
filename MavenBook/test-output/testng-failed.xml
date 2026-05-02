@@ -4,14 +4,14 @@
   <test thread-count="5" name="Tests(failed)">
     <parameter name="browser" value="chrome"/>
     <classes>
-      <class name="tests.SalesOrderTest">
+      <class name="tests.ReceiptTest">
         <methods>
           <include name="setUp"/>
           <include name="loginToApp"/>
+          <include name="receiptTest" invocation-numbers="0"/>
           <include name="tearDown"/>
-          <include name="salesOrderTest" invocation-numbers="0"/>
         </methods>
-      </class> <!-- tests.SalesOrderTest -->
+      </class> <!-- tests.ReceiptTest -->
     </classes>
   </test> <!-- Tests(failed) -->
 </suite> <!-- Failed suite [Automation Suite] -->

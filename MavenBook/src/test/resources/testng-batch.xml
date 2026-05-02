@@ -22,9 +22,10 @@
             <class name="tests.CreateDeliverynoteTest"/>
             <class name="tests.CreatePurchaseOrderTest"/>    
             -->
+            <!--
             <class name="tests.EstimateTest"/>
             <class name="tests.SalesOrderTest"/>
-            <class name="tests.InvoicesTest"/>
+              <class name="tests.InvoicesTest"/>
             <class name="tests.DeliveryNoteTest"/>         
             <class name="tests.SalesReturnTest"/>
             <class name="tests.PurchaseOrderTest"/>
@@ -32,6 +33,13 @@
             <class name="tests.VendorCreditTest"/>
             <class name="tests.ReceiptTest"/>
             <class name="tests.PaymentsTest"/>
+            <class name="tests.LandedcostPITest"/>
+            -->
+             <class name="tests.PaymentsTest"/>
+
+             
+           
+           
            
         </classes>
     </test>
