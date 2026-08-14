@@ -1,0 +1,39 @@
+pipeline {
+    agent any
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                git branch: 'master',
+                    url: 'https://github.com/subinpolosys/Books.git'
+            }
+        }
+
+        // stage('Payment Test') {
+        //     steps {
+        //         bat 'cd MavenBook && RunPayment.bat'
+        //     }
+        // }
+         stage('Payment Test') {
+            steps {
+                dir('MavenBook') {
+                    bat 'mvn clean test -DsuiteXmlFile=src/test/resources/pay.xml'
+                }
+            }
+        }
+    }
+    post {
+        always {
+            echo 'Payment test execution completed'
+        }
+
+        success {
+            echo 'Payment tests PASSED'
+        }
+
+        failure {
+            echo 'Payment tests FAILED'
+        }
+    }
+}
