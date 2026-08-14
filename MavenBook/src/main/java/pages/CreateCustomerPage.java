@@ -19,7 +19,7 @@ public class CreateCustomerPage {
     }
     //==================New customer Navigation=========================   
     private final By dashboardField=By.xpath("//a[text()='Dashboard']");
-    private final By salesMenuField = By.xpath("//div[@title='sales']/a[contains(text(),'Sales')]");
+    private final By salesMenuField = By.xpath("//a[contains(text(),'Sales')]");
     private final By customerMenuField = By.xpath("//span[text()='Customers']");
     private final By newCustomerField = By.xpath("//button/p[contains(text(),'new')]");
     
@@ -54,7 +54,7 @@ public class CreateCustomerPage {
     private final By facebookField=By.id("facebook");
     private final By twitterField=By.id("twitter");
     //===================More Details=========================================  
-    private final By addmoreDetailsField=By.xpath("//p[text()='add more details']");
+    private final By addmoreDetailsField=By.xpath("//p[text()='Add More Details']");
     private final By designationField=By.id("designation");
     private final By departmentField=By.id("department");  
     //===================Billing & Shipping Address===========================

@@ -126,16 +126,32 @@ public class CreateReceiptPage {
 	    				if(invno.equalsIgnoreCase(invoiceNo)) {
 	    					//System.out.println("Located Invoice number:"+invno+" count:"+invno.length());
 	    					invoiceDueAmount=driver.findElement(By.xpath("//tbody/tr["+i+"]/td[4]")).getText();
+	    					invoiceDueAmount = invoiceDueAmount.replace(",", "");
 	    					BigDecimal dueAmount = new BigDecimal(invoiceDueAmount);
 	    					BigDecimal amount = new BigDecimal(amountReceived);
 	    					if(dueAmount.compareTo(amount)<0) {
-	    						driver.findElement(By.xpath("//tbody/tr["+i+"]/td[5]/input")).clear();
-	    						driver.findElement(By.xpath("//tbody/tr["+i+"]/td[5]/input")).sendKeys(invoiceDueAmount);
+	    						WebElement inputField1 = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//tbody/tr["+i+"]/td[5]/input")));
+	    						((JavascriptExecutor) driver).executeScript(
+	    						        "arguments[0].scrollIntoView({block:'center'});", inputField1);
+	    						//Thread.sleep(10000);
+	    						//driver.findElement(By.xpath("//tbody/tr["+i+"]/td[5]/input")).clear();
+	    						//driver.findElement(By.xpath("//tbody/tr["+i+"]/td[5]/input")).sendKeys(invoiceDueAmount);
+	    						inputField1.click();
+	    						inputField1.clear();
+	    						inputField1.sendKeys(dueAmount.toString());
+	    						//Thread.sleep(1000);
 	    						break;
 	    					}
 	    					else {
-	    						driver.findElement(By.xpath("//tbody/tr["+i+"]/td[5]/input")).clear();
-	    						driver.findElement(By.xpath("//tbody/tr["+i+"]/td[5]/input")).sendKeys(amountReceived);
+	    						//driver.findElement(By.xpath("//tbody/tr["+i+"]/td[5]/input")).clear();
+	    						//driver.findElement(By.xpath("//tbody/tr["+i+"]/td[5]/input")).sendKeys(amountReceived);
+	    						WebElement inputField = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//tbody/tr["+i+"]/td[5]/input")));     
+	    						((JavascriptExecutor) driver).executeScript(
+	    						        "arguments[0].scrollIntoView({block:'center'});", inputField);
+	    						//Thread.sleep(10000);
+	    						inputField.click();
+	    						inputField.clear();
+	    						inputField.sendKeys(amountReceived);
 	    						break;
 	    					}
 	    				}	

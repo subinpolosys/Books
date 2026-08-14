@@ -62,6 +62,5 @@ public class InvoicesTest extends BaseTest {
         		 siPage.verifySalesInvoiceCreated(siNumber),
                  "Invoice creation failed: " + siNumber);
          softAssert.assertAll();
-	
     }
 }

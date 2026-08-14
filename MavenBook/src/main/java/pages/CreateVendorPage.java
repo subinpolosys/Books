@@ -56,7 +56,7 @@ public class CreateVendorPage {
     private final By facebookField=By.id("facebook");
     private final By twitterField=By.id("twitter");
     //===================More Details=========================================  
-    private final By addmoreDetailsField=By.xpath("//p[text()='add more details']");
+    private final By addmoreDetailsField=By.xpath("//p[text()='Add More Details']");
     private final By designationField=By.id("designation");
     private final By departmentField=By.id("department");  
     //===================Billing & Shipping Address===========================

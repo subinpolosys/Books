@@ -120,7 +120,6 @@ public class CreatePurchaseOrderPage {
 	    	}	
 	        WaitUtils.waitForUi(driver);
 	        if (Utilities.isNotEmpty(deliveryDate)) {
-
 	        	wait.until(ExpectedConditions.visibilityOfElementLocated(deliverDateField));
 	        	Utilities.selectDateByValue(driver, deliverDateField, deliveryDate);
 	        }
@@ -171,8 +170,6 @@ public class CreatePurchaseOrderPage {
 		        
 		         return discLevel;
 	    }
-	    
-	    
 	    /** Add multiple items dynamically 
 	     * @throws InterruptedException */
 	    public void addItems(
@@ -180,24 +177,28 @@ public class CreatePurchaseOrderPage {
 	    		String[] itemQtys,
 	    		String[] discType,
 	    		String[] discount,
-	    		int discLevel) throws InterruptedException {	    	
-//			JavascriptExecutor js = (JavascriptExecutor) driver;			
-//			WebElement itemdetail  = driver.findElement(itemDetailsField);
-//		    js.executeScript("arguments[0].scrollIntoView();",itemdetail);  
-//			driver.findElement(itemDetailsField).click();  //#####  
-	 
+	    		int discLevel) throws InterruptedException {	  
+	    	Boolean r=false;
+	    	try {
+	    		//Thread.sleep(1000);
+	    		WebElement revrsecharge=driver.findElement(By.xpath("//div[contains(text(),'Reverse Charge')]/following-sibling::div/input[@type='checkbox']"));
+	    		if(revrsecharge.isEnabled()) {
+	    			revrsecharge.click();
+	    			r=true;
+	    		}	
+	    	}
+	    	catch(Exception e) {	
+	    	}	        
 	    	WebElement itemdetail = wait.until(ExpectedConditions.visibilityOfElementLocated(itemDetailsField));
-
-	    	// 👉 DO NOT CLICK — just focus
 	    	JavascriptExecutor js = (JavascriptExecutor) driver;
 	    	js.executeScript("arguments[0].focus();", itemdetail);
-	    	
+	    	//System.out.println(itemNames.length);
 			Thread.sleep(500);	
-	        for (int i = 0; i < itemNames.length; i++) {
+	        for (int i = 0; i <itemNames.length; i++) {
+	        	//System.out.println("Iteration = " + i);
 //	            wait.until(ExpectedConditions.elementToBeClickable(itemListField)).click();
 //	            driver.findElement(itemListField).sendKeys(itemNames[i]);
 	        	WebElement input = wait.until(ExpectedConditions.visibilityOfElementLocated(itemListField));
-
 	        	js.executeScript("arguments[0].focus();", input);
 	        	input.clear();
 	        	input.sendKeys(itemNames[i]);
@@ -210,12 +211,24 @@ public class CreatePurchaseOrderPage {
 	            // Fill item quantity
 	            WebElement qtyField = driver.findElement(By.xpath("//tbody/tr[" + (i + 1) + "]/td[5]//input"));
 	            qtyField.clear();
-	            qtyField.sendKeys(itemQtys[i]);
+	            qtyField.sendKeys(itemQtys[i]);	            
+	            if(r==true && discLevel==0) {
+	            	try {
+	            	By taxDropdown = By.xpath("//tbody/tr[" + (i + 1) + "]/td[7]/div/div/div/div/div/div/div/button/div/input[@type='text']");
+            		WebElement taxdropdown = wait.until(ExpectedConditions.elementToBeClickable(taxDropdown));
+            		taxdropdown.clear();
+            		taxdropdown.sendKeys("Standard Rate(15%)");
+            		driver.findElement(By.xpath("//tbody/tr[" + (i + 1) + "]/td[7]/div/div/div/div/div/div/ul/li[1]")).click();
+            		System.out.println("Reverse charge applicable");
+	            	}
+	            	catch(Exception e) {
+	            		System.out.println("Reverse charge not applicable for Goods items");
+	            	}
+	            }
 	            //Thread.sleep(500);
 	            if(discLevel!=0) {
 	            	if (discType[i] != null && !discType[i].trim().isEmpty() && discount[i] != null && !discount[i].trim().isEmpty()) {
-	            		if("%".equalsIgnoreCase(discType[i])) {
-	            		
+	            		if("%".equalsIgnoreCase(discType[i])) {	            		
 		            		WebElement discountField=driver.findElement(By.xpath("//tbody/tr[" + (i + 1) + "][1]/td[7]/div[1]/input"));
 		            		discountField.clear();
 		            		discountField.sendKeys(discount[i]);
@@ -237,8 +250,21 @@ public class CreatePurchaseOrderPage {
 		            } else {
 		                // One or both values missing → no discount
 		                //System.out.println("Discount not applied (type or value missing)");
-		            }
-	            }
+		            }            
+	            	if(r==true) {
+	            		try {
+	            			By taxDropdown = By.xpath("//tbody/tr[" + (i + 1) + "]/td[8]/div/div/div/div/div/div/div/button/div/input[@type='text']");
+	            			WebElement taxdropdown = wait.until(ExpectedConditions.elementToBeClickable(taxDropdown));
+	            			taxdropdown.clear();
+	            			taxdropdown.sendKeys("Standard Rate(15%)");
+	            			driver.findElement(By.xpath("//tbody/tr[" + (i + 1) + "]/td[8]/div/div/div/div/div/div/ul/li[1]")).click();
+	            			System.out.println("Reverse charge applicable");
+	            		}
+	            		catch(Exception e) {
+	            			System.out.println("Reverse charge not applicable for Goods items");
+	            		}
+	            	}
+	           }
 	        }
 	    }
 	    /** Add Transaction level discount */ 
@@ -246,7 +272,6 @@ public class CreatePurchaseOrderPage {
 	            String discountType,
 	            String discountValue,
 	            String discountAccount) {
-
 	    		Utilities.addTransactionLevelDiscount(
 	    				driver,
 	    				wait,
@@ -268,7 +293,7 @@ public class CreatePurchaseOrderPage {
 	    }
 	    /** Save the Purchase Order*/
 	    public void saveAsMethod(String saveAs) {
-	    	//System.out.println("SAve as : "+saveAs);
+	    	//System.out.println("Save as : "+saveAs);
 	    	if (saveAs == null || saveAs.trim().isEmpty()|| "SAVE AS DRAFT".equalsIgnoreCase(saveAs))   	        
 	         {    	        
 	        wait.until(ExpectedConditions.elementToBeClickable(saveAsDraftButtonField)).click();

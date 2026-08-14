@@ -49,7 +49,7 @@ public class CreateEstimatePage {
     private final By itemDetailsField = By.xpath("//table[@class=' w-full ']/thead/tr[1]/td[1]");
     private final By itemListField = By.xpath("//input[@placeholder='Type or click to add items']");
     private final String itemSelectField = "//ul[1]/li[%d]"; // dynamic
-
+    
     // ──────────────── Notes and Terms ────────────────
     private final By customerNoteField = By.id("customer notes");
     private final By termsField = By.id("terms_and_conditions");
@@ -146,8 +146,8 @@ public class CreateEstimatePage {
     		String[] itemNames, 
     		String[] itemQtys,
     		String[] discType,
-    		String[] discount) throws InterruptedException {
-  
+    		String[] discount) throws InterruptedException {	 
+    	JavascriptExecutor jsc = (JavascriptExecutor) driver;  	
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		WebElement itemdetail  = driver.findElement(itemDetailsField);
 	    js.executeScript("arguments[0].scrollIntoView();",itemdetail);  
@@ -155,7 +155,11 @@ public class CreateEstimatePage {
 		//Thread.sleep(500);
 		WaitUtils.waitForUi(driver);
         for (int i = 0; i < itemNames.length; i++) {
-        	//System.out.println(itemNames[i]+" : "+itemQtys[i]+" : "+discType[i]+" : "+discount[i]);
+        	WebElement itemField = driver.findElement(itemListField);
+        	jsc.executeScript(
+        	        "arguments[0].scrollIntoView({block:'center'});",
+        	        itemField);
+              Thread.sleep(1000);   	
             wait.until(ExpectedConditions.elementToBeClickable(itemListField)).click();
             driver.findElement(itemListField).sendKeys(itemNames[i]);
             Thread.sleep(500);
@@ -163,6 +167,7 @@ public class CreateEstimatePage {
             By selectItem = By.xpath(String.format(itemSelectField, 1));
             wait.until(ExpectedConditions.elementToBeClickable(selectItem)).click();
             Thread.sleep(500);
+            
             // Fill item quantity
             WebElement qtyField = driver.findElement(By.xpath("//tbody/tr[" + (i + 1) + "]/td[4]//input"));
             qtyField.clear();
@@ -180,6 +185,7 @@ public class CreateEstimatePage {
             		WebElement discontDropdownField=driver.findElement(discDropdown);
             		wait.until(ExpectedConditions.elementToBeClickable(discDropdown));
             		discontDropdownField.click();
+            		Thread.sleep(100);
             		WebElement discountTypeAmountField=driver.findElement(By.xpath("//tbody/tr[" + (i + 1) + "]/td[6]/div[1]/div/div/div/ul/li[2]"));
             		discountTypeAmountField.click();
             		WebElement discountField=driver.findElement(By.xpath("//tbody/tr[" + (i + 1) + "]/td[6]/div[1]/input"));
@@ -187,20 +193,16 @@ public class CreateEstimatePage {
             		//System.out.println(discount[i]);
             		discountField.sendKeys(discount[i]);
             	}
-
-            	//tbody/tr[1]/td[6]/div[1]/div/div/div/ul/li[1]
-                
-
             } else {
                 // One or both values missing → no discount
                 //System.out.println("Discount not applied (type or value missing)");
             }
-            
-            
         }
     }
     /** Add optional notes and terms */
     public void addNotesAndTerms(String customerNote, String terms) {
+    	((JavascriptExecutor) driver).executeScript(
+    		    "window.scrollTo(0,0);");
         if (Utilities.isNotEmpty(customerNote)) {
             driver.findElement(customerNoteField).sendKeys(customerNote);
         }
@@ -210,6 +212,7 @@ public class CreateEstimatePage {
     }
     /** Save the estimate as draft */
     public void saveAsMethod(String saveAs) {
+    	
     	//System.out.println("SAve as : "+saveAs);
     	if (saveAs == null || saveAs.trim().isEmpty()|| "SAVE AS DRAFT".equalsIgnoreCase(saveAs))   	        
          {    	        

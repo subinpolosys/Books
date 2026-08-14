@@ -55,10 +55,12 @@ public class Login {
 
                 // optional continue
                 try {
+                	Thread.sleep(1000);
                     shortWait.until(ExpectedConditions.elementToBeClickable(continueButton)).click();
                 } catch (Exception ignored) {}
 
                 // wait for dashboard
+                Thread.sleep(1000);        
                 shortWait.until(ExpectedConditions.visibilityOfElementLocated(dashboardMenu));
 
                 //System.out.println("Login success in attempt " + attempts);

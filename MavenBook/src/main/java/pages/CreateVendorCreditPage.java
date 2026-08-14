@@ -138,13 +138,31 @@ public class CreateVendorCreditPage {
     		String[] itemNames, 
     		String[] itemQtys,
     		String[] discType,
-    		String[] discount) throws InterruptedException {    	
+    		String[] discount) throws InterruptedException {   
+    	Boolean r=false;
+    	try {
+    		//Thread.sleep(1000);
+    		WebElement revrsecharge=driver.findElement(By.xpath("//div[contains(text(),'Reverse Charge')]/following-sibling::div/input[@type='checkbox']"));
+    		if(revrsecharge.isEnabled()) {
+    			revrsecharge.click();
+    			r=true;
+    		}	
+    	}
+    	catch(Exception e) {	
+    	}	
+    	JavascriptExecutor jsc = (JavascriptExecutor) driver;
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		WebElement itemdetail  = driver.findElement(itemDetailsField);
+		
 	    js.executeScript("arguments[0].scrollIntoView();",itemdetail);  
 		driver.findElement(itemDetailsField).click();  //#####  
 		Thread.sleep(500);	
         for (int i = 0; i < itemNames.length; i++) {
+        	WebElement itemField = driver.findElement(itemListField);
+        	jsc.executeScript(
+        	        "arguments[0].scrollIntoView({block:'center'});",
+        	        itemField);
+              Thread.sleep(1000);
             wait.until(ExpectedConditions.elementToBeClickable(itemListField)).click();
             driver.findElement(itemListField).sendKeys(itemNames[i]);
             Thread.sleep(500);
@@ -157,7 +175,7 @@ public class CreateVendorCreditPage {
             qtyField.clear();
             qtyField.sendKeys(itemQtys[i]);
             Thread.sleep(500);
-           
+                   
             	if (discType[i] != null && !discType[i].trim().isEmpty() && discount[i] != null && !discount[i].trim().isEmpty()) {
             		if("%".equalsIgnoreCase(discType[i])) {
             		
@@ -166,7 +184,7 @@ public class CreateVendorCreditPage {
 	            		discountField.sendKeys(discount[i]);
             		}
 	            	else {
-	            		By discDropdown = By.xpath("//tbody/tr[" + (i + 1) + "]/td[7]/div[1]/div");
+	            		By discDropdown = By.xpath("//tbody/tr[" + (i + 1) + "]/td[6]/div[1]/div");
 	            		WebElement dropdown = wait.until(ExpectedConditions.elementToBeClickable(discDropdown));
 	            		dropdown.click();
 	            		// Wait for dropdown options globally
@@ -174,7 +192,7 @@ public class CreateVendorCreditPage {
 	            		WebElement option = wait.until(ExpectedConditions.elementToBeClickable(optionLocator));
 	            		option.click();
 	            		// Now enter value
-	            		By discountFieldLocator = By.xpath("(//tbody/tr[" + (i + 1) + "]/td[7]//input)[1]");
+	            		By discountFieldLocator = By.xpath("(//tbody/tr[" + (i + 1) + "]/td[6]//input)[1]");
 	            		WebElement discountField = wait.until(ExpectedConditions.visibilityOfElementLocated(discountFieldLocator));
 	            		discountField.clear();
 	            		discountField.sendKeys(discount[i]);
@@ -183,6 +201,19 @@ public class CreateVendorCreditPage {
 	                // One or both values missing → no discount
 	                System.out.println("Discount not applied (type or value missing)");
 	            }
+            	if(r==true) {
+            		try {
+            			By taxDropdown = By.xpath("//tbody/tr[" + (i + 1) + "]/td[7]/div/div/div/div/div/div/div/button/div/input[@type='text']");
+            			WebElement taxdropdown = wait.until(ExpectedConditions.elementToBeClickable(taxDropdown));
+            			taxdropdown.clear();
+            			taxdropdown.sendKeys("Standard Rate(15%)");
+            			driver.findElement(By.xpath("//tbody/tr[" + (i + 1) + "]/td[7]/div/div/div/div/div/div/ul/li[1]")).click();
+            			System.out.println("Reverse charge applicable");
+            		}
+            		catch(Exception e) {
+            			System.out.println("Reverse charge not applicable for Goods items");
+            		}
+            	}            	
         }
     }
     /** Add Transaction level discount */ 

@@ -4,14 +4,30 @@
   <test thread-count="5" name="Tests(failed)">
     <parameter name="browser" value="chrome"/>
     <classes>
-      <class name="tests.ReceiptTest">
+      <class name="tests.PurchaseOrderTest">
         <methods>
           <include name="setUp"/>
+          <include name="purchaseOrderTest" invocation-numbers="0 1 2 3"/>
+          <include name="tearDown"/>
           <include name="loginToApp"/>
-          <include name="receiptTest" invocation-numbers="0"/>
+        </methods>
+      </class> <!-- tests.PurchaseOrderTest -->
+      <class name="tests.ExpenseTest">
+        <methods>
+          <include name="setUp"/>
+          <include name="expenseTest" invocation-numbers="0 1"/>
+          <include name="tearDown"/>
+          <include name="loginToApp"/>
+        </methods>
+      </class> <!-- tests.ExpenseTest -->
+      <class name="tests.PurchaseBillTest">
+        <methods>
+          <include name="purchaseBillTest" invocation-numbers="0 1 2 3"/>
+          <include name="setUp"/>
+          <include name="loginToApp"/>
           <include name="tearDown"/>
         </methods>
-      </class> <!-- tests.ReceiptTest -->
+      </class> <!-- tests.PurchaseBillTest -->
     </classes>
   </test> <!-- Tests(failed) -->
 </suite> <!-- Failed suite [Automation Suite] -->

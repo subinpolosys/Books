@@ -157,13 +157,19 @@ public class CreateSalesReturnPage {
 
     /** Add multiple items dynamically 
      * @throws InterruptedException */
-    public void addItems(String[] itemNames, String[] itemQtys,String[] discType,String[] discount) throws InterruptedException {    	
-		JavascriptExecutor js = (JavascriptExecutor) driver;
+    public void addItems(String[] itemNames, String[] itemQtys,String[] discType,String[] discount) throws InterruptedException {    		
+    	JavascriptExecutor js = (JavascriptExecutor) driver;
 		WebElement itemdetail  = driver.findElement(itemDetailsField);
-	    js.executeScript("arguments[0].scrollIntoView();",itemdetail);  
+	    js.executeScript("arguments[0].scrollIntoView();",itemdetail);
+	    JavascriptExecutor jsc = (JavascriptExecutor) driver;
 		driver.findElement(itemDetailsField).click();  //#####  
 		Thread.sleep(500);	
         for (int i = 0; i < itemNames.length; i++) {
+        	WebElement itemField = driver.findElement(itemListField);
+        	jsc.executeScript(
+        	        "arguments[0].scrollIntoView({block:'center'});",
+        	        itemField);
+              Thread.sleep(1000);
             wait.until(ExpectedConditions.elementToBeClickable(itemListField)).click();
             driver.findElement(itemListField).sendKeys(itemNames[i]);
             Thread.sleep(500);

@@ -178,19 +178,35 @@ public class CreatePurchaseBillPage {
     		String[] itemQtys,
     		String[] discType,
     		String[] discount,
-    		int discLevel) throws InterruptedException {    	   	
-		JavascriptExecutor js = (JavascriptExecutor) driver;
-		WebElement itemdetail  = driver.findElement(itemDetailsField);
-	    js.executeScript("arguments[0].scrollIntoView();",itemdetail);  
-		driver.findElement(itemDetailsField).click();  //#####  
+    		int discLevel) throws InterruptedException {    
+    	Boolean r=false;
+    	try {
+    		//Thread.sleep(1000);
+    		WebElement revrsecharge=driver.findElement(By.xpath("//div[contains(text(),'Reverse Charge')]/following-sibling::div/input[@type='checkbox']"));
+    		if(revrsecharge.isEnabled()) {
+    			revrsecharge.click();
+    			r=true;
+    		}	
+    	}
+    	catch(Exception e) {	
+    	}	
+    	WebElement itemdetail = wait.until(ExpectedConditions.visibilityOfElementLocated(itemDetailsField));
+    	JavascriptExecutor js = (JavascriptExecutor) driver;
+    	js.executeScript("arguments[0].focus();", itemdetail);
+    	
 		Thread.sleep(500);	
         for (int i = 0; i < itemNames.length; i++) {
-        	//System.out.println("Item Name: "+itemNames[i]+" --- Item Qty : "+itemQtys[i]+"-- disc Tpe"+discType[i]+"-- Discount --"+discount[i]);
-            wait.until(ExpectedConditions.elementToBeClickable(itemListField)).click();
-            driver.findElement(itemListField).sendKeys(itemNames[i]);
+//            wait.until(ExpectedConditions.elementToBeClickable(itemListField)).click();
+//            driver.findElement(itemListField).sendKeys(itemNames[i]);
+        	WebElement input = wait.until(ExpectedConditions.visibilityOfElementLocated(itemListField));
+
+        	js.executeScript("arguments[0].focus();", input);
+        	input.clear();
+        	input.sendKeys(itemNames[i]);
             Thread.sleep(500);
             // Select item dynamically
             By selectItem = By.xpath(String.format(itemSelectField, 1));
+            Thread.sleep(200);
             wait.until(ExpectedConditions.elementToBeClickable(selectItem)).click();
             Thread.sleep(200);
             // Fill item quantity
@@ -198,6 +214,19 @@ public class CreatePurchaseBillPage {
             qtyField.clear();
             qtyField.sendKeys(itemQtys[i]);
             //WaitUtils.waitForUi(driver);
+            if(r==true && discLevel==0) {
+            	try {
+            	By taxDropdown = By.xpath("//tbody/tr[" + (i + 1) + "]/td[7]/div/div/div/div/div/div/div/button/div/input[@type='text']");
+        		WebElement taxdropdown = wait.until(ExpectedConditions.elementToBeClickable(taxDropdown));
+        		taxdropdown.clear();
+        		taxdropdown.sendKeys("Standard Rate(15%)");
+        		driver.findElement(By.xpath("//tbody/tr[" + (i + 1) + "]/td[7]/div/div/div/div/div/div/ul/li[1]")).click();
+        		System.out.println("Reverse charge applicable");
+            	}
+            	catch(Exception e) {
+            		System.out.println("Reverse charge not applicable for Goods items");
+            	}
+            }
             if(discLevel!=0) {
             	if (discType[i] != null && !discType[i].trim().isEmpty() && discount[i] != null && !discount[i].trim().isEmpty()) {
             		if("%".equalsIgnoreCase(discType[i])) {
@@ -224,6 +253,19 @@ public class CreatePurchaseBillPage {
 	                // One or both values missing → no discount
 	                //System.out.println("Discount not applied (type or value missing)");
 	            }
+            	if(r==true) {
+            		try {
+            			By taxDropdown = By.xpath("//tbody/tr[" + (i + 1) + "]/td[8]/div/div/div/div/div/div/div/button/div/input[@type='text']");
+            			WebElement taxdropdown = wait.until(ExpectedConditions.elementToBeClickable(taxDropdown));
+            			taxdropdown.clear();
+            			taxdropdown.sendKeys("Standard Rate(15%)");
+            			driver.findElement(By.xpath("//tbody/tr[" + (i + 1) + "]/td[8]/div/div/div/div/div/div/ul/li[1]")).click();
+            			System.out.println("Reverse charge applicable");
+            		}
+            		catch(Exception e) {
+            			System.out.println("Reverse charge not applicable for Goods items");
+            		}
+            	}
             }
         }
     }

@@ -2,6 +2,7 @@ package pages;
 
 import java.math.BigDecimal;
 import java.time.Duration;
+import java.util.List;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -106,28 +107,67 @@ public class CreatePaymentsPage {
 	    		String invoiceDueAmount="";
 	    		String invno="";
 	    		try {
+	    			Thread.sleep(500);
+	    			wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(
+	    			        By.xpath("//tbody/tr"), 1));
 	    			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//tbody/tr")));
 	    			noOfInvoices = driver.findElements(By.xpath("//tbody/tr")).size();
+	    			List<WebElement> rows =
+	    			        driver.findElements(By.xpath("//tbody/tr"));
+
+	    			noOfInvoices = rows.size();
+	    			
+	    			//System.out.println("No of Inv :"+noOfInvoices);
 	    			if(noOfInvoices==0) {
 	    			System.out.println("No Due");
 	    			}	    			
-	    			for(int i=1;i<=noOfInvoices;i++) {	    				
+	    			for(int i=1;i<=noOfInvoices;i++) {	 
+	    				//Thread.sleep(500);
 	    				invno=driver.findElement(By.xpath("//tbody/tr["+i+"]/td[2]")).getText();	 
-	    				//System.out.println("Checking row: "+i);
-	    				//System.out.println("Invoice in UI: "+invno);
+	    				System.out.println("Checking row: "+i);
+	    				System.out.println("Invoice in UI: "+invno);
 	    				if(invno.equalsIgnoreCase(invoiceNo)) {
 	    					//System.out.println("Located Invoice number:"+invno+" count:"+invno.length());
 	    					invoiceDueAmount=driver.findElement(By.xpath("//tbody/tr["+i+"]/td[4]")).getText();
+	    					//System.out.println("invoice Due = "+invoiceDueAmount);
+	    					invoiceDueAmount = invoiceDueAmount.replace(",", "");
 	    					BigDecimal dueAmount = new BigDecimal(invoiceDueAmount);
 	    					BigDecimal amount = new BigDecimal(amountMade);
+	    					//System.out.println("invoice Due amount = "+invoiceDueAmount);
+	    					
+	    					//System.out.println(dueAmount.compareTo(amount));
 	    					if(dueAmount.compareTo(amount)<0) {
-	    						driver.findElement(By.xpath("//tbody/tr["+i+"]/td[5]/input")).clear();
-	    						driver.findElement(By.xpath("//tbody/tr["+i+"]/td[5]/input")).sendKeys(invoiceDueAmount);
+	    						//System.out.println("Inside if");
+	    						WebElement inputField1 = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//tbody/tr["+i+"]/td[5]/input")));
+	    						((JavascriptExecutor) driver).executeScript(
+	    						        "arguments[0].scrollIntoView({block:'center'});", inputField1);
+	    						//Thread.sleep(10000);
+	    						inputField1.click();
+	    						inputField1.clear();
+	    						inputField1.sendKeys(dueAmount.toString());
+	    						//Thread.sleep(1000);
+	    						//driver.findElement(By.xpath("//tbody/tr["+i+"]/td[5]/input")).clear();
+	    						//driver.findElement(By.xpath("//tbody/tr["+i+"]/td[5]/input")).sendKeys(invoiceDueAmount);
 	    						break;
 	    					}
-	    					else {
-	    						driver.findElement(By.xpath("//tbody/tr["+i+"]/td[5]/input")).clear();
-	    						driver.findElement(By.xpath("//tbody/tr["+i+"]/td[5]/input")).sendKeys(amountMade);
+	    					else {    						
+	    						//System.out.println("inside else");
+	    						WebElement inputField = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//tbody/tr["+i+"]/td[5]/input")));     
+	    						((JavascriptExecutor) driver).executeScript(
+	    						        "arguments[0].scrollIntoView({block:'center'});", inputField);
+	    						//Thread.sleep(10000);
+	    						inputField.click();
+	    						inputField.clear();
+//	    						inputField.sendKeys(Keys.chord(Keys.CONTROL, "a"));
+//	    						inputField.sendKeys(Keys.DELETE);
+	    						// Enter value FIRST
+	    						inputField.sendKeys(amountMade);
+	    						//Thread.sleep(1000);
+//	    						inputField.click();
+//	    						//inputField.clear();
+//	    						inputField.sendKeys(amountMade);
+	    						// THEN wait for value to persist	    						
+	    						//System.out.println("test 2");
 	    						break;
 	    					}
 	    				}	
@@ -136,9 +176,10 @@ public class CreatePaymentsPage {
 	    				}
 	    			}	
 	    		}catch(Exception e) {
-	    			 //e.printStackTrace();
+	    			 e.printStackTrace();
 	    			 System.out.println("No unpaid invoices associated with this vendor.");
 	    			    System.out.println("Error occurred while processing invoices.");
+	    			    System.out.println("Exception: " + e.getMessage());
 	    				
 	    		}
 	    	}

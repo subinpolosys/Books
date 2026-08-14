@@ -43,8 +43,7 @@ public class CreateSalesOrderPage {
 	    private final By searchSalesPersonField=By.xpath("//label[contains(text(),'Sales Person')]/following-sibling::input[@type='text']");	    
 	    private final By selectSalesPersonField = By.xpath("//ul/li[1]/span");
 	    private final By searchPriceListField=By.xpath("//input[@placeholder='Price List' and @type='text']");	    
-	    private final By selectPriceListField = By.xpath("//ul/li[1]"); 
-	     
+	    private final By selectPriceListField = By.xpath("//ul/li[1]"); 	     
 	    private final By searchTaxField=By.xpath("//input[@placeholder='Tax' and @type='text']");
 	    private final By selectTaxField = By.xpath("//ul/li[1]");
 	      
@@ -166,7 +165,7 @@ public class CreateSalesOrderPage {
 	            Thread.sleep(500);
 	            if (discType[i] != null && !discType[i].trim().isEmpty() && discount[i] != null && !discount[i].trim().isEmpty()) {
 	            	if("%".equalsIgnoreCase(discType[i])) {
-	            		
+	            		//System.out.println("\n % disc");
 	            		WebElement discountField=driver.findElement(By.xpath("//tbody/tr[" + (i + 1) + "]/td[6]/div[1]/input"));
 	            		discountField.clear();
 	            		discountField.sendKeys(discount[i]);
@@ -176,8 +175,10 @@ public class CreateSalesOrderPage {
 	            		WebElement discontDropdownField=driver.findElement(discDropdown);
 	            		wait.until(ExpectedConditions.elementToBeClickable(discDropdown));
 	            		discontDropdownField.click();
+	            		Thread.sleep(100);
 	            		WebElement discountTypeAmountField=driver.findElement(By.xpath("//tbody/tr[" + (i + 1) + "]/td[6]/div[1]/div/div/div/ul/li[2]"));
 	            		discountTypeAmountField.click();
+	            		//System.out.println("\n amt disc");
 	            		WebElement discountField=driver.findElement(By.xpath("//tbody/tr[" + (i + 1) + "]/td[6]/div[1]/input"));
 	            		discountField.clear();
 	            		//System.out.println(discount[i]);

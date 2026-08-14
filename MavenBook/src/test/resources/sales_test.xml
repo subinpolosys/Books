@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+<suite name="Automation Suite" verbose="1" parallel="none">
+
+    <test name="Tests">
+        <parameter name="browser" value="chrome"/>
+
+        <classes>
+  
+			<class name="tests.SalesOrderTest"/>
+			<class name="tests.SalesReturnTest"/>
+            <class name="tests.DeliveryNoteTest"/>         
+           
+             <class name="tests.EstimateTest"/>
+             <class name="tests.ReceiptTest"/>
+               
+            <class name="tests.InvoicesTest"/>
+		         
+        </classes>
+    </test>
+
+</suite>

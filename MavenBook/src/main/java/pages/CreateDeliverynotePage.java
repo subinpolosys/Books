@@ -134,13 +134,19 @@ public class CreateDeliverynotePage {
 	    		String[] itemNames, 
 	    		String[] itemQtys,
 	    		String[] discType,
-	    		String[] discount) throws InterruptedException {	    	
+	    		String[] discount) throws InterruptedException {	 
+	    	JavascriptExecutor jsc = (JavascriptExecutor) driver;  	
 			JavascriptExecutor js = (JavascriptExecutor) driver;
 			WebElement itemdetail  = driver.findElement(itemDetailsField);
 		    js.executeScript("arguments[0].scrollIntoView();",itemdetail);  
 			driver.findElement(itemDetailsField).click();  //#####  
 			Thread.sleep(500);	
 	        for (int i = 0; i < itemNames.length; i++) {
+	        	WebElement itemField = driver.findElement(itemListField);
+	        	jsc.executeScript(
+	        	        "arguments[0].scrollIntoView({block:'center'});",
+	        	        itemField);
+	              Thread.sleep(1000);
 	            wait.until(ExpectedConditions.elementToBeClickable(itemListField)).click();
 	            driver.findElement(itemListField).sendKeys(itemNames[i]);
 	            Thread.sleep(500);
